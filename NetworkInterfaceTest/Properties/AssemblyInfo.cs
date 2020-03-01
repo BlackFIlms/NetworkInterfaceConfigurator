@@ -32,5 +32,9 @@ using System.Runtime.InteropServices;
 // Можно задать все значения или принять номер сборки и номер редакции по умолчанию.
 // используя "*", как показано ниже:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.4.0.0")]
-[assembly: AssemblyFileVersion("0.4.0.0")]
+//Version guide: a.a.b.c
+//> a - version number.
+//> b - build number.
+//> c - release number(0 - Release version, 1 - Beta version, 2 - Dev version).
+[assembly: AssemblyVersion("0.4.1.2")]
+[assembly: AssemblyFileVersion("0.4.1.2")]
