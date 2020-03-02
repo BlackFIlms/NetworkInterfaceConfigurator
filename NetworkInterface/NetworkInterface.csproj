@@ -5,9 +5,9 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{10C6A9C7-766B-4BCA-ACED-1C1DC9EDEE40}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>NetworkInterfaceTest</RootNamespace>
-    <AssemblyName>NetworkInterfaceTest</AssemblyName>
+    <OutputType>Library</OutputType>
+    <RootNamespace>NetworkInterface</RootNamespace>
+    <AssemblyName>NetworkInterface</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NetworkInterfaceTest.cs" />
+    <Compile Include="NetworkInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

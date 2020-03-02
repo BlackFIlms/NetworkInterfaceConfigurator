@@ -7,9 +7,9 @@ using System.Net.NetworkInformation;
 using Microsoft.Win32;
 using System.Management;
 
-namespace NetworkInterfaceTest
+namespace NetworkInterface
 {
-    class NetworkInterfaceTest
+    class NetworkInterface
     {
         //Defining variables
         public static List<AdapterWMI> adaptersWMI = new List<AdapterWMI>();
@@ -183,8 +183,8 @@ namespace NetworkInterfaceTest
         /// </summary>
         public static string GetNicName(string index)
         {
-            NetworkInterface[] netName = NetworkInterface.GetAllNetworkInterfaces();
-            foreach (NetworkInterface item in netName)
+            System.Net.NetworkInformation.NetworkInterface[] netName = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
+            foreach (System.Net.NetworkInformation.NetworkInterface item in netName)
             {
                 if (item.Id == index)
                 {
@@ -198,8 +198,8 @@ namespace NetworkInterfaceTest
         /// </summary>
         public static string GetNetName(string index)
         {
-            NetworkInterface[] netName = NetworkInterface.GetAllNetworkInterfaces();
-            foreach (NetworkInterface item in netName)
+            System.Net.NetworkInformation.NetworkInterface[] netName = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
+            foreach (System.Net.NetworkInformation.NetworkInterface item in netName)
             {
                 if (item.Id == index)
                 {

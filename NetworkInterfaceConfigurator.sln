@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkInterfaceTest", "NetworkInterfaceTest\NetworkInterfaceTest.csproj", "{10C6A9C7-766B-4BCA-ACED-1C1DC9EDEE40}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkInterfaceConfigurator", "NetworkInterfaceConfigurator\NetworkInterfaceConfigurator.csproj", "{48BC0F77-7F42-4F46-92D3-3108F8FCFBD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkInterface", "NetworkInterface\NetworkInterface.csproj", "{10C6A9C7-766B-4BCA-ACED-1C1DC9EDEE40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,6 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{48BC0F77-7F42-4F46-92D3-3108F8FCFBD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48BC0F77-7F42-4F46-92D3-3108F8FCFBD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48BC0F77-7F42-4F46-92D3-3108F8FCFBD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48BC0F77-7F42-4F46-92D3-3108F8FCFBD1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{10C6A9C7-766B-4BCA-ACED-1C1DC9EDEE40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{10C6A9C7-766B-4BCA-ACED-1C1DC9EDEE40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10C6A9C7-766B-4BCA-ACED-1C1DC9EDEE40}.Release|Any CPU.ActiveCfg = Release|Any CPU
