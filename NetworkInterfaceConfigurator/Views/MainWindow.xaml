@@ -1,0 +1,53 @@
+﻿<Window x:Class="NetworkInterfaceConfigurator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NetworkInterfaceConfigurator"
+        xmlns:viewmodel="clr-namespace:NetworkInterfaceConfigurator.ViewModels"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="446" Width="700" MinHeight="446" MinWidth="700" AllowsTransparency="true" WindowStyle="None">
+
+    <Window.DataContext>
+        <viewmodel:MainViewModel />
+    </Window.DataContext>
+
+    <Grid x:Name="gridBase">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="18"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="18"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="gridHeader">
+            
+        </Grid>
+        <Grid x:Name="gridMain" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="gridPresets">
+
+            </Grid>
+            <Grid x:Name="gridContent" Grid.Column="1">
+                
+            </Grid>
+        </Grid>
+        <Grid x:Name="gridFooter" Grid.Row="2">
+            
+        </Grid>
+        <!--<Button Content="123_TEST" Margin="5">
+        </Button>
+        <Image x:Name="image" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Source="Design/Icon-3.png"/>
+
+        <StackPanel>
+            <TextBlock 
+            Text="{Binding Clicks}"
+            Margin="10"
+            Width="50"
+            Height="20"/>
+            <Button Command="{Binding ClickAdd}" Content="Button" Click="Button_Click" />
+        </StackPanel>-->
+
+    </Grid>
+</Window>
