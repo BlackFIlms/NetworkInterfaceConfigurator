@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkInterfaceConfigurator", "NetworkInterfaceConfigurator\NetworkInterfaceConfigurator.csproj", "{48BC0F77-7F42-4F46-92D3-3108F8FCFBD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkInterface", "NetworkInterface\NetworkInterface.csproj", "{10C6A9C7-766B-4BCA-ACED-1C1DC9EDEE40}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkInterfaceLib", "NetworkInterfaceLib\NetworkInterfaceLib.csproj", "{10C6A9C7-766B-4BCA-ACED-1C1DC9EDEE40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

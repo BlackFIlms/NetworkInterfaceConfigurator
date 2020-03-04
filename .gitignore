@@ -263,4 +263,6 @@ __pycache__/
 # Design
 Design/
 *.psd
+*.ai
 *.jpg
+*.png

@@ -7,9 +7,9 @@ using System.Net.NetworkInformation;
 using Microsoft.Win32;
 using System.Management;
 
-namespace NetworkInterface
+namespace NetworkInterfaceLib
 {
-    class NetworkInterface
+    class NetworkInterfaceLib
     {
         //Defining variables
         public static List<AdapterWMI> adaptersWMI = new List<AdapterWMI>();

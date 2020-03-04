@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("NetworkInterface")]
+[assembly: AssemblyTitle("NetworkInterfaceLib")]
 [assembly: AssemblyDescription("Designed by AvdeevMatvey")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("BlackFilms")]
-[assembly: AssemblyProduct("NetworkInterface")]
+[assembly: AssemblyProduct("NetworkInterfaceLib")]
 [assembly: AssemblyCopyright("BlackFilms ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
