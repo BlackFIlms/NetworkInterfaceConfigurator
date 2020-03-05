@@ -11,7 +11,7 @@ namespace NetworkInterfaceLib
 {
     class NetworkInterfaceLib
     {
-        //Defining variables
+        /*//Defining variables
         public static List<AdapterWMI> adaptersWMI = new List<AdapterWMI>();
         public static List<AdapterReg> adaptersReg = new List<AdapterReg>();
 
@@ -96,7 +96,7 @@ namespace NetworkInterfaceLib
                 default:
                     break;
             }
-        }
+        }*/
     }
     /// <summary>
     /// Operations with adapters via WMI & NetworkInformation.
