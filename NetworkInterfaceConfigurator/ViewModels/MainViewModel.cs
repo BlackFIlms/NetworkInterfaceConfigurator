@@ -10,15 +10,15 @@ namespace NetworkInterfaceConfigurator.ViewModels
 {
     class MainViewModel : ViewModelBase
     {
-        private int _Clicks;
+        private int clicks;
         
         public int Clicks
         {
-            get { return _Clicks; }
+            get { return clicks; }
 
             set
             {
-                _Clicks = value;
+                clicks = value;
                 RaisePropertyChanged(() => Clicks);
             }
         }

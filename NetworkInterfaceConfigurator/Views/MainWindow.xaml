@@ -18,7 +18,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="18"/>
         </Grid.RowDefinitions>
-        <Grid x:Name="gridHeader">
+        <Grid x:Name="gridHeader" Grid.Row="0">
             
         </Grid>
         <Grid x:Name="gridMain" Grid.Row="1">
@@ -26,11 +26,33 @@
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Grid x:Name="gridPresets">
+            <Grid x:Name="gridPresets" Grid.Column="0">
 
             </Grid>
             <Grid x:Name="gridContent" Grid.Column="1">
-                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="48"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="61"/>
+                </Grid.RowDefinitions>
+                <Grid x:Name="gridAdapterField" Grid.Row="0">
+                    
+                </Grid>
+                <Grid x:Name="gridAdapterData" Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="267"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid x:Name="gridAdapterSettings" Grid.Column="0">
+                        
+                    </Grid>
+                    <Grid x:Name="gridAdapterStats" Grid.Column="1">
+
+                    </Grid>
+                </Grid>
+                <Grid x:Name="gridAdapterButtons" Grid.Row="2">
+                    
+                </Grid>
             </Grid>
         </Grid>
         <Grid x:Name="gridFooter" Grid.Row="2">
