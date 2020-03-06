@@ -34,11 +34,16 @@
         <Grid x:Name="gridHeader" Grid.Row="0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
+                <Image
+                    Source="/NetworkInterfaceConfigurator;component/Design/Icon-3.png"
+                    Grid.Column="0"
+                    />
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1" >
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="2" >
                     <Button 
                         Width="100" 
                         Content="Min window"
@@ -104,17 +109,5 @@
                 </StatusBarItem>
             </StatusBar>
         </Grid>
-        <!--<Button Content="123_TEST" Margin="5">
-        </Button>
-        <Image x:Name="image" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Source="Design/Icon-3.png"/>
-
-        <StackPanel>
-            <TextBlock 
-                Text="{Binding Clicks}"
-                Margin="10"
-                Width="50"
-                Height="20"/>
-            <Button Command="{Binding ClickAdd}" Content="Button" Click="Button_Click" />
-        </StackPanel>-->
     </Grid>
 </Window>

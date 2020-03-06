@@ -85,6 +85,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
 
+        //Define command for drag Window.
         public RelayCommand DragWindow
         {
             get
