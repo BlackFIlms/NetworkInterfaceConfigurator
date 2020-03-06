@@ -1,0 +1,337 @@
+# NoteAboutMVVM
+Я решил создать записку для себя на будущее.  
+P.s. а может и не только для себя. Она будет валяться на **GitHub'е**, так что если она кому-то поможет, то хорошо =)  
+Т.к. это первое моё приложение с использованием паттерна **MVVM** и я потратил много времени, на изучение принципа работы этого паттерна  
+и поиск решения для банального закрытия окна нестандартной кнопкой через **ViewModel**.  
+
+1. Модель MVVM и общие принципы
+2. DevExpress MVVM
+3. Команды и RelayCommand
+4. Мои мучения с методом закрытия окна
+
+### 1 - Модель MVVM и общие принципы
+
+Модель **MVVM** *(Model View ViewModel)* - шаблон для разделения:  
+логики приложения - **Model**  
+пользовательского интерфейса *(UI)* - **View**   
+бизнес-логики - **ViewModel**  
+
+Что такое **View** впрочем и так понятно, **Model** - весь код который занимается сбором и обработкой данных.  
+А вот про **ViewModel** не сразу было понятно, что - за фрукт.  
+Если просто, то это некая прослойка между **View** и **Model**.  
+Это конечно не точно, но для себя я понял, что **ViewModel** - элемент, который связывает **View** и **Model**,  
+а так же имеет свой набор логики, для управления **View**.  
+Т.е. всё что относится к логике управления UI - **ViewModel**, всё что относится к данным - **Model**.  
+
+Ещё немного про идеальный вариант реализации этого паттерна:  
+В идеале **View** ничего не должна знать про **Model** и наоборот.  
+P.s. Некоторые инструкции по **MVVM** говорят, что ни один элемент этого паттерна, ничего не должен знать про другой.  
+Но никто из авторов, таких инструкций не привёл такой правильный пример.  
+
+Якобы вот такой вид неприемлим **MainWindow.xaml.cs**:  
+
+```csharp
+using System.Windows;
+ 
+namespace MVVM
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+ 
+            DataContext = new ApplicationViewModel();
+        }
+    }
+}
+```
+
+Я в одном из примеров увидел такую реализацию подключения **ViewModel** и мне понравилось:  
+
+```xaml
+(В файле MainWindow.xaml)
+<Window xmlns:viewmodel="clr-namespace:NetworkInterfaceConfigurator.ViewModels">
+<Window.DataContext>
+        <viewmodel:MainViewModel />
+    </Window.DataContext>
+</Window>
+```
+
+Самое удобное описание по работе с **WPF** и **MVVM**: https://metanit.com/sharp/wpf/22.2.php  
+
+Ну с общими принципами всё, двигаем далее.  
+
+### 2 - DevExpress MVVM
+Это мини фреймворк, который сокращает число строк кода, который надо написать, с ним проще писать свойства.  
+Но мне он не понравился, т.к. я не понял логику его работы.  
+Поэтому пока без него.  
+
+Увидел я его у **BashkaMen** на ютубе: https://github.com/BashkaMen https://www.youtube.com/channel/UCqUwuGtD4cygaILkjiTXmAw  
+Кстати ему спасибо! Он немного помог вникнуть в этот паттерн.  
+
+### 3 - Команды и RelayCommand
+Тут, почти всё скопировал отсюда:https://metanit.com/sharp/wpf/22.3.php (На всякий случай)  
+Для взаимодействия пользователя и приложения в **MVVM** используются команды.  
+Это не значит, что вовсе не можем использовать события и событийную модель,  
+однако везде, где возможно, вместо событий следует использовать команды.  
+
+В **WPF** команды представлены интерфейсом `ICommand`:  
+
+```csharp
+public interface ICommand
+{
+    event EventHandler CanExecuteChanged;
+    void Execute (object parameter);
+    bool CanExecute (object parameter);
+}
+```
+
+Однако **WPF** имеет в качестве реализации этого интерфейса имеет класс `System.Windows.Input.RoutedCommand`,  
+который ограничен по функциональности.  
+Поэтому, как правило, придется реализовывать свои собственные команды с помощью реализации `ICommand`.  
+Для использования команд добавим новый класс, который назовем `RelayCommand`:  
+
+```csharp
+using System;
+using System.Windows.Input;
+ 
+namespace MVVM
+{
+    public class RelayCommand : ICommand
+    {
+        private Action<object> execute;
+        private Func<object, bool> canExecute;
+ 
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+ 
+        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
+        {
+            this.execute = execute;
+            this.canExecute = canExecute;
+        }
+ 
+        public bool CanExecute(object parameter)
+        {
+            return this.canExecute == null || this.canExecute(parameter);
+        }
+ 
+        public void Execute(object parameter)
+        {
+            this.execute(parameter);
+        }
+    }
+}
+```
+
+Класс реализует два метода:  
+
+**CanExecute:** определяет, может ли команда выполняться  
+
+**Execute:** собственно выполняет логику команды  
+
+Событие `CanExecuteChanged` вызывается при изменении условий, указывающий, может ли команда выполняться.  
+Для этого используется событие `CommandManager.RequerySuggested`.  
+
+Ключевым является метод **Execute**.  
+Для его выполнения в конструкторе команды передается делегат типа `Action<object>`.  
+При этом класс команды не знает какое именно действие будет выполняться.  
+Например, мы можем написать так:  
+```csharp
+var cmd = new RelayCommand(o => { MessageBox.Show("Команда" + o.ToString()); });
+cmd.Execute("1");
+```
+В результате вызова команды будет выведено окно с надписью "Команда1". Но мы могли также передать любое другое действие, которое бы соответствовало делегату `Action<object>`.  
+
+Пример реализации:  
+Для ряда визуальных элементов **WPF**, например, для кнопок, определена поддержка команд.  
+Однако сами команды определяются в **ViewModel** и затем через механизм привязки устанавливаются для элементов управления.  
+**ViewModel**:  
+```csharp
+private Phone selectedPhone;
+        public ObservableCollection<Phone> Phones { get; set; }
+ 
+        // команда добавления нового объекта
+        private RelayCommand addCommand;
+        public RelayCommand AddCommand
+        {
+            get
+            {
+                return addCommand ??
+                  (addCommand = new RelayCommand(obj =>
+                  {
+                      Phone phone = new Phone();
+                      Phones.Insert(0, phone);
+                      SelectedPhone = phone;
+                  }));
+            }
+        }
+ 
+        public Phone SelectedPhone
+        {
+            get { return selectedPhone; }
+            set
+            {
+                selectedPhone = value;
+                OnPropertyChanged("SelectedPhone");
+            }
+        }
+```
+
+Не забываем обновлять свойства, добавив интерфейс к классу и метод для обновления:  
+
+```csharp
+public class ViewModel : INotifyPropertyChanged
+
+public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName]string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+```
+
+В **MainWindow.xaml** команды прописываются вот так:  
+```xaml
+<Button Command="{Binding AddCommand}">+</Button> - при нажатии кнопки, отправляем команду свойству AddCommand. Это может быть и метод.
+
+<StackPanel Grid.Column="1" DataContext="{Binding SelectedPhone}"> - Здесь, уже ViewModel устанавливает контент, в стакпанель, но впрочем может и забирать отсюда.
+            <TextBlock Text="Выбранный элемент"  />
+            <TextBlock Text="Модель" />
+            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" /> - Это привязка к св-вам класса, и обновление данных при изменении св-ва, т.к. биндинг работает при потере элементом фокуса.
+            <TextBlock Text="Производитель" />
+            <TextBox Text="{Binding Company, UpdateSourceTrigger=PropertyChanged}" /> - Это привязка к св-вам класса, и обновление данных при изменении св-ва, т.к. биндинг работает при потере элементом фокуса.
+            <TextBlock Text="Цена" />
+            <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" /> - Это привязка к св-вам класса, и обновление данных при изменении св-ва, т.к. биндинг работает при потере элементом фокуса.
+        </StackPanel>
+```
+
+Так же команды могут, передавать доп. параметры в метод, св-ва и т.д.:  
+```xaml
+<Window x:Name="nameMainWindow" - задаём имя окну.
+<Button
+    Command="{Binding CloseWin}" - передаём команду.
+    CommandParameter="{Binding ElementName=nameMainWindow}"> - и параметром, вместе с комндой, передаём имя окна.
+    Close window
+</Button>
+```
+
+### 4 - Мои мучения с методом закрытия окна
+Какие методы я только не видел, и не пробовал, пока не пришёл к текущему решению, скомбинировав несколько методов.  
+Многие люди вообще предлагали в **MainWindow.xaml.cs** писать `RoutedEvent`.  
+А смысл тогда в **MVVM**?  
+
+В общем немного истории:  
+За основу взял метод отсюда: https://metanit.com/sharp/wpf/22.3.php  
+
+```csharp
+private RelayCommand addCommand;
+public RelayCommand AddCommand
+{
+  get
+  {
+    return addCommand ??
+      (addCommand = new RelayCommand(obj =>
+      {
+        Phone phone = new Phone();
+        Phones.Insert(0, phone);
+        SelectedPhone = phone;
+      }));
+  }
+}
+```
+
+И мучал его.  
+Сначала я вообще забыл про лямбда выражение, т.к. давно не кодил, да и дело было, ночью уже.  
+И не мог придумать как передать **MainWindow** заместо *phone*.  
+
+Пробовал вот такие варианты =)):  
+```csharp
+Window.GetWindow(obj as Window).Close();
+
+
+
+private RelayCommand closeWin;
+public RelayCommand CloseWin
+{
+  get
+  {
+    return closeWin ??
+      (closeWin = new RelayCommand(obj =>
+      {
+        Window closeWindow = new Window;
+        Window.GetWindow(obj as Window).Close();
+      }));
+  }
+}
+```
+
+Потом, пытался назначить второй `DataContext` для **MainWindow**.  
+
+Но спустя какое-то время, до меня дошло, что `=>` - лямбда выражение и оно передаёт объект.  
+Я начал изобретать велосипед:  
+
+```csharp
+private RelayCommand closeWin;
+public RelayCommand CloseWin
+{
+  get
+  {
+    return closeWin ??
+      (closeWin = new RelayCommand(obj =>
+      {
+        Window closeWindow = new Window;
+        closeWindow.Close();
+      }));
+  }
+}
+```
+
+Поняв, что так продолжаться не может, стал не закрывать окно, а пытаться выводить его ширину в это же окно:  
+```csharp
+(closeWin = new RelayCommand(obj =>
+            {
+                Window closeWindow = new Window;
+				outProp = closeWindow.Width.ToString();
+            }));
+```
+
+Потом допёр, что - не обычное **Window**, а **MainWindow**!  
+```csharp
+(closeWin = new RelayCommand(obj =>
+            {
+                MainWindow closeWindow = new MainWindow;
+				outProp = closeWindow.Width.ToString();
+            }));
+```
+Тут уже появилось значение ширины.  
+
+Но всё же нам надо получить не новый объект, а текущий!  
+Вернулся к тому методу, который брал за основу и  получилось вот так:  
+
+```csharp
+private RelayCommand closeWin;
+public RelayCommand CloseWin
+{
+  get
+  {
+    return closeWin ??
+      (closeWin = new RelayCommand(obj =>
+      {
+        MainWindow closeWindowButton = obj as MainWindow;
+
+        if (closeWindowButton != null)
+        {
+          closeWindowButton.Close();
+        }
+      }));
+  }
+}
+```
+
+Ничего не вышло, но когда я решил попробовать, передать в `obj` имя окна, как описал в конце 3го пункта.  
+То всё заработало!
