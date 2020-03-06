@@ -11,21 +11,8 @@ using System.Windows.Input;
 
 namespace NetworkInterfaceConfigurator.ViewModels
 {
-    class MainViewModel : INotifyPropertyChanged
+    class WindowViewModel : INotifyPropertyChanged
     {
-        private string debug;
-
-        public string Debug
-        {
-            get { return debug; }
-
-            set
-            {
-                debug = value;
-                OnPropertyChanged("Debug");
-            }
-        }
-
         //Define command for minimize Window.
         public RelayCommand MinWin
         {
