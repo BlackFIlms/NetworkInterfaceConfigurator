@@ -26,6 +26,8 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
 
+        //Control logics for window.
+
         //Define command for minimize Window.
         public RelayCommand MinWin
         {
@@ -78,6 +80,22 @@ namespace NetworkInterfaceConfigurator.ViewModels
                     if (closeWindowButton != null)
                     {
                         closeWindowButton.Close();
+                    }
+                });
+            }
+        }
+
+        public RelayCommand DragWindow
+        {
+            get
+            {
+                return new RelayCommand(obj =>
+                {
+                    Window dragButton = obj as Window;
+
+                    if (dragButton != null)
+                    {
+                        dragButton.DragMove();
                     }
                 });
             }
