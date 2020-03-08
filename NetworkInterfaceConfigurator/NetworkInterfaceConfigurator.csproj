@@ -68,6 +68,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Resources\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Fonts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Window.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -106,6 +118,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Design\Fonts\calibril.ttf" />
+    <Resource Include="Design\Fonts\Montserrat-Light.ttf" />
+    <Resource Include="Design\Fonts\Raleway-Light.ttf" />
+    <Resource Include="Design\Fonts\Raleway-Medium.ttf" />
+    <Resource Include="Design\Fonts\Roboto-Light.ttf" />
+    <Resource Include="Design\Fonts\Roboto-Regular.ttf" />
+    <Resource Include="Design\Fonts\Montserrat-Regular.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

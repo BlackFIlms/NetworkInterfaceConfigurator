@@ -38,68 +38,9 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                <Canvas>
-                    <Path
-                    Stroke="DarkRed"
-                    StrokeThickness="1"
-                    Stretch="None"
-                    RenderOptions.EdgeMode="Aliased"
-                    Data="M51.2,72.6c-0.4,0-0.8,0-1.2,0c-12.5,0-22.7-10.1-22.7-22.7c0-12.5,10.1-22.7,22.7-22.7S72.7,37.5,72.7,50
-		    	          c0,0.4,0,0.8,0,1.2c4.4,0.2,8.5,1.8,11.8,4.4l1.6-0.8v-9.7l-7.1-3.8c-0.7-2.3-1.6-4.5-2.8-6.5l3-6.9l-6.7-6.7l-7.9,2.3
-			              c-2.1-1.1-4.3-2-6.6-2.6L54.7,14h-9.1l-3.2,6.9c-2.5,0.7-4.9,1.7-7.1,3l-7.3-2.7l-6.7,6.4l2.9,7.4c-1.1,1.9-2,4-2.7,6.1L14,45
-				          v9.7l7.5,3.9c0.6,2,1.4,3.9,2.4,5.7l-3,8l6.8,6.8l8.2-2.8c1.9,1,3.9,1.8,5.9,2.4l3.6,7.2h9.2l0.8-1.6C53,81.1,51.4,77,51.2,72.6z"
-                    />
-                    <Path
-                    Stroke="DarkRed"
-                    StrokeThickness="1"
-                    Stretch="None"
-                    RenderOptions.EdgeMode="Aliased"
-                    Data="M68.5,50c0,0.5,0,0.9-0.1,1.4c-8.8,1.4-15.7,8.3-17.1,17.1c-0.5,0-0.9,0.1-1.4,0.1
-			              c-10.2,0-18.5-8.3-18.5-18.5S39.8,31.5,50,31.5S68.5,39.8,68.5,50z"
-                    />
-                    <Path
-                    Stroke="DarkRed"
-                    StrokeThickness="1"
-                    Stretch="None"
-                    RenderOptions.EdgeMode="Aliased"
-                    Data="M52.6,71.6c0-10.5,8.5-19,19-19s19,8.5,19,19s-8.5,19-19,19S52.6,82.1,52.6,71.6z"
-                    />
-                    <Path
-                    Stroke="DarkRed"
-                    StrokeThickness="1"
-                    Stretch="None"
-                    RenderOptions.EdgeMode="Aliased"
-                    Data="M55.9,72c0-1.8,1.4-3.2,3.2-3.2s3.2,1.4,3.2,3.2c0,1.8-1.4,3.2-3.2,3.2C57.4,75.2,55.9,73.7,55.9,72z"
-                    />
-                    <Path
-                    Stroke="DarkRed"
-                    StrokeThickness="1"
-                    Stretch="None"
-                    RenderOptions.EdgeMode="Aliased"
-                    Data="M77.1,64.4c0-1.8,1.4-3.2,3.2-3.2c1.8,0,3.2,1.4,3.2,3.2c0,1.8-1.4,3.2-3.2,3.2S77.1,66.2,77.1,64.4z"
-                    />
-                    <Path
-                    Stroke="DarkRed"
-                    StrokeThickness="1"
-                    Stretch="None"
-                    RenderOptions.EdgeMode="Aliased"
-                    Data="M78.7,79.5c0-1.8,1.4-3.2,3.2-3.2c1.8,0,3.2,1.4,3.2,3.2s-1.4,3.2-3.2,3.2C80.2,82.7,78.7,81.3,78.7,79.5z"
-                    />
-                    <Path
-                    Stroke="DarkRed"
-                    StrokeThickness="1"
-                    Stretch="None"
-                    RenderOptions.EdgeMode="Aliased"
-                    Data="M59.2,71.8l22.5-7.2"
-                    />
-                    <Path
-                    Stroke="DarkRed"
-                    StrokeThickness="1"
-                    Stretch="None"
-                    RenderOptions.EdgeMode="Aliased"
-                    Data="M59.2,72l22.5,7.6"
-                    />
-                </Canvas>
+                <Label Style="{StaticResource AppIcon}" Grid.Column="0"/>
+
+                <TextBlock Text="Network Interface Configurator" FontFamily="{StaticResource WideFont}" FontSize="{StaticResource Big}" Grid.Column="1"/>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="2" >
                     <Button 
@@ -146,7 +87,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid x:Name="gridAdapterSettings" Grid.Column="0">
-                        
+
                     </Grid>
                     <Grid x:Name="gridAdapterStats" Grid.Column="1">
 
