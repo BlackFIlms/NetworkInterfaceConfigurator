@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -14,7 +15,6 @@ namespace NetworkInterfaceConfigurator.ViewModels
     class MainViewModel : INotifyPropertyChanged
     {
         private string debug;
-
         public string Debug
         {
             get { return debug; }
@@ -26,7 +26,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
 
-        //Control logics for window.
+        #region Control logics for window.
 
         //Define command for minimize Window.
         public RelayCommand MinWin
@@ -35,12 +35,12 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 return new RelayCommand(obj =>
                 {
-                    Window minWindowButton = obj as Window;
+                    Window minWindowCommand = obj as Window;
 
-                    if (minWindowButton != null)
+                    if (minWindowCommand != null)
                     {
                         void _MinWin(Window w) => SystemCommands.MinimizeWindow(w); //Define a function to send arguments to the object MainWindow.
-                        _MinWin(minWindowButton);
+                        _MinWin(minWindowCommand);
                     }
                 });
             }
@@ -53,16 +53,16 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 return new RelayCommand(obj =>
                 {
-                    Window maxWindowButton = obj as Window;
+                    Window maxWindowCommand = obj as Window;
 
-                    if (maxWindowButton != null)
+                    if (maxWindowCommand != null)
                     {
                         void _MaxWin(Window w) //Define a function to send arguments to the object MainWindow.
                         {
                             if (w.WindowState == WindowState.Maximized) SystemCommands.RestoreWindow(w);
                             else SystemCommands.MaximizeWindow(w);
                         }
-                        _MaxWin(maxWindowButton);
+                        _MaxWin(maxWindowCommand);
                     }
                 });
             }
@@ -75,11 +75,11 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 return new RelayCommand(obj =>
                 {
-                    Window closeWindowButton = obj as Window;
+                    Window closeWindowCommand = obj as Window;
 
-                    if (closeWindowButton != null)
+                    if (closeWindowCommand != null)
                     {
-                        closeWindowButton.Close();
+                        closeWindowCommand.Close();
                     }
                 });
             }
@@ -92,28 +92,113 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 return new RelayCommand(obj =>
                 {
-                    Window dragButton = obj as Window;
+                    Window dragCommand = obj as Window;
 
-                    if (dragButton != null)
+                    if (dragCommand != null)
                     {
-                        dragButton.DragMove();
+                        dragCommand.DragMove();
                     }
                 });
             }
         }
+        #endregion
+        
+        #region Center header title.
+        private string centerTitle;
+        public string CenterTitle
+        {
+            get { return centerTitle; }
 
-        //Center header title.
-
-        public RelayCommand CenterTitle
+            set
+            {
+                centerTitle = value;
+                OnPropertyChanged("CenterTitle");
+            }
+        }
+        private string windowWidth;
+        public string GetWindowWidth
+        {
+            get { return windowWidth; }
+            set
+            {
+                windowWidth = value;
+                OnPropertyChanged("GetWindowWidth");
+            }
+        }
+        private string iconHeaderWidth;
+        public string GetIconHeaderWidth
+        {
+            get { return iconHeaderWidth; }
+            set
+            {
+                iconHeaderWidth = value;
+                OnPropertyChanged("GetIconHeaderWidth");
+            }
+        }
+        private string menuHeaderWidth;
+        public string GetMenuHeaderWidth
+        {
+            get { return menuHeaderWidth; }
+            set
+            {
+                menuHeaderWidth = value;
+                OnPropertyChanged("GetMenuHeaderWidth");
+            }
+        }
+        private string gridWidth;
+        public string GridWidth
+        {
+            get { return gridWidth; }
+            set
+            {
+                gridWidth = value;
+                OnPropertyChanged("GridWidth");
+            }
+        }
+        private RelayCommand stableGridWidth;
+        public RelayCommand StableGridWidth
         {
             get
             {
-                return new RelayCommand(obj =>
-                {
-                    
-                });
+                return stableGridWidth ??
+                    (stableGridWidth = new RelayCommand(obj =>
+                    {
+                        Grid grid = obj as Grid;
+                        GridWidth = grid.RenderSize.Width.ToString(); //All methods for get Grid width, return old data. And it's affected on CalcMarginTitle method. Need to solution!!!
+                    }));
             }
         }
+        private string titleHeaderWidth;
+        public string GetTitleHeaderWidth
+        {
+            get { return titleHeaderWidth; }
+            set
+            {
+                titleHeaderWidth = value;
+                OnPropertyChanged("GetTitleHeaderWidth");
+            }
+        }
+        private RelayCommand calcMarginTitle;
+        public RelayCommand CalcMarginTitle
+        {
+            get
+            {
+                return calcMarginTitle ??
+                    (calcMarginTitle = new RelayCommand(obj =>
+                    {
+                        //Swap culture. My default culture - "ru-RU". Need culture, for ConvertToDouble en-US.
+                        NumberFormatInfo provider = new NumberFormatInfo();
+                        provider.NumberDecimalSeparator = ".";
+                        provider.NumberGroupSeparator = ",";
+                        provider.NumberGroupSizes = new int[] { 3 };
+
+                        double res = ((Convert.ToDouble(GetWindowWidth, provider) / 2) - Convert.ToDouble(GetIconHeaderWidth, provider) - Convert.ToDouble(GetMenuHeaderWidth, provider)) - (Convert.ToDouble(GetTitleHeaderWidth, provider) / 2);
+                        CenterTitle = res.ToString().Replace(',', '.') + ", 0, 0, 0";
+                        Debug = res.ToString().Replace(',', '.') + ", 0, 0, 0" + " " + (Convert.ToDouble(GetWindowWidth, provider) / 2) + " " + Convert.ToDouble(GetIconHeaderWidth, provider) + " " + Convert.ToDouble(GetMenuHeaderWidth, provider) + " " + GridWidth + " " + (Convert.ToDouble(GetTitleHeaderWidth, provider) / 2);
+                    }));
+            }
+        }
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")

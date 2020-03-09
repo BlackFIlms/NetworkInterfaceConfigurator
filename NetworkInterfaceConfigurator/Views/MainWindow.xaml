@@ -10,6 +10,8 @@
         mc:Ignorable="d"
         x:Name="nameMainWindow"
         Style="{StaticResource WindowStyle}"
+        viewmodel:SizeObserver.Observe="True"
+        viewmodel:SizeObserver.ObservedWidth="{Binding GetWindowWidth, Mode=OneWayToSource}"
         Icon="/NetworkInterfaceConfigurator;component/Design/Icon-3-64.ico"
         Title="Network Interface Configurator"
         Height="446"
@@ -23,12 +25,22 @@
     </Window.DataContext>
 
     <i:Interaction.Triggers>
+        <!-- Drag window -->
         <!-- MouseLeftButtonDown - action of UIElement -->
         <i:EventTrigger EventName="MouseLeftButtonDown">
             <i:InvokeCommandAction 
                 Command="{Binding DragWindow}"
                 CommandParameter="{Binding ElementName=nameMainWindow}" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction 
+                Command="{Binding CalcMarginTitle}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="SizeChanged">
+            <i:InvokeCommandAction 
+                Command="{Binding CalcMarginTitle}"/>
+        </i:EventTrigger>
+        
     </i:Interaction.Triggers>
 
     <Grid x:Name="gridBase">
@@ -44,27 +56,51 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                <Label x:Name="headerIcon" Style="{StaticResource AppIcon}" Grid.Column="0"/>
+                <!-- SizeObserver calculate actual sizes of the element -->
+                <!-- Observe - Set ObservedWidth & ObservedHeight properties in SizeObserver class -->
+                <!-- ObservedWidth & ObservedHeight - Binding property value to VM field or property -->
+                <Label x:Name="headerIcon"
+                       Style="{StaticResource AppIcon}"
+                       viewmodel:SizeObserver.Observe="True"
+                       viewmodel:SizeObserver.ObservedWidth="{Binding GetIconHeaderWidth, Mode=OneWayToSource}"
+                       Grid.Column="0"/>
 
                 <Grid Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel
+                    <!-- SizeObserver calculate actual sizes of the element -->
+                    <!-- Observe - Set ObservedWidth & ObservedHeight properties in SizeObserver class -->
+                    <!-- ObservedWidth & ObservedHeight - Binding property value to VM field or property -->
+                    <Grid x:Name="unstableGrid"
+                        viewmodel:SizeObserver.Observe="True"
+                        viewmodel:SizeObserver.ObservedWidth="{Binding GetMenuHeaderWidth, Mode=OneWayToSource}"
+                        Background="Red"
+                        Grid.Column="0">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SizeChanged">
+                                <i:InvokeCommandAction Command="{Binding StableGridWidth}"
+                                CommandParameter="{Binding ElementName=unstableGrid}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <StackPanel
                         x:Name="headerMenu"
                         Orientation="Horizontal"
-                        Grid.Column="0">
-                        
-                    </StackPanel>
+                        HorizontalAlignment="Stretch">
+
+                        </StackPanel>
+                    </Grid>
                     <TextBlock
                         x:Name="headerTitle"
+                        viewmodel:SizeObserver.Observe="True"
+                        viewmodel:SizeObserver.ObservedWidth="{Binding GetTitleHeaderWidth, Mode=OneWayToSource}"
                         Text="Network Interface Configurator"
                         FontFamily="{StaticResource WideFont}"
                         FontSize="{StaticResource Big}"
                         Margin="{Binding CenterTitle}"
+                        HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
                         Grid.Column="1"/>
                 </Grid>
                 
