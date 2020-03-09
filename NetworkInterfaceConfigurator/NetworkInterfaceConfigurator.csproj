@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Design\Icon-3-64.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Mvvm, Version=19.2.0.0, Culture=neutral, PublicKeyToken=382ad28f6ae31f30, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpressMvvm.19.2.3\lib\net452\DevExpress.Mvvm.dll</HintPath>
@@ -137,9 +140,15 @@
   <ItemGroup>
     <Resource Include="Design\Icon-3.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Design\Icon-3-18.ico" />
+    <Resource Include="Design\Icon-3-64.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="NoteAboutMVVM.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Design\Icon-3-16.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

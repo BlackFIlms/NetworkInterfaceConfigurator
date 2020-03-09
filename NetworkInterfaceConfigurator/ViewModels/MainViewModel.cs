@@ -102,6 +102,19 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
 
+        //Center header title.
+
+        public RelayCommand CenterTitle
+        {
+            get
+            {
+                return new RelayCommand(obj =>
+                {
+                    
+                });
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {

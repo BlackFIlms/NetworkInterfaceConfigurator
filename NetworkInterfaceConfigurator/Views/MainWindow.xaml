@@ -10,7 +10,13 @@
         mc:Ignorable="d"
         x:Name="nameMainWindow"
         Style="{StaticResource WindowStyle}"
-        Title="MainWindow" Height="446" Width="700" MinHeight="446" MinWidth="700" WindowStartupLocation="CenterScreen">
+        Icon="/NetworkInterfaceConfigurator;component/Design/Icon-3-64.ico"
+        Title="Network Interface Configurator"
+        Height="446"
+        Width="700"
+        MinHeight="446"
+        MinWidth="700"
+        WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
         <viewmodel:MainViewModel />
@@ -38,11 +44,35 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                <Label Style="{StaticResource AppIcon}" Grid.Column="0"/>
+                <Label x:Name="headerIcon" Style="{StaticResource AppIcon}" Grid.Column="0"/>
 
-                <TextBlock Text="Network Interface Configurator" FontFamily="{StaticResource WideFont}" FontSize="{StaticResource Big}" Grid.Column="1"/>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="2" >
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="10*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel
+                        x:Name="headerMenu"
+                        Orientation="Horizontal"
+                        Grid.Column="0">
+                        
+                    </StackPanel>
+                    <TextBlock
+                        x:Name="headerTitle"
+                        Text="Network Interface Configurator"
+                        FontFamily="{StaticResource WideFont}"
+                        FontSize="{StaticResource Big}"
+                        Margin="{Binding CenterTitle}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Grid.Column="1"/>
+                </Grid>
+                
+                <StackPanel
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Grid.Column="2" >
                     <Button 
                         Width="100" 
                         Content="Min window"

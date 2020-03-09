@@ -2,16 +2,18 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:NetworkInterfaceConfigurator.Resources"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
-
+    
+    <!-- Controls for icon -->
     <system:Double x:Key="ScaleAppIcon">1</system:Double>
     <system:Double x:Key="TranslateAppIconX">0</system:Double>
     <system:Double x:Key="TranslateAppIconY">0</system:Double>
 
+    <!-- Icon -->
     <Style x:Key="AppIcon" TargetType="{x:Type Label}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
-                    <Canvas UseLayoutRounding="True">
+                    <Canvas UseLayoutRounding="True" Margin="2,0,10,0">
                         <Path
                             StrokeThickness="0"
                             Fill="{StaticResource GradientRedToBlue}"
