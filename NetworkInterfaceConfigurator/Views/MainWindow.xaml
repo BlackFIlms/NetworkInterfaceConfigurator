@@ -36,80 +36,10 @@
 
     <Grid x:Name="gridBase">
         <Grid.RowDefinitions>
-            <RowDefinition Height="18"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="18"/>
         </Grid.RowDefinitions>
-        <Grid x:Name="gridHeader" Grid.Row="0">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
-                <!-- SizeObserver calculate actual sizes of the element -->
-                <!-- Observe - Set ObservedWidth & ObservedHeight properties in SizeObserver class -->
-                <!-- ObservedWidth & ObservedHeight - Binding property value to VM field or property -->
-                <Label x:Name="headerIcon"
-                       Style="{StaticResource AppIcon}"
-                       viewmodel:SizeObserver.Observe="True"
-                       viewmodel:SizeObserver.ObservedWidth="{Binding GetIconHeaderWidth, Mode=OneWayToSource}"
-                       Grid.Column="0"/>
-
-                <Grid Grid.Column="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="10*"/>
-                    </Grid.ColumnDefinitions>
-                    <!-- SizeObserver calculate actual sizes of the element -->
-                    <!-- Observe - Set ObservedWidth & ObservedHeight properties in SizeObserver class -->
-                    <!-- ObservedWidth & ObservedHeight - Binding property value to VM field or property -->
-                    <StackPanel
-                    x:Name="headerMenu"
-                    viewmodel:SizeObserver.Observe="True"
-                    viewmodel:SizeObserver.ObservedWidth="{Binding GetMenuHeaderWidth, Mode=OneWayToSource}"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Stretch"
-                    Grid.Column="0">
-
-                    </StackPanel>
-                    <TextBlock
-                    x:Name="headerTitle"
-                    viewmodel:SizeObserver.Observe="True"
-                    viewmodel:SizeObserver.ObservedWidth="{Binding GetTitleHeaderWidth, Mode=OneWayToSource}"
-                    Text="Network Interface Configurator"
-                    FontFamily="{StaticResource WideFont}"
-                    FontSize="{StaticResource Big}"
-                    Margin="{Binding CenterTitle}"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Grid.Column="1"/>
-                </Grid>
-                
-                <StackPanel
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Grid.Column="2" >
-                    <Button 
-                        Width="100" 
-                        Content="Min window"
-                        Command="{Binding MinWin}"
-                        CommandParameter="{Binding ElementName=nameMainWindow}"/>
-                    <Button 
-                        Width="100"
-                        Content="Max window"
-                        Command="{Binding MaxWin}"
-                        CommandParameter="{Binding ElementName=nameMainWindow}"/>
-                    <Button 
-                        Width="100"
-                        Content="Close window"
-                        Command="{Binding CloseWin}"
-                        CommandParameter="{Binding ElementName=nameMainWindow}"/>
-                </StackPanel>
-            </Grid>
-        </Grid>
-        <Grid x:Name="gridMain" Grid.Row="1">
+        <Grid x:Name="gridMain" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="*"/>
@@ -132,7 +62,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid x:Name="gridAdapterSettings" Grid.Column="0">
-
+                        
                     </Grid>
                     <Grid x:Name="gridAdapterStats" Grid.Column="1">
 
@@ -143,7 +73,7 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Grid x:Name="gridFooter" Grid.Row="2">
+        <Grid x:Name="gridFooter" Grid.Row="1">
             <StatusBar
                 Width="Auto"
                 Height="20">

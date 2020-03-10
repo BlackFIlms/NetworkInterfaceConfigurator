@@ -195,7 +195,6 @@ namespace NetworkInterfaceConfigurator.ViewModels
             double res = ((Convert.ToDouble(GetWindowWidth, provider) / 2) - Convert.ToDouble(GetIconHeaderWidth, provider) - Convert.ToDouble(GetMenuHeaderWidth, provider)) - (Convert.ToDouble(GetTitleHeaderWidth, provider) / 2);
             res = Math.Round(res); //Rounds the result so that the title borders occupy full pixels.
             CenterTitle = res.ToString().Replace(',', '.') + ", 0, 0, 0";
-            Debug = res.ToString().Replace(',', '.') + ", 0, 0, 0" + " " + (Convert.ToDouble(GetWindowWidth, provider) / 2) + " " + Convert.ToDouble(GetIconHeaderWidth, provider) + " " + Convert.ToDouble(GetMenuHeaderWidth, provider) + " " + GridWidth + " " + (Convert.ToDouble(GetTitleHeaderWidth, provider) / 2);
         }
         #endregion
 

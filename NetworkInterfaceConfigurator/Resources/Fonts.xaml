@@ -4,6 +4,7 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <FontFamily x:Key="WideFont">pack://application:,,,/Design/Fonts/#Montserrat Regular</FontFamily>
+    <FontFamily x:Key="WideFont-Medium">pack://application:,,,/Design/Fonts/#Montserrat Medium</FontFamily>
 
     <system:Double x:Key="Small">8</system:Double>
     <system:Double x:Key="Regular">10</system:Double>

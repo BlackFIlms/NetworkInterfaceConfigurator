@@ -71,6 +71,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Resources\Buttons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Colors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,6 +133,7 @@
     <Resource Include="Design\Fonts\Roboto-Light.ttf" />
     <Resource Include="Design\Fonts\Roboto-Regular.ttf" />
     <Resource Include="Design\Fonts\Montserrat-Regular.ttf" />
+    <Resource Include="Design\Fonts\Montserrat-SemiBold.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
