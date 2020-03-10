@@ -129,7 +129,7 @@
                                                 Command="{Binding Path=MinWin}"
                                                 CommandParameter="{Binding ElementName=nameMainWindow}"
                                                 >
-                                                <Label UseLayoutRounding="True"  x:Name="LabelMinButton" Style="{StaticResource MinimizeIcon}"/>
+                                                <Label x:Name="LabelMinButton" Style="{StaticResource MinimizeIcon}"/>
                                             </Button>
                                             <Button
                                                 x:Name="MaxButton"

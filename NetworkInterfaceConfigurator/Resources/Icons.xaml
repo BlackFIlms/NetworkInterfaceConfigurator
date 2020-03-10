@@ -8,10 +8,6 @@
     <system:Double x:Key="TranslateAppIconX">0</system:Double>
     <system:Double x:Key="TranslateAppIconY">0</system:Double>
 
-    <system:Double x:Key="ScaleWinIcon">1</system:Double>
-    <system:Double x:Key="TranslateWinIconX">0</system:Double>
-    <system:Double x:Key="TranslateWinIconY">0</system:Double>
-
     <!-- Icon -->
     <Style x:Key="AppIcon" TargetType="{x:Type Label}">
         <Setter Property="Template">
@@ -150,21 +146,30 @@
     </Style>
     
     <!-- This Icons get "Stroke" value from buttons value "Foreground" -->
-    <Style  x:Key="MinimizeIcon" TargetType="{x:Type Label}">
+    <!--
+    For path needs exactly specify value in the sizes properties! Sizes necessary exactly specify, how in a illustrator!
+    And change stroke to fill.
+    If not specify this. Elements will be blurred!
+    -->
+     <Style  x:Key="MinimizeIcon" TargetType="{x:Type Label}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
-                    <Grid UseLayoutRounding="True" Margin="0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Path StrokeThickness="1"
+                    <Grid Margin="0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Path Width="10"
+                            Height="1"
+                            StrokeThickness="1"
                             Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                            Stretch="None"
+                            Stretch="Fill"
+                            UseLayoutRounding="True"
+                            SnapsToDevicePixels="True"
                             Data="M0,6h10">
                             <Path.RenderTransform>
                                 <TransformGroup>
-                                    <ScaleTransform ScaleX="{StaticResource ScaleWinIcon}" ScaleY="{StaticResource ScaleWinIcon}"/>
+                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
                                     <SkewTransform/>
                                     <RotateTransform/>
-                                    <TranslateTransform X="{StaticResource TranslateWinIconX}" Y="{StaticResource TranslateWinIconY}"/>
+                                    <TranslateTransform X="0" Y="3"/>
                                 </TransformGroup>
                             </Path.RenderTransform>
                         </Path>
@@ -178,18 +183,22 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
-                    <Grid UseLayoutRounding="True" Margin="0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Path x:Name="MaximizeIcon"
+                    <Grid Margin="0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Path x:Name="MaximizeIconRestored"
+                            Width="8"
+                            Height="8"
                             StrokeThickness="1"
                             Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                            Stretch="None"
+                            Stretch="Fill"
+                            UseLayoutRounding="True"
+                            SnapsToDevicePixels="True"
                             Data="M9,9H1V1h8V9z">
                             <Path.RenderTransform>
                                 <TransformGroup>
-                                    <ScaleTransform ScaleX="{StaticResource ScaleWinIcon}" ScaleY="{StaticResource ScaleWinIcon}"/>
+                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
                                     <SkewTransform/>
                                     <RotateTransform/>
-                                    <TranslateTransform X="{StaticResource TranslateWinIconX}" Y="{StaticResource TranslateWinIconY}"/>
+                                    <TranslateTransform X="0" Y="1"/>
                                 </TransformGroup>
                             </Path.RenderTransform>
                         </Path>
@@ -203,18 +212,22 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
-                    <Grid UseLayoutRounding="True" Margin="0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Path x:Name="MaximizeIcon"
+                    <Grid Margin="0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Path x:Name="MaximizeIconNormal"
+                            Width="10"
+                            Height="10.2"
                             StrokeThickness="1"
                             Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                            Stretch="None"
+                            Stretch="Fill"
+                            UseLayoutRounding="True"
+                            SnapsToDevicePixels="True"
                             Data="M2.2,1.3v-1.9H10v8.5H8.3 M8.3,1.3H2.2H0v8.3h8.3V1.3z">
                             <Path.RenderTransform>
                                 <TransformGroup>
-                                    <ScaleTransform ScaleX="{StaticResource ScaleWinIcon}" ScaleY="{StaticResource ScaleWinIcon}"/>
+                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
                                     <SkewTransform/>
                                     <RotateTransform/>
-                                    <TranslateTransform X="{StaticResource TranslateWinIconX}" Y="{StaticResource TranslateWinIconY}"/>
+                                    <TranslateTransform X="0" Y="0"/>
                                 </TransformGroup>
                             </Path.RenderTransform>
                         </Path>
@@ -228,17 +241,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
-                    <Grid UseLayoutRounding="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Path StrokeThickness="1"
                             Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
                             Stretch="None"
+                            UseLayoutRounding="True"
+                            SnapsToDevicePixels="True"
                             Data="M0,10L10,0.1 M0,0l10,10">
                             <Path.RenderTransform>
                                 <TransformGroup>
-                                    <ScaleTransform ScaleX="{StaticResource ScaleWinIcon}" ScaleY="{StaticResource ScaleWinIcon}"/>
+                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
                                     <SkewTransform/>
                                     <RotateTransform/>
-                                    <TranslateTransform X="{StaticResource TranslateWinIconX}" Y="{StaticResource TranslateWinIconY}"/>
+                                    <TranslateTransform X="0" Y="0"/>
                                 </TransformGroup>
                             </Path.RenderTransform>
                         </Path>

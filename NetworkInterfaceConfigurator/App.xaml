@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="Resources/Fonts.xaml"/>
                 <ResourceDictionary Source="Resources/Icons.xaml"/>
 
+                <ResourceDictionary Source="Resources/Texts.xaml"/>
                 <ResourceDictionary Source="Resources/Buttons.xaml"/>
                 <ResourceDictionary Source="Resources/Window.xaml"/>
             </ResourceDictionary.MergedDictionaries>
