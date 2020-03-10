@@ -123,6 +123,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 windowWidth = value;
                 OnPropertyChanged("GetWindowWidth");
+                CalcMarginTitle();
             }
         }
         private string iconHeaderWidth;
@@ -133,6 +134,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 iconHeaderWidth = value;
                 OnPropertyChanged("GetIconHeaderWidth");
+                CalcMarginTitle();
             }
         }
         private string menuHeaderWidth;
@@ -143,6 +145,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 menuHeaderWidth = value;
                 OnPropertyChanged("GetMenuHeaderWidth");
+                CalcMarginTitle();
             }
         }
         private string gridWidth;
@@ -153,6 +156,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 gridWidth = value;
                 OnPropertyChanged("GridWidth");
+                CalcMarginTitle();
             }
         }
         private RelayCommand stableGridWidth;
@@ -176,27 +180,22 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 titleHeaderWidth = value;
                 OnPropertyChanged("GetTitleHeaderWidth");
+                CalcMarginTitle();
             }
         }
-        private RelayCommand calcMarginTitle;
-        public RelayCommand CalcMarginTitle
+        public void CalcMarginTitle()
         {
-            get
-            {
-                return calcMarginTitle ??
-                    (calcMarginTitle = new RelayCommand(obj =>
-                    {
-                        //Swap culture. My default culture - "ru-RU". Need culture, for ConvertToDouble en-US.
-                        NumberFormatInfo provider = new NumberFormatInfo();
-                        provider.NumberDecimalSeparator = ".";
-                        provider.NumberGroupSeparator = ",";
-                        provider.NumberGroupSizes = new int[] { 3 };
+            //Swap culture.My default culture - "ru-RU".Need culture, for ConvertToDouble en-US.
 
-                        double res = ((Convert.ToDouble(GetWindowWidth, provider) / 2) - Convert.ToDouble(GetIconHeaderWidth, provider) - Convert.ToDouble(GetMenuHeaderWidth, provider)) - (Convert.ToDouble(GetTitleHeaderWidth, provider) / 2);
-                        CenterTitle = res.ToString().Replace(',', '.') + ", 0, 0, 0";
-                        Debug = res.ToString().Replace(',', '.') + ", 0, 0, 0" + " " + (Convert.ToDouble(GetWindowWidth, provider) / 2) + " " + Convert.ToDouble(GetIconHeaderWidth, provider) + " " + Convert.ToDouble(GetMenuHeaderWidth, provider) + " " + GridWidth + " " + (Convert.ToDouble(GetTitleHeaderWidth, provider) / 2);
-                    }));
-            }
+            NumberFormatInfo provider = new NumberFormatInfo();
+            provider.NumberDecimalSeparator = ".";
+            provider.NumberGroupSeparator = ",";
+            provider.NumberGroupSizes = new int[] { 3 };
+
+            double res = ((Convert.ToDouble(GetWindowWidth, provider) / 2) - Convert.ToDouble(GetIconHeaderWidth, provider) - Convert.ToDouble(GetMenuHeaderWidth, provider)) - (Convert.ToDouble(GetTitleHeaderWidth, provider) / 2);
+            res = Math.Round(res); //Rounds the result so that the title borders occupy full pixels.
+            CenterTitle = res.ToString().Replace(',', '.') + ", 0, 0, 0";
+            Debug = res.ToString().Replace(',', '.') + ", 0, 0, 0" + " " + (Convert.ToDouble(GetWindowWidth, provider) / 2) + " " + Convert.ToDouble(GetIconHeaderWidth, provider) + " " + Convert.ToDouble(GetMenuHeaderWidth, provider) + " " + GridWidth + " " + (Convert.ToDouble(GetTitleHeaderWidth, provider) / 2);
         }
         #endregion
 

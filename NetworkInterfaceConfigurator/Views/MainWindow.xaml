@@ -32,15 +32,6 @@
                 Command="{Binding DragWindow}"
                 CommandParameter="{Binding ElementName=nameMainWindow}" />
         </i:EventTrigger>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction 
-                Command="{Binding CalcMarginTitle}"/>
-        </i:EventTrigger>
-        <i:EventTrigger EventName="SizeChanged">
-            <i:InvokeCommandAction 
-                Command="{Binding CalcMarginTitle}"/>
-        </i:EventTrigger>
-        
     </i:Interaction.Triggers>
 
     <Grid x:Name="gridBase">
@@ -73,35 +64,26 @@
                     <!-- SizeObserver calculate actual sizes of the element -->
                     <!-- Observe - Set ObservedWidth & ObservedHeight properties in SizeObserver class -->
                     <!-- ObservedWidth & ObservedHeight - Binding property value to VM field or property -->
-                    <Grid x:Name="unstableGrid"
-                        viewmodel:SizeObserver.Observe="True"
-                        viewmodel:SizeObserver.ObservedWidth="{Binding GetMenuHeaderWidth, Mode=OneWayToSource}"
-                        Background="Red"
-                        Grid.Column="0">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="SizeChanged">
-                                <i:InvokeCommandAction Command="{Binding StableGridWidth}"
-                                CommandParameter="{Binding ElementName=unstableGrid}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <StackPanel
-                        x:Name="headerMenu"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Stretch">
+                    <StackPanel
+                    x:Name="headerMenu"
+                    viewmodel:SizeObserver.Observe="True"
+                    viewmodel:SizeObserver.ObservedWidth="{Binding GetMenuHeaderWidth, Mode=OneWayToSource}"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch"
+                    Grid.Column="0">
 
-                        </StackPanel>
-                    </Grid>
+                    </StackPanel>
                     <TextBlock
-                        x:Name="headerTitle"
-                        viewmodel:SizeObserver.Observe="True"
-                        viewmodel:SizeObserver.ObservedWidth="{Binding GetTitleHeaderWidth, Mode=OneWayToSource}"
-                        Text="Network Interface Configurator"
-                        FontFamily="{StaticResource WideFont}"
-                        FontSize="{StaticResource Big}"
-                        Margin="{Binding CenterTitle}"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Grid.Column="1"/>
+                    x:Name="headerTitle"
+                    viewmodel:SizeObserver.Observe="True"
+                    viewmodel:SizeObserver.ObservedWidth="{Binding GetTitleHeaderWidth, Mode=OneWayToSource}"
+                    Text="Network Interface Configurator"
+                    FontFamily="{StaticResource WideFont}"
+                    FontSize="{StaticResource Big}"
+                    Margin="{Binding CenterTitle}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Grid.Column="1"/>
                 </Grid>
                 
                 <StackPanel
@@ -113,20 +95,17 @@
                         Width="100" 
                         Content="Min window"
                         Command="{Binding MinWin}"
-                        CommandParameter="{Binding ElementName=nameMainWindow}">
-                    </Button>
+                        CommandParameter="{Binding ElementName=nameMainWindow}"/>
                     <Button 
                         Width="100"
                         Content="Max window"
                         Command="{Binding MaxWin}"
-                        CommandParameter="{Binding ElementName=nameMainWindow}">
-                    </Button>
+                        CommandParameter="{Binding ElementName=nameMainWindow}"/>
                     <Button 
                         Width="100"
                         Content="Close window"
                         Command="{Binding CloseWin}"
-                        CommandParameter="{Binding ElementName=nameMainWindow}">
-                    </Button>
+                        CommandParameter="{Binding ElementName=nameMainWindow}"/>
                 </StackPanel>
             </Grid>
         </Grid>
@@ -145,7 +124,7 @@
                     <RowDefinition Height="61"/>
                 </Grid.RowDefinitions>
                 <Grid x:Name="gridAdapterField" Grid.Row="0">
-
+                    
                 </Grid>
                 <Grid x:Name="gridAdapterData" Grid.Row="1">
                     <Grid.ColumnDefinitions>
