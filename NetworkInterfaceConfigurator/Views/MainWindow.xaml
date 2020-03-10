@@ -75,11 +75,16 @@
         </Grid>
         <Grid x:Name="gridFooter" Grid.Row="1">
             <StatusBar
+                Background="{StaticResource BrushVeryDarkGrey}"
                 Width="Auto"
                 Height="20">
-                <TextBlock Margin="3,0,0,0" Text="{Binding Debug}"/>
+                <TextBlock Text="{Binding Debug}"
+                    Margin="3,0,0,0"
+                    VerticalAlignment="Center"
+                    Foreground="{StaticResource BrushGreen}"/>
                 <StatusBarItem HorizontalAlignment="Right">
-                    <ResizeGrip Opacity="0.75"/>
+                    <ResizeGrip 
+                        Opacity="0.75"/>
                 </StatusBarItem>
             </StatusBar>
         </Grid>

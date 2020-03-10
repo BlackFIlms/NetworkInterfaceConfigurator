@@ -83,7 +83,22 @@
                                             Orientation="Horizontal"
                                             HorizontalAlignment="Stretch"
                                             Grid.Column="1">
-
+                                            <Menu Background="{StaticResource BrushDarkGrey}"
+                                                  Foreground="{StaticResource BrushLightGrey}"
+                                                  Margin="5, 0, 0, 0"
+                                                  VerticalAlignment="Center">
+                                                <MenuItem Header="File"
+                                                          Background="{StaticResource BrushDarkGrey}">
+                                                    <TextBlock>Open</TextBlock>
+                                                    <TextBlock>Save</TextBlock>
+                                                    <TextBlock>Options</TextBlock>
+                                                    <TextBlock>Exit</TextBlock>
+                                                </MenuItem>
+                                                <MenuItem Header="Help">
+                                                    <TextBlock>Updates</TextBlock>
+                                                    <TextBlock>About</TextBlock>
+                                                </MenuItem>
+                                            </Menu>
                                         </StackPanel>
                                         <!-- SizeObserver calculate actual sizes of the element -->
                                         <!-- Observe - Set ObservedWidth & ObservedHeight properties in SizeObserver class -->

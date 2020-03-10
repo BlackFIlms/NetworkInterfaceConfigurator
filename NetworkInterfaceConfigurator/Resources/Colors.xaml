@@ -4,7 +4,7 @@
     
     <LinearGradientBrush x:Key="GradientRedToBlue" EndPoint="1,1" StartPoint="0,1">
         <GradientStop Color="#E61B49" Offset="0"/>
-        <GradientStop Color="#4186C6" Offset="1"/>
+        <GradientStop Color="#4186C6" Offset="1"/> 
     </LinearGradientBrush>
 
     <SolidColorBrush x:Key="BrushABlack" Color="#000000"/>
@@ -16,11 +16,17 @@
     <SolidColorBrush x:Key="BrushWhite" Color="#FEFEFE"/>
     <Color x:Key="ColorWhite">#FEFEFE</Color>
 
-    <SolidColorBrush x:Key="BrushDarkGrey" Color="#222426"/>
+    <SolidColorBrush x:Key="BrushVeryDarkGrey" Color="#202224"/>
+    <Color x:Key="ColorVeryDarkGrey">#202224</Color>
+    
+    <SolidColorBrush x:Key="BrushDarkGrey" Color="#222426"/> 
     <Color x:Key="ColorDarkGrey">#222426</Color>
 
     <SolidColorBrush x:Key="BrushLightGrey" Color="#babcbd"/>
     <Color x:Key="ColorLightGrey">#babcbd</Color>
+
+    <SolidColorBrush x:Key="BrushGreen" Color="#49dc00"/>
+    <Color x:Key="ColorGreen">#49dc00</Color>
 
     <SolidColorBrush x:Key="BrushDarkBlue" Color="#24292e"/>
     <Color x:Key="ColorDarkBlue">#24292e</Color>
