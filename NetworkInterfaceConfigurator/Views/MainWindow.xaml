@@ -74,31 +74,109 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid x:Name="gridAdapterSettings" Margin="20, 0, 0, 0" Grid.Column="0">
-                        <StackPanel>
-                            <StackPanel Margin="0, 18, 0, 0" Orientation="Vertical">
-                                <TextBlock Text="IP" Style="{StaticResource GridContentTitles}" Margin="0, 0, 0, 3"/>
-                                <TextBlock Text="255.255.255.255" Style="{StaticResource GridContentValues}"/>
-                            </StackPanel>
-                            <StackPanel Margin="0, 18, 0, 0" Orientation="Vertical">
-                                <TextBlock Text="Subnet" Style="{StaticResource GridContentTitles}"/>
-                                <TextBlock Text="255.255.255.255" Style="{StaticResource GridContentValues}"/>
-                            </StackPanel>
-                            <StackPanel Margin="0, 18, 0, 0" Orientation="Vertical">
-                                <TextBlock Text="Gateway" Style="{StaticResource GridContentTitles}"/>
-                                <TextBlock Text="255.255.255.255" Style="{StaticResource GridContentValues}"/>
-                            </StackPanel>
-                            <StackPanel Margin="0, 18, 0, 0" Orientation="Vertical">
-                                <TextBlock Text="DNS 1" Style="{StaticResource GridContentTitles}"/>
-                                <TextBlock Text="255.255.255.255" Style="{StaticResource GridContentValues}"/>
-                            </StackPanel>
-                            <StackPanel Margin="0, 18, 0, 0" Orientation="Vertical">
-                                <TextBlock Text="DNS 2" Style="{StaticResource GridContentTitles}"/>
-                                <TextBlock Text="255.255.255.255" Style="{StaticResource GridContentValues}"/>
-                            </StackPanel>
-                            <StackPanel Margin="0, 18, 0, 0" Orientation="Vertical">
-                                <TextBlock Text="MAC" Style="{StaticResource GridContentTitles}"/>
-                                <TextBlock Text="00:00:00:00:00:00" Style="{StaticResource GridContentValues}"/>
-                            </StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <Grid Margin="0, 18, 0, 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="IP" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="255.255.255.255"
+                                               Style="{StaticResource GridContentValues}"
+                                               Grid.Column="0"/>
+                                    <TextBox Grid.Column="1"/>
+                                </Grid>
+                            </Grid>
+                            <Grid Margin="0, 18, 0, 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Subnet" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="255.255.255.255"
+                                           Style="{StaticResource GridContentValues}"
+                                           Grid.Column="0"/>
+                                    <TextBox Grid.Column="1"/>
+                                </Grid>
+                            </Grid>
+                            <Grid Margin="0, 18, 0, 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Gateway" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="255.255.255.255"
+                                           Style="{StaticResource GridContentValues}"
+                                           Grid.Column="0"/>
+                                    <TextBox Grid.Column="1"/>
+                                </Grid>
+                            </Grid>
+                            <Grid Margin="0, 18, 0, 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="DNS 1" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="255.255.255.255"
+                                           Style="{StaticResource GridContentValues}"
+                                           Grid.Column="0"/>
+                                    <TextBox Grid.Column="1"/>
+                                </Grid>
+                            </Grid>
+                            <Grid Margin="0, 18, 0, 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="DNS 2" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="255.255.255.255"
+                                           Style="{StaticResource GridContentValues}"
+                                           Grid.Column="0"/>
+                                    <TextBox Grid.Column="1"/>
+                                </Grid>
+                            </Grid>
+                            <Grid Margin="0, 18, 0, 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="MAC" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="00:00:00:00:00:00"
+                                           Style="{StaticResource GridContentValues}"
+                                           Grid.Column="0"/>
+                                    <TextBox Grid.Column="1"/>
+                                </Grid>
+                            </Grid>
                         </StackPanel>
                     </Grid>
                     <Grid x:Name="gridAdapterStats" Grid.Column="1">
