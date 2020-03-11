@@ -16,7 +16,7 @@
         Title="Network Interface Configurator"
         Height="446"
         Width="700"
-        MinHeight="446"
+        MinHeight="459"
         MinWidth="700"
         WindowStartupLocation="CenterScreen">
 
