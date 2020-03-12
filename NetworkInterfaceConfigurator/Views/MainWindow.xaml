@@ -107,10 +107,10 @@
                                     <TextBlock Text="255.255.255.255"
                                                Style="{StaticResource GridContentValues}"
                                                Grid.Column="0"/>
-                                    <TextBox Grid.Column="1"/>
+                                    <TextBox Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
-                            <Grid Margin="0, 18, 0, 0">
+                            <Grid Margin="0, 14, 0, 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
@@ -124,10 +124,10 @@
                                     <TextBlock Text="255.255.255.255"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Grid.Column="1"/>
+                                    <TextBox Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
-                            <Grid Margin="0, 18, 0, 0">
+                            <Grid Margin="0, 14, 0, 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
@@ -141,10 +141,10 @@
                                     <TextBlock Text="255.255.255.255"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Grid.Column="1"/>
+                                    <TextBox Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
-                            <Grid Margin="0, 18, 0, 0">
+                            <Grid Margin="0, 14, 0, 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
@@ -158,10 +158,10 @@
                                     <TextBlock Text="255.255.255.255"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Grid.Column="1"/>
+                                    <TextBox Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
-                            <Grid Margin="0, 18, 0, 0">
+                            <Grid Margin="0, 14, 0, 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
@@ -175,10 +175,10 @@
                                     <TextBlock Text="255.255.255.255"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Grid.Column="1"/>
+                                    <TextBox Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
-                            <Grid Margin="0, 18, 0, 0">
+                            <Grid Margin="0, 14, 0, 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
@@ -192,7 +192,7 @@
                                     <TextBlock Text="00:00:00:00:00:00"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Grid.Column="1"/>
+                                    <TextBox Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
                         </StackPanel>
