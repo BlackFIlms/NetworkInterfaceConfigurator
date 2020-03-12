@@ -159,19 +159,6 @@ namespace NetworkInterfaceConfigurator.ViewModels
                 CalcMarginTitle();
             }
         }
-        private RelayCommand stableGridWidth;
-        public RelayCommand StableGridWidth
-        {
-            get
-            {
-                return stableGridWidth ??
-                    (stableGridWidth = new RelayCommand(obj =>
-                    {
-                        Grid grid = obj as Grid;
-                        GridWidth = grid.RenderSize.Width.ToString(); //All methods for get Grid width, return old data. And it's affected on CalcMarginTitle method. Need to solution!!!
-                    }));
-            }
-        }
         private string titleHeaderWidth;
         public string GetTitleHeaderWidth
         {
