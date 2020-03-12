@@ -63,8 +63,26 @@
                 <Grid x:Name="gridAdapterField" Margin="20,0" Grid.Row="0">
                     <StackPanel Margin="0, 14, 0, 0" Orientation="Vertical">
                         <TextBlock Text="Adapter" Style="{StaticResource GridContentTitles}"/>
-                        <ComboBox>
-                            
+                        <ComboBox Style="{StaticResource AdapterSelector}">
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 1</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 2</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 3</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 4</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 5</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 6</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 7</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 8</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 9</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 10</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 11</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 12</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 13</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 14</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 15</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 16</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 17</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 18</ComboBoxItem>
+                            <ComboBoxItem Style="{StaticResource AdapterSelectorItem}">Item 19</ComboBoxItem>
                         </ComboBox>
                     </StackPanel>
                 </Grid>

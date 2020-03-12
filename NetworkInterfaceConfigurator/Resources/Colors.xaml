@@ -22,6 +22,9 @@
     <SolidColorBrush x:Key="BrushDarkGrey" Color="#222426"/>
     <Color x:Key="ColorDarkGrey">#222426</Color>
 
+    <SolidColorBrush x:Key="BrushMediumGrey2" Color="#363a3d"/>
+    <Color x:Key="ColorMediumGrey2">#363a3d</Color>
+    
     <SolidColorBrush x:Key="BrushMediumGrey" Color="#c7c7c7"/>
     <Color x:Key="ColorMediumGrey">#c7c7c7</Color>
 
@@ -36,6 +39,9 @@
 
     <SolidColorBrush x:Key="BrushLightBlue" Color="#4186C6"/>
     <Color x:Key="ColorLightBlue">#4186C6</Color>
+
+    <SolidColorBrush x:Key="BrushPressedLightBlue" Color="#8db9e5"/>
+    <Color x:Key="ColorPressedLightBlue">#8db9e5</Color>
 
     <SolidColorBrush x:Key="BrushRoyalBlue" Color="#0072cf"/>
     <Color x:Key="ColorRoyalBlue">#0072cf</Color>

@@ -2,13 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:NetworkInterfaceConfigurator.Resources"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
-    
+
     <!-- Controls for icon -->
     <system:Double x:Key="ScaleAppIcon">1</system:Double>
     <system:Double x:Key="TranslateAppIconX">0</system:Double>
     <system:Double x:Key="TranslateAppIconY">0</system:Double>
 
-    <!-- Icon -->
+    <!-- AppIcon -->
     <Style x:Key="AppIcon" TargetType="{x:Type Label}">
         <Setter Property="Template">
             <Setter.Value>
@@ -144,14 +144,15 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+    <!-- WindowIcon -->
     <!-- This Icons get "Stroke" value from buttons value "Foreground" -->
     <!--
     For path needs exactly specify value in the sizes properties! Sizes necessary exactly specify, how in a illustrator!
     And change stroke to fill.
     If not specify this. Elements will be blurred!
     -->
-     <Style  x:Key="MinimizeIcon" TargetType="{x:Type Label}">
+    <Style  x:Key="MinimizeIcon" TargetType="{x:Type Label}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
@@ -263,5 +264,36 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!-- CommonIcon -->
+
+    <!--
+    For sizing icons, using next scheme: ViewBox(Change sizes of image) - Control with template get image - ControlTemplate -
+    Canvas(With hard set sizes) - Path(With hard set sizes)
+    -->
+    <ControlTemplate x:Key="Arrow">
+        <Canvas Width="19" Height="8">
+            <Path Width="19"
+                  Height="8"
+                  StrokeThickness="3"
+                  Stroke="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}"
+                  StrokeStartLineCap="Round"
+                  StrokeEndLineCap="Round"
+                  StrokeDashCap="Round"
+                  Stretch="Fill"
+                  UseLayoutRounding="True"
+                  SnapsToDevicePixels="True"
+                  Data="M19.5,0.5l-9.5,8l-9.5-8">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform X="0" Y="0"/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+        </Canvas>
+    </ControlTemplate>
 
 </ResourceDictionary>
