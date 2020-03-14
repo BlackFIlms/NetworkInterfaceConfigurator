@@ -52,7 +52,42 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid x:Name="gridPresets" Grid.Column="0">
-
+                <StackPanel Orientation="Vertical">
+                    <Grid Height="34">
+                        <TextBlock Text="Presets" Style="{StaticResource GridPresetsTitle}"/>
+                    </Grid>
+                    <Grid Height="34">
+                        <Button Content="Preset 1" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
+                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
+                    </Grid>
+                    <Grid Height="34">
+                        <Button Content="Preset 2" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
+                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
+                    </Grid>
+                    <Grid Height="34">
+                        <Button Content="Preset 3" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
+                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
+                    </Grid>
+                    <Grid Height="34">
+                        <Button Content="Preset 4" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
+                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
+                    </Grid>
+                    <Grid Height="34">
+                        <Button Content="Preset 5" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
+                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
+                    </Grid>
+                    <Grid Height="34">
+                        <Button Content="Preset 6" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
+                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
+                    </Grid>
+                    <Grid Height="34">
+                        <Button Content="Preset 7" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
+                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
+                    </Grid>
+                    <Grid Height="34">
+                        <Button Content="Preset 8" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
+                    </Grid>
+                </StackPanel>
             </Grid>
             <Grid x:Name="gridContent" Grid.Column="1">
                 <Grid.RowDefinitions>
