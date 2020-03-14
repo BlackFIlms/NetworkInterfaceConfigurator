@@ -34,6 +34,7 @@
     </Style>
 
     <Style x:Key="GridPresetsButtons" TargetType="{x:Type Button}">
+        <Setter Property="Focusable" Value="false" />
         <Setter Property="Background" Value="{StaticResource BrushVeryDarkGray}"/>
         <Setter Property="Foreground" Value="{StaticResource BrushWhite}"/>
         <Setter Property="FontSize" Value="{StaticResource Big}"/>
@@ -61,6 +62,45 @@
                             <Setter TargetName="PART_border" Property="Background" Value="{StaticResource BrushLightBlue}"/>
                             <Setter TargetName="PART_border" Property="Opacity" Value="1" />
                             <Setter Property="Foreground" Value="{StaticResource BrushWhite}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="GridAdapterButtons" TargetType="{x:Type Button}">
+        <Setter Property="Margin" Value="38, 0, 0, 0"/>
+        <Setter Property="Width" Value="69" />
+        <Setter Property="Height" Value="22" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Background" Value="{StaticResource BrushRoyalBlue}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushWhite}"/>
+        <Setter Property="FontSize" Value="{StaticResource Regular}"/>
+        <Setter Property="FontFamily" Value="{StaticResource StandartText-Light}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <Border
+                            x:Name="PART_border"
+                            Background="{Binding Path=Background, RelativeSource={RelativeSource TemplatedParent}}"
+                            CornerRadius="6"
+                            />
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_border" Property="Background" Value="{StaticResource BrushLightBlue}" />
+                            <Setter TargetName="PART_border" Property="Opacity" Value="1" />
+                            <Setter Property="Foreground" Value="{StaticResource BrushWhite}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="PART_border" Property="Background" Value="{StaticResource BrushPressedLightBlue}"/>
+                            <Setter TargetName="PART_border" Property="Opacity" Value="1" />
+                            <Setter Property="Foreground" Value="{StaticResource BrushWhite}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -237,7 +237,11 @@
                     </Grid>
                 </Grid>
                 <Grid x:Name="gridAdapterButtons" Grid.Row="2">
-
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Change" Style="{StaticResource GridAdapterButtons}"/>
+                        <Button Content="Clear" Style="{StaticResource GridAdapterButtons}"/>
+                        <Button Content="Update" Style="{StaticResource GridAdapterButtons}"/>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Grid>
