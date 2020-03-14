@@ -296,6 +296,29 @@
         </Canvas>
     </ControlTemplate>
 
+    <ControlTemplate x:Key="RandomBorder">
+        <Canvas Width="21" Height="20">
+            <Path Width="21"
+                  Height="20"
+                  StrokeThickness="1"
+                  Stroke="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}"
+                  Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Background}"
+                  Stretch="Fill"
+                  UseLayoutRounding="True"
+                  SnapsToDevicePixels="True"
+                  Data="M21.7,3L26,7.4V23H10.6L5,17.4V3H21.7z">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform X="0" Y="0"/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+        </Canvas>
+    </ControlTemplate>
+
     <Style x:Key="GridPresetsRectangles" TargetType="{x:Type Rectangle}">
         <Setter Property="Stroke" Value="{StaticResource BrushMediumGray2}"/>
         <Setter Property="Width" Value="70"/>

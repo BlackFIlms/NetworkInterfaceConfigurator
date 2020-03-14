@@ -140,6 +140,7 @@
     <Resource Include="Design\Fonts\Montserrat-SemiBold.ttf" />
     <Resource Include="Design\Fonts\Raleway-Regular.ttf" />
     <Resource Include="Design\Fonts\calibri.ttf" />
+    <Resource Include="Design\Fonts\Raleway-Bold.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

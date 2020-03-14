@@ -8,6 +8,7 @@
     <FontFamily x:Key="StandartText-Light">pack://application:,,,/Design/Fonts/#Raleway Light</FontFamily>
     <FontFamily x:Key="StandartText-Medium">pack://application:,,,/Design/Fonts/#Raleway Medium</FontFamily>
     <FontFamily x:Key="StandartText">pack://application:,,,/Design/Fonts/#Raleway Regular</FontFamily>
+    <FontFamily x:Key="StandartText-Bold">pack://application:,,,/Design/Fonts/#Raleway Bold</FontFamily>
     <FontFamily x:Key="ValuesText-Light">pack://application:,,,/Design/Fonts/#Calibri Light</FontFamily>
     <FontFamily x:Key="ValuesText">pack://application:,,,/Design/Fonts/#Calibri Regular</FontFamily>
     <FontFamily x:Key="BoldFont-Light">pack://application:,,,/Design/Fonts/#Roboto Light</FontFamily>
