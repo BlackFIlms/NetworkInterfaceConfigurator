@@ -60,6 +60,9 @@
                         <Trigger Property="IsFocused" Value="True">
                             <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BrushRoyalBlue}" />
                         </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BrushLightGrayTranspared}" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -109,7 +112,8 @@
                             <Setter TargetName="textTag" Property="Background" Value="{StaticResource BrushMediumGray2}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="textTag" Property="Background" Value="{StaticResource BrushLightGray}" />
+                            <Setter TargetName="textTag" Property="Background" Value="{StaticResource BrushMediumGray2}" />
+                            <Setter TargetName="textTag" Property="Foreground" Value="{StaticResource BrushLightGrayTranspared}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
