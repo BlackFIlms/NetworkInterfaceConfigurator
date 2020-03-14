@@ -53,7 +53,7 @@
                                 <Border
                                     x:Name="TitleBar"
                                     DockPanel.Dock="Top"
-                                    Background="{StaticResource BrushDarkGrey}"
+                                    Background="{StaticResource BrushDarkGray}"
                                     BorderThickness="0"
                                     >
                                     <Grid Height="18">
@@ -83,12 +83,12 @@
                                             Orientation="Horizontal"
                                             HorizontalAlignment="Stretch"
                                             Grid.Column="1">
-                                            <Menu Background="{StaticResource BrushDarkGrey}"
-                                                  Foreground="{StaticResource BrushLightGrey}"
+                                            <Menu Background="{StaticResource BrushDarkGray}"
+                                                  Foreground="{StaticResource BrushLightGray}"
                                                   Margin="5, 0, 0, 0"
                                                   VerticalAlignment="Center">
                                                 <MenuItem Header="File"
-                                                          Background="{StaticResource BrushDarkGrey}">
+                                                          Background="{StaticResource BrushDarkGray}">
                                                     <TextBlock>Open</TextBlock>
                                                     <TextBlock>Save</TextBlock>
                                                     <TextBlock>Options</TextBlock>

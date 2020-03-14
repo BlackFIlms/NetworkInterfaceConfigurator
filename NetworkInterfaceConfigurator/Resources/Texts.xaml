@@ -10,79 +10,108 @@
     </Style>
 
     <Style x:Key="GridContentValues" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="{StaticResource BrushMediumGrey}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushMediumGray}"/>
         <Setter Property="FontSize" Value="{StaticResource Big}"/>
         <Setter Property="FontFamily" Value="{StaticResource ValuesText-Light}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
-    <Style x:Key="GridContentSettings" TargetType="{x:Type TextBox}">
+    <!-- Base template for TextBoxes -->
+    <!--
+        Border.background depends from background property in template.
+        This created for change this property from other templates.
+        Because background setting up happen in border.background.
+    
+        Change background at event IsMouseOver or IsEnabled,
+        it's setting up from other templates in ControlTemplate.Triggers.
+    -->
+    <Style x:Key="BaseTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="MinWidth" Value="120" />
+        <Setter Property="CaretBrush" Value="{StaticResource BrushWhite}"/>
+        <Setter Property="MinWidth" Value="100" />
         <Setter Property="MinHeight" Value="20" />
         <Setter Property="AllowDrop" Value="true" />
         <Setter Property="Foreground" Value="{StaticResource BrushWhite}" />
+        <Setter Property="Background" Value="{StaticResource BrushVeryDarkGray}" />
         <Setter Property="FontSize" Value="{StaticResource Big}"/>
         <Setter Property="FontFamily" Value="{StaticResource ValuesText-Light}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBoxBase}">
-                    <Border Name="Border"
+                    <Border x:Name="Border"
                             CornerRadius="2"
                             Padding="2"
                             BorderThickness="1">
+                        
                         <Border.Background>
-                            <SolidColorBrush Color="{DynamicResource ColorVeryDarkGrey}" />
+                            <SolidColorBrush Color="{Binding Path=Background.Color, RelativeSource={RelativeSource TemplatedParent}}" />
                         </Border.Background>
                         <Border.BorderBrush>
                             <SolidColorBrush Color="{DynamicResource ColorABlack}" />
                         </Border.BorderBrush>
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="FocusedStates">
-                                <VisualState x:Name="Unfocused" />
-                                <VisualState x:Name="Focused">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
-                                                Storyboard.TargetProperty="BorderBrush.(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ColorRoyalBlue}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal" />
-                                <VisualState x:Name="Disabled">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
-                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ColorLightGrey}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="ReadOnly">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
-                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ColorMediumGrey}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="MouseOver">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
-                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ColorMediumGrey2}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
+
                         <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BrushRoyalBlue}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="GridContentSettings" TargetType="{x:Type TextBox}">
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid>
+                        <TextBox x:Name="textSource"
+                                 Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Panel.ZIndex="2">
+                            <TextBox.Style>
+                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource BaseTextBox}">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                        <TextBox x:Name="textTag" 
+                                 Text="{TemplateBinding Tag}"
+                                 Panel.ZIndex="1">
+                            <TextBox.Style>
+                                <Style BasedOn="{StaticResource BaseTextBox}" TargetType="{x:Type TextBox}">
+                                    <Setter Property="Foreground" Value="Transparent"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=Text, Source={x:Reference textSource}}" Value="">
+                                            <Setter Property="Foreground" Value="{StaticResource BrushLightGrayTranspared}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="textTag" Property="Background" Value="{StaticResource BrushMediumGray2}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="textTag" Property="Background" Value="{StaticResource BrushLightGray}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

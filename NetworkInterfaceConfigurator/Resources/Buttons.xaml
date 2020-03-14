@@ -5,7 +5,7 @@
 
     <Style x:Key="WindowStyleHeaderButton" TargetType="{x:Type Button}">
         <Setter Property="Focusable" Value="false" />
-        <Setter Property="Foreground" Value="{StaticResource BrushLightGrey}" />
+        <Setter Property="Foreground" Value="{StaticResource BrushLightGray}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">

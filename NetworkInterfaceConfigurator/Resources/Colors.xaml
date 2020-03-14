@@ -16,20 +16,23 @@
     <SolidColorBrush x:Key="BrushWhite" Color="#FEFEFE"/>
     <Color x:Key="ColorWhite">#FEFEFE</Color>
 
-    <SolidColorBrush x:Key="BrushVeryDarkGrey" Color="#202224"/>
+    <SolidColorBrush x:Key="BrushVeryDarkGray" Color="#202224"/>
     <Color x:Key="ColorVeryDarkGrey">#202224</Color>
     
-    <SolidColorBrush x:Key="BrushDarkGrey" Color="#222426"/>
+    <SolidColorBrush x:Key="BrushDarkGray" Color="#222426"/>
     <Color x:Key="ColorDarkGrey">#222426</Color>
 
-    <SolidColorBrush x:Key="BrushMediumGrey2" Color="#363a3d"/>
+    <SolidColorBrush x:Key="BrushMediumGray2" Color="#363a3d"/>
     <Color x:Key="ColorMediumGrey2">#363a3d</Color>
     
-    <SolidColorBrush x:Key="BrushMediumGrey" Color="#c7c7c7"/>
+    <SolidColorBrush x:Key="BrushMediumGray" Color="#c7c7c7"/>
     <Color x:Key="ColorMediumGrey">#c7c7c7</Color>
 
-    <SolidColorBrush x:Key="BrushLightGrey" Color="#babcbd"/>
-    <Color x:Key="ColorLightGrey">#babcbd</Color>
+    <SolidColorBrush x:Key="BrushLightGrayTranspared" Color="#B2BABCBD"/>
+    <Color x:Key="ColorLightGrayTranspared">#B2BABCBD</Color>
+
+    <SolidColorBrush x:Key="BrushLightGray" Color="#babcbd"/>
+    <Color x:Key="ColorLightGray">#babcbd</Color>
 
     <SolidColorBrush x:Key="BrushGreen" Color="#49dc00"/>
     <Color x:Key="ColorGreen">#49dc00</Color>

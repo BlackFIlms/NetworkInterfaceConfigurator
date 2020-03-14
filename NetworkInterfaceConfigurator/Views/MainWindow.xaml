@@ -107,7 +107,7 @@
                                     <TextBlock Text="255.255.255.255"
                                                Style="{StaticResource GridContentValues}"
                                                Grid.Column="0"/>
-                                    <TextBox Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
+                                    <TextBox Tag="Set ip here" Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
                             <Grid Margin="0, 14, 0, 0">
@@ -124,7 +124,7 @@
                                     <TextBlock Text="255.255.255.255"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
+                                    <TextBox Tag="Set subnet here" Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
                             <Grid Margin="0, 14, 0, 0">
@@ -141,7 +141,7 @@
                                     <TextBlock Text="255.255.255.255"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
+                                    <TextBox Tag="Set gateway here" Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
                             <Grid Margin="0, 14, 0, 0">
@@ -158,7 +158,7 @@
                                     <TextBlock Text="255.255.255.255"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
+                                    <TextBox Tag="Set 1st dns here" Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
                             <Grid Margin="0, 14, 0, 0">
@@ -175,7 +175,7 @@
                                     <TextBlock Text="255.255.255.255"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
+                                    <TextBox Tag="Set 2nd dns here" Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
                             <Grid Margin="0, 14, 0, 0">
@@ -192,7 +192,7 @@
                                     <TextBlock Text="00:00:00:00:00:00"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
+                                    <TextBox Tag="Set mac here" Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
                         </StackPanel>
@@ -208,7 +208,7 @@
         </Grid>
         <Grid x:Name="gridFooter" Grid.Row="1">
             <StatusBar
-                Background="{StaticResource BrushVeryDarkGrey}"
+                Background="{StaticResource BrushVeryDarkGray}"
                 Width="Auto"
                 Height="20">
                 <TextBlock Text="{Binding Debug}"

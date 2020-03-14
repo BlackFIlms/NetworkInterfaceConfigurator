@@ -12,7 +12,7 @@
                     CornerRadius="2"
                     BorderThickness="1"
                     BorderBrush="{StaticResource BrushABlack}"
-                    Background="{StaticResource BrushVeryDarkGrey}"
+                    Background="{StaticResource BrushVeryDarkGray}"
                     Grid.ColumnSpan="2"/>
             <Control x:Name="Arrow"
                      Foreground="{StaticResource BrushAWhite}"
@@ -62,7 +62,7 @@
                                 <Border x:Name="DropDownBorder"
                                         BorderThickness="1"
                                         BorderBrush="{StaticResource BrushLightBlue}"
-                                        Background="{StaticResource BrushVeryDarkGrey}"/>
+                                        Background="{StaticResource BrushVeryDarkGray}"/>
                                 <ScrollViewer Style="{StaticResource ScrollViewer}"
                                               Margin="4,6,4,6"
                                               SnapsToDevicePixels="True">
@@ -121,7 +121,7 @@
                                         <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
                                                                       Storyboard.TargetProperty="BorderBrush.(SolidColorBrush.Color)">
                                             <EasingColorKeyFrame KeyTime="0"
-                                                                 Value="{StaticResource ColorLightGrey}" />
+                                                                 Value="{StaticResource ColorLightGray}" />
                                         </ColorAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
