@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace NetworkInterfaceConfigurator.ViewModels
+namespace NetworkInterfaceConfigurator.Models
 {
     public class RelayCommand : ICommand
     {

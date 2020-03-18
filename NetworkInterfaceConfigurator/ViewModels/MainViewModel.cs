@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using NetworkInterfaceConfigurator.Models;
 using NetworkInterfaceConfigurator.Views;
 
 namespace NetworkInterfaceConfigurator.ViewModels
 {
-    class MainViewModel : INotifyPropertyChanged
+    class MainViewModel : ProperyChanged
     {
+        //Constructor.
+        public MainViewModel()
+        {
+            GetAdapters();
+        }
+
         private string debug;
         public string Debug
         {
@@ -24,6 +30,20 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 debug = value;
                 OnPropertyChanged("Debug");
+            }
+        }
+
+        public ObservableCollection<NetworkInterfaceLib> Adapters { get; set; }
+
+        private NetworkInterfaceLib selectedAdapter;
+        public NetworkInterfaceLib SelectedAdapter
+        {
+            get { return selectedAdapter; }
+            set
+            {
+                selectedAdapter = value;
+                OnPropertyChanged("SelectedAdapter");
+                InitAdapterProperties(value); //After selection adapter, loading adapter properties.
             }
         }
 
@@ -103,7 +123,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
         #endregion
-        
+
         #region Center header title.
         private string centerTitle;
         public string CenterTitle
@@ -186,6 +206,50 @@ namespace NetworkInterfaceConfigurator.ViewModels
         }
         #endregion
 
+        #region AdaptersInit
+        /*
+            Manual initialization.
+            U can try change this methods on constructor.
+            But i don't sure, what this can be work in all cases.
+
+            First step: get index for all adapters.
+            Step two: validate adapters.
+            Step three: Create new object for each adapter and set base properties.
+        */
+        public IEnumerable<NetworkInterfaceLib> Init()
+        {
+            foreach (string adapterIndex in NetworkInterfaceLib.GetNicIndexes())
+            {
+                if ((NetworkInterfaceLib.GetMAC(adapterIndex) != "Empty") && (NetworkInterfaceLib.GetNicName(adapterIndex) != null))
+                {
+                    NetworkInterfaceLib obj = new NetworkInterfaceLib();
+                    obj.NicIndex = adapterIndex;
+                    obj.NicID = NetworkInterfaceLib.GetNicID(adapterIndex);
+                    obj.NicName = NetworkInterfaceLib.GetNicName(adapterIndex);
+                    obj.NetName = NetworkInterfaceLib.GetNetName(adapterIndex);
+                    yield return obj;
+                }
+            }
+        }
+        //Adapter properties loading only for selected adapter 
+        public void InitAdapterProperties(NetworkInterfaceLib obj)
+        {
+            obj.IPEnabled = NetworkInterfaceLib.IsIpEnabled(obj.NicIndex);
+            obj.IP = NetworkInterfaceLib.GetIP(obj.NicIndex);
+            obj.Subnet = NetworkInterfaceLib.GetSubnet(obj.NicIndex);
+            obj.Gateway = NetworkInterfaceLib.GetGateway(obj.NicIndex);
+            obj.DNS = NetworkInterfaceLib.GetDNS(obj.NicIndex);
+            obj.MAC = NetworkInterfaceLib.GetMAC(obj.NicIndex);
+        }
+        #endregion
+
+        #region GetAdapters
+        public void GetAdapters()
+        {
+            Adapters = new ObservableCollection<NetworkInterfaceLib>(Init());
+        }
+        #endregion
+
         #region Presets
         public RelayCommand EditPreset
         {
@@ -201,12 +265,5 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
         #endregion
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
     }
 }
