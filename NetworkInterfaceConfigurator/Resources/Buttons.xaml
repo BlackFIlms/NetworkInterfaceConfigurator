@@ -109,7 +109,7 @@
     </Style>
 
     <Style x:Key="MacRandButton" TargetType="{x:Type Button}">
-        <Setter Property="Margin" Value="0, 0, 0, 6"/>
+        <Setter Property="Margin" Value="0, 0, 0, 0"/>
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
         <Setter Property="Focusable" Value="false" />

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using NetworkInterfaceConfigurator.Views;
 
 namespace NetworkInterfaceConfigurator.ViewModels
 {
@@ -182,6 +183,22 @@ namespace NetworkInterfaceConfigurator.ViewModels
             double res = ((Convert.ToDouble(GetWindowWidth, provider) / 2) - Convert.ToDouble(GetIconHeaderWidth, provider) - Convert.ToDouble(GetMenuHeaderWidth, provider)) - (Convert.ToDouble(GetTitleHeaderWidth, provider) / 2);
             res = Math.Round(res); //Rounds the result so that the title borders occupy full pixels.
             CenterTitle = res.ToString().Replace(',', '.') + ", 0, 0, 0";
+        }
+        #endregion
+
+        #region Presets
+        public RelayCommand EditPreset
+        {
+            get
+            {
+                return new RelayCommand(obj =>
+                {
+                    var w = new EditPresetWindow();
+                    var vm = new EditPresetViewModel();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
         }
         #endregion
 
