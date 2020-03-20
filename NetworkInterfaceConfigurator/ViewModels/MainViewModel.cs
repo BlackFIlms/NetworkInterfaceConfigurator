@@ -48,7 +48,13 @@ namespace NetworkInterfaceConfigurator.ViewModels
                           Debug = parameters.Count.ToString() + " ";
                           foreach (TextBox item in parameters)
                           {
-                              Debug += item.Name + " ";
+                              Debug += item.Name + "=" + item.Text + " ";
+                              switch (item.Name)
+                              {
+                                  case "adapterSetSubnet":
+                                      SelectedAdapter.Subnet = item.Text;
+                                      break;
+                              }
                           }
                       }
                       else
@@ -69,19 +75,6 @@ namespace NetworkInterfaceConfigurator.ViewModels
                   (updateSettings = new RelayCommand(obj =>
                   {
                       InitAdapterProperties(SelectedAdapter);
-                  }));
-            }
-        }
-        private RelayCommand updateSource;
-        public RelayCommand UpdateSource
-        {
-            get
-            {
-                return updateSource ??
-                  (updateSource = new RelayCommand(obj =>
-                  {
-                      TextBox tb = obj as TextBox;
-                      SelectedAdapter.Gateway = tb.Text;
                   }));
             }
         }

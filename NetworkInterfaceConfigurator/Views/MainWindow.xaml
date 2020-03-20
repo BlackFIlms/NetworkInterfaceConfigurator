@@ -149,6 +149,7 @@
                                                Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetIP"
                                              Tag="Set ip here"
+                                             Text="{Binding IP, UpdateSourceTrigger=Explicit}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                 </Grid>
@@ -170,6 +171,7 @@
                                            Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetSubnet"
                                              Tag="Set subnet here"
+                                             Text="{Binding Subnet, UpdateSourceTrigger=Explicit}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                 </Grid>
@@ -191,6 +193,7 @@
                                            Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetGateway"
                                              Tag="Set gateway here"
+                                             Text="{Binding Gateway, UpdateSourceTrigger=Explicit}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                 </Grid>
@@ -212,6 +215,7 @@
                                            Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetDNS1"
                                              Tag="Set 1st dns here"
+                                             Text="{Binding DNS1, UpdateSourceTrigger=Explicit}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                 </Grid>
@@ -233,6 +237,7 @@
                                            Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetDNS2"
                                              Tag="Set 2nd dns here"
+                                             Text="{Binding DNS2, UpdateSourceTrigger=Explicit}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                 </Grid>
@@ -254,7 +259,7 @@
                                            Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetMAC"
                                              Tag="Set mac here"
-                                             Text="{Binding Gateway, UpdateSourceTrigger=Explicit}"
+                                             Text="{Binding MAC, UpdateSourceTrigger=Explicit}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                     <Button Content="R"
@@ -271,6 +276,7 @@
                         
                     </Grid>
                 </Grid>
+                <!-- For change settings before user click on button, using MultiBinding -->
                 <Grid x:Name="gridAdapterButtons" Grid.Row="2">
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Change" Style="{StaticResource GridAdapterButtons}" Command="{Binding ChangeDebug}">

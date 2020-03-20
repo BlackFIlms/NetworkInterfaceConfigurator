@@ -8,6 +8,9 @@ using System.Windows.Data;
 
 namespace NetworkInterfaceConfigurator.Converters
 {
+    /// <summary>
+    /// Converter for get settings for adapter, from window fields.
+    /// </summary>
     class AdapterSettingsConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
