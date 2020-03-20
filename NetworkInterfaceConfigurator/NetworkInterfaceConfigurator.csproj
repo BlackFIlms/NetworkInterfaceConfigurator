@@ -107,6 +107,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\AdapterSettingsConverter.cs" />
     <Compile Include="Models\NetworkInterfaceLib.cs" />
     <Compile Include="Models\ProperyChanged.cs" />
     <Compile Include="ViewModels\EditPresetViewModel.cs" />

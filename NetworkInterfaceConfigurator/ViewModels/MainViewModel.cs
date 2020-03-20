@@ -33,6 +33,59 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
 
+        /*Example for change adapter settings*/
+        private RelayCommand changeDebug;
+        public RelayCommand ChangeDebug
+        {
+            get
+            {
+                return changeDebug ??
+                  (changeDebug = new RelayCommand(obj =>
+                  {
+                      if (obj != null)
+                      {
+                          List<object> parameters = obj as List<object>;
+                          Debug = parameters.Count.ToString() + " ";
+                          foreach (TextBox item in parameters)
+                          {
+                              Debug += item.Name + " ";
+                          }
+                      }
+                      else
+                      {
+                          Debug = "null";
+                      }
+                      /*string txt = obj as string;
+                      Debug = txt;*/
+                  }));
+            }
+        }
+        private RelayCommand updateSettings;
+        public RelayCommand UpdateSettings
+        {
+            get
+            {
+                return updateSettings ??
+                  (updateSettings = new RelayCommand(obj =>
+                  {
+                      InitAdapterProperties(SelectedAdapter);
+                  }));
+            }
+        }
+        private RelayCommand updateSource;
+        public RelayCommand UpdateSource
+        {
+            get
+            {
+                return updateSource ??
+                  (updateSource = new RelayCommand(obj =>
+                  {
+                      TextBox tb = obj as TextBox;
+                      SelectedAdapter.Gateway = tb.Text;
+                  }));
+            }
+        }
+
         public ObservableCollection<NetworkInterfaceLib> Adapters { get; set; }
 
         private NetworkInterfaceLib selectedAdapter;
@@ -43,7 +96,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 selectedAdapter = value;
                 OnPropertyChanged("SelectedAdapter");
-                InitAdapterProperties(value); //After selection adapter, loading adapter properties.
+                //InitAdapterProperties(value); //After selection adapter, loading adapter properties.
             }
         }
 
@@ -227,6 +280,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                     obj.NicID = NetworkInterfaceLib.GetNicID(adapterIndex);
                     obj.NicName = NetworkInterfaceLib.GetNicName(adapterIndex);
                     obj.NetName = NetworkInterfaceLib.GetNetName(adapterIndex);
+                    InitAdapterProperties(obj);
                     yield return obj;
                 }
             }
@@ -238,7 +292,19 @@ namespace NetworkInterfaceConfigurator.ViewModels
             obj.IP = NetworkInterfaceLib.GetIP(obj.NicIndex);
             obj.Subnet = NetworkInterfaceLib.GetSubnet(obj.NicIndex);
             obj.Gateway = NetworkInterfaceLib.GetGateway(obj.NicIndex);
-            obj.DNS = NetworkInterfaceLib.GetDNS(obj.NicIndex);
+            
+            for (int i = 0; i < NetworkInterfaceLib.GetDNS(obj.NicIndex).Length; i++)
+            {
+                if (i == 0)
+                {
+                    obj.DNS1 = NetworkInterfaceLib.GetDNS(obj.NicIndex)[0];
+                }
+                else if (i == 1 )
+                {
+                    obj.DNS2 = NetworkInterfaceLib.GetDNS(obj.NicIndex)[1];
+                }
+            }
+
             obj.MAC = NetworkInterfaceLib.GetMAC(obj.NicIndex);
         }
         #endregion

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkInterfaceConfigurator"
         xmlns:viewmodel="clr-namespace:NetworkInterfaceConfigurator.ViewModels"
+        xmlns:converter="clr-namespace:NetworkInterfaceConfigurator.Converters"
         xmlns:view="clr-namespace:NetworkInterfaceConfigurator.Views"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
@@ -21,8 +22,11 @@
         WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
-        <viewmodel:MainViewModel />
+        <viewmodel:MainViewModel x:Name="MainVM"/>
     </Window.DataContext>
+    <Window.Resources>
+        <converter:AdapterSettingsConverter x:Key="myAdapterSettingsConverter"/>
+    </Window.Resources>
 
     <!-- For get user input, better use gesture then Interaction.Triggers -->
     <Window.InputBindings>
@@ -143,7 +147,10 @@
                                     <TextBlock Text="{Binding IP, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
                                                Style="{StaticResource GridContentValues}"
                                                Grid.Column="0"/>
-                                    <TextBox Tag="Set ip here" Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
+                                    <TextBox x:Name="adapterSetIP"
+                                             Tag="Set ip here"
+                                             Style="{StaticResource GridContentSettings}"
+                                             Grid.Column="1"/>
                                 </Grid>
                             </Grid>
                             <Grid Margin="0, 14, 0, 0">
@@ -161,7 +168,10 @@
                                     <TextBlock Text="{Binding Subnet, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Tag="Set subnet here" Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
+                                    <TextBox x:Name="adapterSetSubnet"
+                                             Tag="Set subnet here"
+                                             Style="{StaticResource GridContentSettings}"
+                                             Grid.Column="1"/>
                                 </Grid>
                             </Grid>
                             <Grid Margin="0, 14, 0, 0">
@@ -179,7 +189,10 @@
                                     <TextBlock Text="{Binding Gateway, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Tag="Set gateway here" Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
+                                    <TextBox x:Name="adapterSetGateway"
+                                             Tag="Set gateway here"
+                                             Style="{StaticResource GridContentSettings}"
+                                             Grid.Column="1"/>
                                 </Grid>
                             </Grid>
                             <Grid Margin="0, 14, 0, 0">
@@ -194,10 +207,13 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="23"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding DNS[0], TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
+                                    <TextBlock Text="{Binding DNS1, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Tag="Set 1st dns here" Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
+                                    <TextBox x:Name="adapterSetDNS1"
+                                             Tag="Set 1st dns here"
+                                             Style="{StaticResource GridContentSettings}"
+                                             Grid.Column="1"/>
                                 </Grid>
                             </Grid>
                             <Grid Margin="0, 14, 0, 0">
@@ -212,10 +228,13 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="23"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding DNS[1], TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
+                                    <TextBlock Text="{Binding DNS2, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Tag="Set 2nd dns here" Style="{StaticResource GridContentSettings}" Grid.Column="1"/>
+                                    <TextBox x:Name="adapterSetDNS2"
+                                             Tag="Set 2nd dns here"
+                                             Style="{StaticResource GridContentSettings}"
+                                             Grid.Column="1"/>
                                 </Grid>
                             </Grid>
                             <Grid Margin="0, 14, 0, 0">
@@ -233,8 +252,11 @@
                                     <TextBlock Text="{Binding MAC, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
-                                    <TextBox Tag="Set mac here" Style="{StaticResource GridContentSettings}"
-                                                Grid.Column="1"/>
+                                    <TextBox x:Name="adapterSetMAC"
+                                             Tag="Set mac here"
+                                             Text="{Binding Gateway, UpdateSourceTrigger=Explicit}"
+                                             Style="{StaticResource GridContentSettings}"
+                                             Grid.Column="1"/>
                                     <Button Content="R"
                                             ToolTip="Set random mac address"
                                             HorizontalAlignment="Center"
@@ -251,9 +273,20 @@
                 </Grid>
                 <Grid x:Name="gridAdapterButtons" Grid.Row="2">
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="Change" Style="{StaticResource GridAdapterButtons}"/>
+                        <Button Content="Change" Style="{StaticResource GridAdapterButtons}" Command="{Binding ChangeDebug}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource myAdapterSettingsConverter}">
+                                    <Binding ElementName="adapterSetIP"/>
+                                    <Binding ElementName="adapterSetSubnet"/>
+                                    <Binding ElementName="adapterSetGateway"/>
+                                    <Binding ElementName="adapterSetDNS1"/>
+                                    <Binding ElementName="adapterSetDNS2"/>
+                                    <Binding ElementName="adapterSetMAC"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
                         <Button Content="Clear" Style="{StaticResource GridAdapterButtons}"/>
-                        <Button Content="Update" Style="{StaticResource GridAdapterButtons}"/>
+                        <Button Content="Update" Style="{StaticResource GridAdapterButtons}" Command="{Binding UpdateSettings}"/>
                     </StackPanel>
                 </Grid>
             </Grid>

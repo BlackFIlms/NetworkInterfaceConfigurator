@@ -112,7 +112,8 @@ namespace NetworkInterfaceConfigurator.Models
         private string ip;
         private string subnet;
         private string gateway;
-        private string[] dns;
+        private string dns1;
+        private string dns2;
         private string mac;
 
         //Properties.
@@ -221,15 +222,28 @@ namespace NetworkInterfaceConfigurator.Models
             }
         }
         /// <summary>
-        /// Get or Set DNS.
+        /// Get or Set DNS 1.
         /// </summary>
-        public string[] DNS
+        public string DNS1
         {
-            get { return dns; }
+            get { return dns1; }
 
             set
             {
-                dns = value;
+                dns1 = value;
+                OnPropertyChanged("DNS");
+            }
+        }
+        /// <summary>
+        /// Get or Set DNS 2.
+        /// </summary>
+        public string DNS2
+        {
+            get { return dns2; }
+
+            set
+            {
+                dns2 = value;
                 OnPropertyChanged("DNS");
             }
         }
