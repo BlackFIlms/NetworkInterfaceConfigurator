@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using NetworkInterfaceConfigurator.Models;
 using NetworkInterfaceConfigurator.Views;
 
@@ -21,6 +24,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             GetAdapters();
         }
 
+        
         private string debug;
         public string Debug
         {
@@ -32,53 +36,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                 OnPropertyChanged("Debug");
             }
         }
-
-        /*Example for change adapter settings*/
-        private RelayCommand changeDebug;
-        public RelayCommand ChangeDebug
-        {
-            get
-            {
-                return changeDebug ??
-                  (changeDebug = new RelayCommand(obj =>
-                  {
-                      if (obj != null)
-                      {
-                          List<object> parameters = obj as List<object>;
-                          Debug = parameters.Count.ToString() + " ";
-                          foreach (TextBox item in parameters)
-                          {
-                              Debug += item.Name + "=" + item.Text + " ";
-                              switch (item.Name)
-                              {
-                                  case "adapterSetSubnet":
-                                      SelectedAdapter.Subnet = item.Text;
-                                      break;
-                              }
-                          }
-                      }
-                      else
-                      {
-                          Debug = "null";
-                      }
-                      /*string txt = obj as string;
-                      Debug = txt;*/
-                  }));
-            }
-        }
-        private RelayCommand updateSettings;
-        public RelayCommand UpdateSettings
-        {
-            get
-            {
-                return updateSettings ??
-                  (updateSettings = new RelayCommand(obj =>
-                  {
-                      InitAdapterProperties(SelectedAdapter);
-                  }));
-            }
-        }
-
+        
         public ObservableCollection<NetworkInterfaceLib> Adapters { get; set; }
 
         private NetworkInterfaceLib selectedAdapter;
@@ -306,6 +264,61 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
 
             obj.MAC = NetworkInterfaceLib.GetMAC(obj.NicIndex);
+        }
+        #endregion
+
+        #region Buttons
+        private RelayCommand changeProperties;
+        public RelayCommand ChangeProperties
+        {
+            get
+            {
+                return changeProperties ??
+                  (changeProperties = new RelayCommand(obj =>
+                  {
+                      try
+                      {
+                          List<object> parameters = obj as List<object>;
+                          Debug = parameters.Count.ToString() + " ";
+                          foreach (TextBox item in parameters)
+                          {
+                              Debug += item.Name + "=" + item.Text + " ";
+                              switch (item.Name)
+                              {
+                                  case "adapterSetIP":
+                                      SelectedAdapter.IP = item.Text;
+                                      break;
+                                  case "adapterSetSubnet":
+                                      SelectedAdapter.Subnet = item.Text;
+                                      break;
+                              }
+                          }
+                      }
+                      catch (NullReferenceException e)
+                      {
+                          MessageBox.Show("You did not select adapter!", "Error");
+                      }
+                  }));
+            }
+        }
+        private RelayCommand updateSettings;
+        public RelayCommand UpdateSettings
+        {
+            get
+            {
+                return updateSettings ??
+                  (updateSettings = new RelayCommand(obj =>
+                  {
+                      try
+                      {
+                          InitAdapterProperties(SelectedAdapter);
+                      }
+                      catch (NullReferenceException e)
+                      {
+                          MessageBox.Show("You did not select adapter!", "Error");
+                      }
+                  }));
+            }
         }
         #endregion
 

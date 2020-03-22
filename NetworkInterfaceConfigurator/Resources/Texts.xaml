@@ -61,7 +61,7 @@
                             <SolidColorBrush Color="{Binding Path=Background.Color, RelativeSource={RelativeSource TemplatedParent}}" />
                         </Border.Background>
                         <Border.BorderBrush>
-                            <SolidColorBrush Color="{DynamicResource ColorABlack}" />
+                            <SolidColorBrush Color="{Binding Path=BorderBrush.Color, RelativeSource={RelativeSource TemplatedParent}}" />
                         </Border.BorderBrush>
 
                         <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
@@ -92,7 +92,8 @@
                             <TextBox.Style>
                                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource BaseTextBox}">
                                     <Setter Property="Background" Value="Transparent"/>
-                                    
+                                    <Setter Property="BorderBrush" Value="{StaticResource BrushABlack}"/>
+
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter Property="Background" Value="Transparent" />
@@ -124,6 +125,11 @@
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="textTag" Property="Background" Value="{StaticResource BrushMediumGray2}" />
                             <Setter TargetName="textTag" Property="Foreground" Value="{StaticResource BrushLightGrayTranspared}" />
+                        </Trigger>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="textSource" Property="ToolTip" Value="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="textSource" Property="Foreground" Value="Red" />
+                            <Setter TargetName="textSource" Property="BorderBrush" Value="Red" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

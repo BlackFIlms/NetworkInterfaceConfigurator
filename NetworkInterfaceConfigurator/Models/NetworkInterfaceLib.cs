@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 using System.Net.NetworkInformation;
 using Microsoft.Win32;
 using System.Management;
+using System.ComponentModel;
+using System.Collections;
 
 namespace NetworkInterfaceConfigurator.Models
 {
     /// <summary>
     /// Operations with adapters via WMI & NetworkInformation.
     /// </summary>
-    class NetworkInterfaceLib : ProperyChanged
+    class NetworkInterfaceLib : ProperyChanged, INotifyDataErrorInfo
     {
         /*//Defining variables
         public static List<AdapterWMI> adaptersWMI = new List<AdapterWMI>();
@@ -101,8 +103,70 @@ namespace NetworkInterfaceConfigurator.Models
             }
         }*/
 
+        #region Validation
+        private readonly Dictionary<string, List<string>> _errorsByPropertyName = new Dictionary<string, List<string>>();
 
+        public bool HasErrors => _errorsByPropertyName.Any();
 
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            return _errorsByPropertyName.ContainsKey(propertyName) ?
+                _errorsByPropertyName[propertyName] : null;
+        }
+
+        private void OnErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+
+        private bool IsValidIP(string data)
+        {
+            ClearErrors(nameof(IP));
+            bool valid = false;
+            if (string.IsNullOrWhiteSpace(data))
+            {
+                AddError(nameof(IP), "Username cannot be empty.");
+                return valid;
+            }
+            if (string.Equals(data, "Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                AddError(nameof(IP), "Admin is not valid username.");
+                return valid;
+            }
+            if (data == null || data?.Length <= 5)
+            {
+                AddError(nameof(IP), "Username must be at least 6 characters long.");
+                return valid;
+            }
+            valid = true;
+            return valid;
+        }
+
+        private void AddError(string propertyName, string error)
+        {
+            if (!_errorsByPropertyName.ContainsKey(propertyName))
+                _errorsByPropertyName[propertyName] = new List<string>();
+
+            if (!_errorsByPropertyName[propertyName].Contains(error))
+            {
+                _errorsByPropertyName[propertyName].Add(error);
+                OnErrorsChanged(propertyName);
+            }
+        }
+
+        private void ClearErrors(string propertyName)
+        {
+            if (_errorsByPropertyName.ContainsKey(propertyName))
+            {
+                _errorsByPropertyName.Remove(propertyName);
+                OnErrorsChanged(propertyName);
+            }
+        }
+        #endregion
+
+        #region Variables & Properties
         //Variables.
         private string nicIndex;
         private string nicID;
@@ -191,8 +255,11 @@ namespace NetworkInterfaceConfigurator.Models
 
             set
             {
-                ip = value;
-                OnPropertyChanged("IP");
+                if (IsValidIP(value))
+                {
+                    ip = value;
+                    OnPropertyChanged("IP");
+                }
             }
         }
         /// <summary>
@@ -260,8 +327,9 @@ namespace NetworkInterfaceConfigurator.Models
                 OnPropertyChanged("MAC");
             }
         }
-
-        //Methods.
+        #endregion
+        
+        #region GetMethods
 
         /// <summary>
         /// Get adapter RegKeys.
@@ -472,5 +540,6 @@ namespace NetworkInterfaceConfigurator.Models
             }
             return MAC;
         }
+        #endregion
     }
 }

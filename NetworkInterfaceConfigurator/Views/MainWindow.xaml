@@ -132,7 +132,7 @@
                     </Grid.ColumnDefinitions>
                     <Grid x:Name="gridAdapterSettings" Margin="20, 0, 0, 0" Grid.Column="0">
                         <StackPanel DataContext="{Binding SelectedAdapter}" Orientation="Vertical">
-                            <Grid Margin="0, 18, 0, 0">
+                            <Grid x:Name="gridAdapterSettingsIP" Margin="0, 18, 0, 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
@@ -149,12 +149,12 @@
                                                Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetIP"
                                              Tag="Set ip here"
-                                             Text="{Binding IP, UpdateSourceTrigger=Explicit}"
+                                             Text="{Binding Path=IP, UpdateSourceTrigger=Explicit, ValidatesOnNotifyDataErrors=True}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                 </Grid>
                             </Grid>
-                            <Grid Margin="0, 14, 0, 0">
+                            <Grid x:Name="gridAdapterSettingsSubnet" Margin="0, 14, 0, 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
@@ -176,7 +176,7 @@
                                              Grid.Column="1"/>
                                 </Grid>
                             </Grid>
-                            <Grid Margin="0, 14, 0, 0">
+                            <Grid x:Name="gridAdapterSettingsGateway" Margin="0, 14, 0, 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
@@ -198,7 +198,7 @@
                                              Grid.Column="1"/>
                                 </Grid>
                             </Grid>
-                            <Grid Margin="0, 14, 0, 0">
+                            <Grid x:Name="gridAdapterSettingsDNS1" Margin="0, 14, 0, 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
@@ -220,7 +220,7 @@
                                              Grid.Column="1"/>
                                 </Grid>
                             </Grid>
-                            <Grid Margin="0, 14, 0, 0">
+                            <Grid x:Name="gridAdapterSettingsDNS2" Margin="0, 14, 0, 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
@@ -242,7 +242,7 @@
                                              Grid.Column="1"/>
                                 </Grid>
                             </Grid>
-                            <Grid Margin="0, 14, 0, 0">
+                            <Grid x:Name="gridAdapterSettingsMAC" Margin="0, 14, 0, 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
@@ -279,7 +279,9 @@
                 <!-- For change settings before user click on button, using MultiBinding -->
                 <Grid x:Name="gridAdapterButtons" Grid.Row="2">
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="Change" Style="{StaticResource GridAdapterButtons}" Command="{Binding ChangeDebug}">
+                        <Button Content="Change"
+                                Style="{StaticResource GridAdapterButtons}"
+                                Command="{Binding ChangeProperties}">
                             <Button.CommandParameter>
                                 <MultiBinding Converter="{StaticResource myAdapterSettingsConverter}">
                                     <Binding ElementName="adapterSetIP"/>
