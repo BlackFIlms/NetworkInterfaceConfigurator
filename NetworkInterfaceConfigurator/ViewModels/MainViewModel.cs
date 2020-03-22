@@ -88,8 +88,8 @@ namespace NetworkInterfaceConfigurator.ViewModels
             set
             {
                 selectedAdapter = value;
+                InitAdapterProperties(value); //After selection adapter, loading adapter properties.
                 OnPropertyChanged("SelectedAdapter");
-                //InitAdapterProperties(value); //After selection adapter, loading adapter properties.
             }
         }
 
@@ -252,6 +252,13 @@ namespace NetworkInterfaceConfigurator.ViewModels
         }
         #endregion
 
+        #region GetAdapters
+        public void GetAdapters()
+        {
+            Adapters = new ObservableCollection<NetworkInterfaceLib>(Init());
+        }
+        #endregion
+
         #region AdaptersInit
         /*
             Manual initialization.
@@ -273,7 +280,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                     obj.NicID = NetworkInterfaceLib.GetNicID(adapterIndex);
                     obj.NicName = NetworkInterfaceLib.GetNicName(adapterIndex);
                     obj.NetName = NetworkInterfaceLib.GetNetName(adapterIndex);
-                    InitAdapterProperties(obj);
+                    //InitAdapterProperties(obj); //Properties init for all adapters, together with adapters init.
                     yield return obj;
                 }
             }
@@ -299,13 +306,6 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
 
             obj.MAC = NetworkInterfaceLib.GetMAC(obj.NicIndex);
-        }
-        #endregion
-
-        #region GetAdapters
-        public void GetAdapters()
-        {
-            Adapters = new ObservableCollection<NetworkInterfaceLib>(Init());
         }
         #endregion
 
