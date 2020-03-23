@@ -14,7 +14,7 @@ namespace NetworkInterfaceConfigurator.Models
     /// <summary>
     /// Operations with adapters via WMI & NetworkInformation.
     /// </summary>
-    class NetworkInterfaceLib : ProperyChanged, INotifyDataErrorInfo
+    class NetworkInterfaceLib : NotifyDataErrorInfoAndPropertyChanged
     {
         /*//Defining variables
         public static List<AdapterWMI> adaptersWMI = new List<AdapterWMI>();
@@ -104,65 +104,80 @@ namespace NetworkInterfaceConfigurator.Models
         }*/
 
         #region Validation
-        private readonly Dictionary<string, List<string>> _errorsByPropertyName = new Dictionary<string, List<string>>();
-
-        public bool HasErrors => _errorsByPropertyName.Any();
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        public IEnumerable GetErrors(string propertyName)
+        /// <summary>
+        /// Check ip based values on matching to some conditions.
+        /// And after checks, return true if value is valid.
+        /// </summary>
+        /// <param name="data">Requieries the ip based value.</param>
+        /// <param name="key">Requieries name of the property.</param>
+        /// <returns>Bool value. True if value is valid.</returns>
+        protected bool IsValidIP(string data, string key)
         {
-            return _errorsByPropertyName.ContainsKey(propertyName) ?
-                _errorsByPropertyName[propertyName] : null;
-        }
-
-        private void OnErrorsChanged(string propertyName)
-        {
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-        }
-
-        private bool IsValidIP(string data)
-        {
-            ClearErrors(nameof(IP));
+            ClearErrors(key);
+            //Variables.
             bool valid = false;
+            const int ipGroups = 4;
+            const int ipMaxValue = 255;
+
+            //Validation.
             if (string.IsNullOrWhiteSpace(data))
             {
-                AddError(nameof(IP), "Username cannot be empty.");
+                AddError(key, key + " cannot be empty.");
                 return valid;
             }
-            if (string.Equals(data, "Admin", StringComparison.OrdinalIgnoreCase))
+            if (!ValidateStringFormat(data, @"\A(\d+)\.(\d+)\.(\d+)\.(\d+)\z"))
             {
-                AddError(nameof(IP), "Admin is not valid username.");
+                AddError(key, "Wrong " + key + " format.");
                 return valid;
             }
-            if (data == null || data?.Length <= 5)
+            if (!ValidateIntMaxValues(data, @"(\d+)", ipGroups, ipMaxValue))
             {
-                AddError(nameof(IP), "Username must be at least 6 characters long.");
+                AddError(key, "Values in " + key + " cannot be greater, than: " + ipMaxValue + ".");
                 return valid;
             }
+
             valid = true;
             return valid;
         }
-
-        private void AddError(string propertyName, string error)
+        /// <summary>
+        /// Check mac based values on matching to some conditions.
+        /// And after checks, return true if value is valid.
+        /// </summary>
+        /// <param name="data">Requieries the mac based value.</param>
+        /// <param name="key">Requieries name of the property.</param>
+        /// <returns>Bool value. True if value is valid.</returns>
+        protected bool IsValidMAC(string data, string key)
         {
-            if (!_errorsByPropertyName.ContainsKey(propertyName))
-                _errorsByPropertyName[propertyName] = new List<string>();
+            ClearErrors(key);
+            //Variables.
+            bool valid = false;
+            const int macGroups = 6;
+            const int macMaxValue = 255;
 
-            if (!_errorsByPropertyName[propertyName].Contains(error))
+            //Validation.
+            if (string.IsNullOrWhiteSpace(data))
             {
-                _errorsByPropertyName[propertyName].Add(error);
-                OnErrorsChanged(propertyName);
+                AddError(key, key + " cannot be empty.");
+                return valid;
             }
-        }
+            if (!ValidateStringFormat(data, @"\A(((\d+[A-F]*)|([A-F]+\d*)){2}:){5}((\d+[A-F]*)|([A-F]+\d*)){2}\z")) // {2} for single char cases. {5} for 5 times matches this group.
+            {
+                AddError(key, "Wrong " + key + " format.");
+                return valid;
+            }
+            if (!ValidateHEXMaxValues(data, @"((\d+[A-F]*)|([A-F]+\d*)){2}", macGroups, macMaxValue)) //{2} for A0A or 0A0 cases.
+            {
+                AddError(key, "Values in " + key + " cannot be greater, than: " + macMaxValue + ".");
+                return valid;
+            }
+            if (ValidateStringFormat(data, @"00(\d+[A-F]*)|00(\d*[A-F]+)")) // For 00x, where x any value.
+            {
+                AddError(key, "Wrong " + key + " format.");
+                return valid;
+            }
 
-        private void ClearErrors(string propertyName)
-        {
-            if (_errorsByPropertyName.ContainsKey(propertyName))
-            {
-                _errorsByPropertyName.Remove(propertyName);
-                OnErrorsChanged(propertyName);
-            }
+            valid = true;
+            return valid;
         }
         #endregion
 
@@ -255,7 +270,7 @@ namespace NetworkInterfaceConfigurator.Models
 
             set
             {
-                if (IsValidIP(value))
+                if (IsValidIP(value, "IP"))
                 {
                     ip = value;
                     OnPropertyChanged("IP");
@@ -271,8 +286,11 @@ namespace NetworkInterfaceConfigurator.Models
 
             set
             {
-                subnet = value;
-                OnPropertyChanged("Subnet");
+                if (IsValidIP(value, "Subnet"))
+                {
+                    subnet = value;
+                    OnPropertyChanged("Subnet");
+                }
             }
         }
         /// <summary>
@@ -284,8 +302,11 @@ namespace NetworkInterfaceConfigurator.Models
 
             set
             {
-                gateway = value;
-                OnPropertyChanged("Gateway");
+                if (IsValidIP(value, "Gateway"))
+                {
+                    gateway = value;
+                    OnPropertyChanged("Gateway");
+                }
             }
         }
         /// <summary>
@@ -297,8 +318,11 @@ namespace NetworkInterfaceConfigurator.Models
 
             set
             {
-                dns1 = value;
-                OnPropertyChanged("DNS");
+                if (IsValidIP(value, "DNS1"))
+                {
+                    dns1 = value;
+                    OnPropertyChanged("DNS1");
+                }
             }
         }
         /// <summary>
@@ -310,8 +334,11 @@ namespace NetworkInterfaceConfigurator.Models
 
             set
             {
-                dns2 = value;
-                OnPropertyChanged("DNS");
+                if (IsValidIP(value, "DNS2"))
+                {
+                    dns2 = value;
+                    OnPropertyChanged("DNS2");
+                }
             }
         }
         /// <summary>
@@ -323,8 +350,11 @@ namespace NetworkInterfaceConfigurator.Models
 
             set
             {
-                mac = value;
-                OnPropertyChanged("MAC");
+                if (IsValidMAC(value, "MAC"))
+                {
+                    mac = value;
+                    OnPropertyChanged("MAC");
+                }
             }
         }
         #endregion

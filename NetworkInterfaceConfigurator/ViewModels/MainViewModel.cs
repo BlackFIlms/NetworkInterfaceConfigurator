@@ -286,10 +286,23 @@ namespace NetworkInterfaceConfigurator.ViewModels
                               switch (item.Name)
                               {
                                   case "adapterSetIP":
+                                      Debug = Convert.ToInt32('H').ToString();
                                       SelectedAdapter.IP = item.Text;
                                       break;
                                   case "adapterSetSubnet":
                                       SelectedAdapter.Subnet = item.Text;
+                                      break;
+                                  case "adapterSetGateway":
+                                      SelectedAdapter.Gateway = item.Text;
+                                      break;
+                                  case "adapterSetDNS1":
+                                      SelectedAdapter.DNS1 = item.Text;
+                                      break;
+                                  case "adapterSetDNS2":
+                                      SelectedAdapter.DNS2 = item.Text;
+                                      break;
+                                  case "adapterSetMAC":
+                                      SelectedAdapter.MAC = item.Text;
                                       break;
                               }
                           }
