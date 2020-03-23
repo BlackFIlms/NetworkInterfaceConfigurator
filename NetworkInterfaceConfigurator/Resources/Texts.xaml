@@ -80,15 +80,19 @@
     </Style>
 
     <Style x:Key="GridContentSettings" TargetType="{x:Type TextBox}">
-        <Setter Property="Width" Value="100"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
                     <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
                         <TextBox x:Name="textSource"
                                  Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 Panel.ZIndex="2">
+                                 Panel.ZIndex="2"
+                                 Grid.Column="0">
                             <TextBox.Style>
                                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource BaseTextBox}">
                                     <Setter Property="Background" Value="Transparent"/>
@@ -104,7 +108,8 @@
                         </TextBox>
                         <TextBox x:Name="textTag" 
                                  Text="{TemplateBinding Tag}"
-                                 Panel.ZIndex="1">
+                                 Panel.ZIndex="1"
+                                 Grid.Column="0">
                             <TextBox.Style>
                                 <Style BasedOn="{StaticResource BaseTextBox}" TargetType="{x:Type TextBox}">
                                     <Setter Property="Foreground" Value="Transparent"/>
@@ -116,6 +121,28 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
+                        <Grid x:Name="textError"
+                              Margin="4, 0, 0, 0"
+                              VerticalAlignment="Center"
+                              Visibility="Collapsed"
+                              Grid.Column="1">
+                            <TextBlock Text="!"
+                                       Foreground="{StaticResource BrushRed}"
+                                       FontFamily="{StaticResource StandartText-Bold}"
+                                       FontSize="{StaticResource VeryBig}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       SnapsToDevicePixels="True"
+                                       UseLayoutRounding="True"
+                                       Panel.ZIndex="2"/>
+                            <Ellipse Width="19"
+                                     Height="19"
+                                     Stroke="{StaticResource BrushRed}"
+                                     StrokeThickness="0.5"
+                                     SnapsToDevicePixels="True"
+                                     UseLayoutRounding="True"
+                                     Panel.ZIndex="1"/>
+                        </Grid>
                     </Grid>
 
                     <ControlTemplate.Triggers>
@@ -127,9 +154,10 @@
                             <Setter TargetName="textTag" Property="Foreground" Value="{StaticResource BrushLightGrayTranspared}" />
                         </Trigger>
                         <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="textError" Property="Visibility" Value="Visible"/>
                             <Setter TargetName="textSource" Property="ToolTip" Value="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter TargetName="textSource" Property="Foreground" Value="Red" />
-                            <Setter TargetName="textSource" Property="BorderBrush" Value="Red" />
+                            <Setter TargetName="textSource" Property="Foreground" Value="{StaticResource BrushRed}" />
+                            <Setter TargetName="textSource" Property="BorderBrush" Value="{StaticResource BrushRed}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

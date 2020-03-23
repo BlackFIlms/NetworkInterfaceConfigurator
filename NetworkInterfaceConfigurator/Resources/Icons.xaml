@@ -319,6 +319,7 @@
         </Canvas>
     </ControlTemplate>
 
+
     <Style x:Key="GridPresetsRectangles" TargetType="{x:Type Rectangle}">
         <Setter Property="Stroke" Value="{StaticResource BrushMediumGray2}"/>
         <Setter Property="Width" Value="70"/>

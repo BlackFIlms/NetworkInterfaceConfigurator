@@ -17,5 +17,6 @@
     <system:Double x:Key="Small">8</system:Double>
     <system:Double x:Key="Regular">10</system:Double>
     <system:Double x:Key="Big">12</system:Double>
+    <system:Double x:Key="VeryBig">14</system:Double>
 
 </ResourceDictionary>
