@@ -181,7 +181,7 @@ namespace NetworkInterfaceConfigurator.Models
         }
         #endregion
 
-        #region Variables & Properties
+        #region Variables, Constants & Properties
         //Variables.
         private string nicIndex;
         private string nicID;
@@ -194,6 +194,9 @@ namespace NetworkInterfaceConfigurator.Models
         private string dns1;
         private string dns2;
         private string mac;
+
+        //Constatnts.
+        private const string netAdaptersReg = @"SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002bE10318}\";
 
         //Properties.
         /// <summary>
@@ -387,6 +390,16 @@ namespace NetworkInterfaceConfigurator.Models
                 if (objMO["SettingID"].ToString() == index)
                 {
                     ID = objMO["Index"].ToString();
+
+                    // Change ID format.
+                    if (ID.Length < 4)
+                    {
+                        for (int i = ID.Length; i < 4; i++)
+                        {
+                            ID = "0" + ID;
+                        }
+                    }
+
                     return ID;
                 }
             }
@@ -569,6 +582,54 @@ namespace NetworkInterfaceConfigurator.Models
                 }
             }
             return MAC;
+        }
+        #endregion
+
+        #region SetMethods
+
+        /// <summary>
+        /// Set MAC.
+        /// </summary>
+        public static bool SetMAC(string nicid, string new_mac, out string dbg)
+        {
+            bool ret = false;
+            using (RegistryKey bkey = GetBaseKey())
+            using (RegistryKey key = bkey.OpenSubKey(netAdaptersReg + nicid, true))
+            {
+                dbg = netAdaptersReg + nicid; // <--- Debug data, remove before release.
+                if (key != null)
+                {
+                    new_mac.Replace(":", "");
+                    key.SetValue("NetworkAddress", new_mac, RegistryValueKind.String);
+
+                    ManagementObjectSearcher objMOS = new ManagementObjectSearcher(
+                        new SelectQuery("SELECT * FROM Win32_NetworkAdapter WHERE Index = " + nicid));
+
+                    foreach (ManagementObject o in objMOS.Get().OfType<ManagementObject>())
+                    {
+                        o.InvokeMethod("Disable", null);
+                        o.InvokeMethod("Enable", null);
+                        ret = true;
+                    }
+                }
+                key.Close();
+            }
+
+            return ret;
+        }
+        /// <summary>
+        /// This functions check system version (64/32bit) and then get corresponding branch of registry.
+        /// </summary>
+        public static RegistryKey GetBaseKey()
+        {
+            return RegistryKey.OpenBaseKey(
+                RegistryHive.LocalMachine,
+                InternalCheckIsWow64() ? RegistryView.Registry64 : RegistryView.Registry32);
+        }
+        public static bool InternalCheckIsWow64()
+        {
+            bool b = Environment.Is64BitOperatingSystem;
+            return b;
         }
         #endregion
     }

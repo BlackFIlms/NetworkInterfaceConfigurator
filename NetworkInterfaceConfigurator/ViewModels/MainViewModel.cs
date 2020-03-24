@@ -286,7 +286,6 @@ namespace NetworkInterfaceConfigurator.ViewModels
                               switch (item.Name)
                               {
                                   case "adapterSetIP":
-                                      Debug = Convert.ToInt32('H').ToString();
                                       SelectedAdapter.IP = item.Text;
                                       break;
                                   case "adapterSetSubnet":
@@ -303,13 +302,14 @@ namespace NetworkInterfaceConfigurator.ViewModels
                                       break;
                                   case "adapterSetMAC":
                                       SelectedAdapter.MAC = item.Text;
+                                      MessageBox.Show(NetworkInterfaceLib.SetMAC(SelectedAdapter.NicID, SelectedAdapter.MAC, out string dbg).ToString() + "\r\n" + dbg + "\r\n" + SelectedAdapter.NicID.Length); // <--- Debug data, remove before release.
                                       break;
                               }
                           }
                       }
                       catch (NullReferenceException e)
                       {
-                          MessageBox.Show("You did not select adapter!", "Error");
+                          MessageBox.Show("You did not select adapter!" + "\r\n" + e, "Error");
                       }
                   }));
             }

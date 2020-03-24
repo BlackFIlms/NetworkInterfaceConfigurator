@@ -8,11 +8,11 @@ using System.Windows;
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 [assembly: AssemblyTitle("NetworkInterfaceConfigurator")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Designed by AvdeevMatvey")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("BlackFilms")]
 [assembly: AssemblyProduct("NetworkInterfaceConfigurator")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("BlackFilms ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -55,5 +55,5 @@ using System.Windows;
 //> a - version number.
 //> b - build number.
 //> c - release number(0 - Release version, 1 - Beta version, 2 - Dev version).
-[assembly: AssemblyVersion("0.8.8.2")]
-[assembly: AssemblyFileVersion("0.8.8.2")]
+[assembly: AssemblyVersion("0.8.9.2")]
+[assembly: AssemblyFileVersion("0.8.9.2")]
