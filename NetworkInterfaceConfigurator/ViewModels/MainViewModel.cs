@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.Win32;
 using NetworkInterfaceConfigurator.Models;
 using NetworkInterfaceConfigurator.Views;
 
@@ -18,13 +19,17 @@ namespace NetworkInterfaceConfigurator.ViewModels
 {
     class MainViewModel : ProperyChanged
     {
-        //Constructor.
+        // Constructor.
         public MainViewModel()
         {
             GetAdapters();
         }
 
-        
+        // Variables, Constants & Properties.
+        string tempIP;
+        string tempDNS2;
+
+
         private string debug;
         public string Debug
         {
@@ -46,14 +51,14 @@ namespace NetworkInterfaceConfigurator.ViewModels
             set
             {
                 selectedAdapter = value;
-                InitAdapterProperties(value); //After selection adapter, loading adapter properties.
+                InitAdapterProperties(value); // After selection adapter, loading adapter properties.
                 OnPropertyChanged("SelectedAdapter");
             }
         }
 
         #region Control logics for window.
 
-        //Define command for minimize Window.
+        // Define command for minimize Window.
         public RelayCommand MinWin
         {
             get
@@ -64,14 +69,14 @@ namespace NetworkInterfaceConfigurator.ViewModels
 
                     if (minWindowCommand != null)
                     {
-                        void _MinWin(Window w) => SystemCommands.MinimizeWindow(w); //Define a function to send arguments to the object MainWindow.
+                        void _MinWin(Window w) => SystemCommands.MinimizeWindow(w); // Define a function to send arguments to the object MainWindow.
                         _MinWin(minWindowCommand);
                     }
                 });
             }
         }
 
-        //Define command for restore||maximize Window.
+        // Define command for restore||maximize Window.
         public RelayCommand MaxWin
         {
             get
@@ -82,7 +87,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
 
                     if (maxWindowCommand != null)
                     {
-                        void _MaxWin(Window w) //Define a function to send arguments to the object MainWindow.
+                        void _MaxWin(Window w) // Define a function to send arguments to the object MainWindow.
                         {
                             if (w.WindowState == WindowState.Maximized) SystemCommands.RestoreWindow(w);
                             else SystemCommands.MaximizeWindow(w);
@@ -93,7 +98,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
 
-        //Define command for close Window.
+        // Define command for close Window.
         public RelayCommand CloseWin
         {
             get
@@ -110,7 +115,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
 
-        //Define command for drag Window.
+        // Define command for drag Window.
         public RelayCommand DragWindow
         {
             get
@@ -197,7 +202,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
         }
         public void CalcMarginTitle()
         {
-            //Swap culture.My default culture - "ru-RU".Need culture, for ConvertToDouble en-US.
+            // Swap culture.My default culture - "ru-RU".Need culture, for ConvertToDouble en-US.
 
             NumberFormatInfo provider = new NumberFormatInfo();
             provider.NumberDecimalSeparator = ".";
@@ -205,7 +210,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             provider.NumberGroupSizes = new int[] { 3 };
 
             double res = ((Convert.ToDouble(GetWindowWidth, provider) / 2) - Convert.ToDouble(GetIconHeaderWidth, provider) - Convert.ToDouble(GetMenuHeaderWidth, provider)) - (Convert.ToDouble(GetTitleHeaderWidth, provider) / 2);
-            res = Math.Round(res); //Rounds the result so that the title borders occupy full pixels.
+            res = Math.Round(res); // Rounds the result so that the title borders occupy full pixels.
             CenterTitle = res.ToString().Replace(',', '.') + ", 0, 0, 0";
         }
         #endregion
@@ -238,12 +243,12 @@ namespace NetworkInterfaceConfigurator.ViewModels
                     obj.NicID = NetworkInterfaceLib.GetNicID(adapterIndex);
                     obj.NicName = NetworkInterfaceLib.GetNicName(adapterIndex);
                     obj.NetName = NetworkInterfaceLib.GetNetName(adapterIndex);
-                    //InitAdapterProperties(obj); //Properties init for all adapters, together with adapters init.
+                    //InitAdapterProperties(obj); // Properties init for all adapters, together with adapters init.
                     yield return obj;
                 }
             }
         }
-        //Adapter properties loading only for selected adapter 
+        // Adapter properties loading only for selected adapter.
         public void InitAdapterProperties(NetworkInterfaceLib obj)
         {
             obj.IPEnabled = NetworkInterfaceLib.IsIpEnabled(obj.NicIndex);
@@ -280,29 +285,43 @@ namespace NetworkInterfaceConfigurator.ViewModels
                       {
                           List<object> parameters = obj as List<object>;
                           Debug = parameters.Count.ToString() + " ";
+
                           foreach (TextBox item in parameters)
                           {
                               Debug += item.Name + "=" + item.Text + " ";
                               switch (item.Name)
                               {
                                   case "adapterSetIP":
-                                      SelectedAdapter.IP = item.Text;
+                                      tempIP = SelectedAdapter.IP; // Writes ip to field, for get it in next case.
+                                      SelectedAdapter.IP = item.Text; // Writes ip from TextBox to adapter property.
                                       break;
                                   case "adapterSetSubnet":
-                                      SelectedAdapter.Subnet = item.Text;
+                                      string tempSubnet = SelectedAdapter.Subnet;
+                                      SelectedAdapter.Subnet = item.Text; // Writes subnet from TextBox to adapter property.
+                                      if ((SelectedAdapter.IP != tempIP) || (SelectedAdapter.Subnet != tempSubnet))
+                                          NetworkInterfaceLib.SetStatic(SelectedAdapter.NicIndex, SelectedAdapter.IP, SelectedAdapter.Subnet); // Apply new ip and subnet to adapter.
                                       break;
                                   case "adapterSetGateway":
-                                      SelectedAdapter.Gateway = item.Text;
+                                      string tempGateway = SelectedAdapter.Gateway;
+                                      SelectedAdapter.Gateway = item.Text; // Writes gateway from TextBox to adapter property.
+                                      if (SelectedAdapter.Gateway != tempGateway)
+                                          NetworkInterfaceLib.SetGateway(SelectedAdapter.NicIndex, SelectedAdapter.Gateway); // Apply new gateway to adapter.
+                                      break;
+                                  case "adapterSetDNS2": // Change property setting queue of DNS1 and DNS2.
+                                      tempDNS2 = SelectedAdapter.DNS2; // Writes dns1 to field, for get it in next case.
+                                      SelectedAdapter.DNS2 = item.Text; // Writes dns1 from TextBox to adapter property.
                                       break;
                                   case "adapterSetDNS1":
-                                      SelectedAdapter.DNS1 = item.Text;
-                                      break;
-                                  case "adapterSetDNS2":
-                                      SelectedAdapter.DNS2 = item.Text;
+                                      string tempDNS1 = SelectedAdapter.DNS1;
+                                      SelectedAdapter.DNS1 = item.Text; // Writes dns2 from TextBox to adapter property.
+                                      if ((SelectedAdapter.DNS1 != tempDNS1) || (SelectedAdapter.DNS2 != tempDNS2))
+                                          NetworkInterfaceLib.SetDNS(SelectedAdapter.NicIndex, SelectedAdapter.DNS1, SelectedAdapter.DNS2); // Apply new dns1 and dns2 to adapter.
                                       break;
                                   case "adapterSetMAC":
-                                      SelectedAdapter.MAC = item.Text;
-                                      MessageBox.Show(NetworkInterfaceLib.SetMAC(SelectedAdapter.NicID, SelectedAdapter.MAC, out string dbg).ToString() + "\r\n" + dbg + "\r\n" + SelectedAdapter.NicID.Length); // <--- Debug data, remove before release.
+                                      string tempMAC = SelectedAdapter.MAC;
+                                      SelectedAdapter.MAC = item.Text; // Writes mac address form TextBox to adapter propery.
+                                      if (SelectedAdapter.MAC != tempMAC)
+                                          NetworkInterfaceLib.SetMAC(SelectedAdapter.NicID, SelectedAdapter.MAC); // Apply new mac address to adapter.
                                       break;
                               }
                           }
@@ -310,6 +329,14 @@ namespace NetworkInterfaceConfigurator.ViewModels
                       catch (NullReferenceException e)
                       {
                           MessageBox.Show("You did not select adapter!" + "\r\n" + e, "Error");
+                      }
+                      catch (WarningException e)
+                      {
+                          MessageBox.Show(e.Message, "Warning");
+                      }
+                      catch (Exception e)
+                      {
+                          MessageBox.Show(e.Message, "Error");
                       }
                   }));
             }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Net.NetworkInformation;
 using Microsoft.Win32;
@@ -490,10 +491,10 @@ namespace NetworkInterfaceConfigurator.Models
             {
                 if (objMO["SettingID"].ToString() == index)
                 {
-                    string[] subnetA = (string[])objMO["IPSubnet"];
-                    if (subnetA != null && subnetA.Count() > 0)
+                    string[] subnetArr = (string[])objMO["IPSubnet"];
+                    if (subnetArr != null && subnetArr.Count() > 0)
                     {
-                        subnet = subnetA[0];
+                        subnet = subnetArr[0];
                     }
                     else
                     {
@@ -515,10 +516,10 @@ namespace NetworkInterfaceConfigurator.Models
             {
                 if (objMO["SettingID"].ToString() == index)
                 {
-                    string[] gateWay = (string[])objMO["DefaultIPGateway"];
-                    if (gateWay != null && gateWay.Count() > 0)
+                    string[] gatewayArr = (string[])objMO["DefaultIPGateway"];
+                    if (gatewayArr != null && gatewayArr.Count() > 0)
                     {
-                        foreach (string item in gateWay)
+                        foreach (string item in gatewayArr)
                         {
                             gateway = item;
                         }
@@ -543,11 +544,11 @@ namespace NetworkInterfaceConfigurator.Models
             {
                 if (objMO["SettingID"].ToString() == index)
                 {
-                    string[] dnsA = (string[])objMO["DNSServerSearchOrder"];
-                    if (dnsA != null && dnsA.Count() > 0)
+                    string[] dnsArr = (string[])objMO["DNSServerSearchOrder"];
+                    if (dnsArr != null && dnsArr.Count() > 0)
                     {
-                        dns = new string[dnsA.Count()];
-                        dns = dnsA;
+                        dns = new string[dnsArr.Count()];
+                        dns = dnsArr;
                     }
                     else
                     {
@@ -586,50 +587,217 @@ namespace NetworkInterfaceConfigurator.Models
         #endregion
 
         #region SetMethods
+        /// <summary>
+        /// Set IP and Subnet mask.
+        /// </summary>
+        public static bool SetStatic(string index, string new_ip, string new_subnet)
+        {
+            bool result = false;
 
+            ManagementClass objMC = new ManagementClass("Win32_NetworkAdapterConfiguration");
+            ManagementObjectCollection objMOC = objMC.GetInstances();
+            foreach (ManagementObject objMO in objMOC)
+            {
+                if (objMO["SettingID"].ToString() == index)
+                {
+                    if ((bool)objMO["IPEnabled"])
+                    {
+                        ManagementBaseObject newMO = objMO.GetMethodParameters("EnableStatic");
+
+                        // Set new values.
+                        newMO["IPAddress"] = new string[] { new_ip };
+                        newMO["SubnetMask"] = new string[] { new_subnet };
+                        objMO.InvokeMethod("EnableStatic", newMO, null);
+
+                        result = true;
+                    }
+                }
+            }
+
+            return result;
+        }
+        /// <summary>
+        /// Set Gateway.
+        /// </summary>
+        public static bool SetGateway(string index, string new_gateway)
+        {
+            bool result = false;
+
+            ManagementClass objMC = new ManagementClass("Win32_NetworkAdapterConfiguration");
+            ManagementObjectCollection objMOC = objMC.GetInstances();
+            foreach (ManagementObject objMO in objMOC)
+            {
+                if (objMO["SettingID"].ToString() == index)
+                {
+                    if ((bool)objMO["IPEnabled"])
+                    {
+                        ManagementBaseObject newMO = objMO.GetMethodParameters("SetGateways");
+
+                        // Set new value.
+                        newMO["DefaultIPGateway"] = new string[] { new_gateway };
+                        newMO["GatewayCostMetric"] = new int[] { 1 };
+                        objMO.InvokeMethod("SetGateways", newMO, null);
+
+                        result = true;
+                    }
+                }
+            }
+
+            return result;
+        }
+        /// <summary>
+        /// Set DNS.
+        /// </summary>
+        public static bool SetDNS(string index, string new_dns1, string new_dns2)
+        {
+            bool result = false;
+
+            ManagementClass objMC = new ManagementClass("Win32_NetworkAdapterConfiguration");
+            ManagementObjectCollection objMOC = objMC.GetInstances();
+            foreach (ManagementObject objMO in objMOC)
+            {
+                if (objMO["SettingID"].ToString() == index)
+                {
+                    if ((bool)objMO["IPEnabled"])
+                    {
+                        ManagementBaseObject newMO = objMO.GetMethodParameters("SetDNSServerSearchOrder");
+
+                        // Set new value.
+                        newMO["DNSServerSearchOrder"] = new string[] { new_dns1, new_dns2 };
+                        objMO.InvokeMethod("SetDNSServerSearchOrder", newMO, null);
+
+                        result = true;
+                    }
+                }
+            }
+
+            return result;
+        }
         /// <summary>
         /// Set MAC.
         /// </summary>
-        public static bool SetMAC(string nicid, string new_mac, out string dbg)
+        public static bool SetMAC(string nicid, string new_mac)
         {
-            bool ret = false;
+            bool result = false;
             using (RegistryKey bkey = GetBaseKey())
             using (RegistryKey key = bkey.OpenSubKey(netAdaptersReg + nicid, true))
             {
-                dbg = netAdaptersReg + nicid; // <--- Debug data, remove before release.
                 if (key != null)
                 {
-                    new_mac.Replace(":", "");
-                    key.SetValue("NetworkAddress", new_mac, RegistryValueKind.String);
+                    string regKey = key.GetValue("NetCfgInstanceId").ToString(); // Get regKey(adapter index in registry).
+                    string old_mac = GetMAC(regKey); // Get the old MAC address to check changes.
+                    old_mac = old_mac.Replace(":", "");
 
+                    new_mac = new_mac.Replace(":", "");
+                    key.SetValue("NetworkAddress", new_mac, RegistryValueKind.String);
+                    
                     ManagementObjectSearcher objMOS = new ManagementObjectSearcher(
                         new SelectQuery("SELECT * FROM Win32_NetworkAdapter WHERE Index = " + nicid));
 
-                    foreach (ManagementObject o in objMOS.Get().OfType<ManagementObject>())
+                    foreach (ManagementObject objMO in objMOS.Get().OfType<ManagementObject>())
                     {
-                        o.InvokeMethod("Disable", null);
-                        o.InvokeMethod("Enable", null);
-                        ret = true;
+                        bool restartState = RestartAdapter(nicid); // Restarts adapter & check it's state.
+
+                        string installed_mac = GetMAC(regKey); // Get installed MAC address to check changes.
+                        installed_mac = installed_mac.Replace(":", "");
+
+
+                        // Check adapter state and check new mac address value.
+                        if (restartState && (new_mac != installed_mac))
+                        {
+                            result = true;
+                            throw new WarningException("MAC address was restored to default value.");
+                        }
+                        else if (restartState && (new_mac != old_mac))
+                        {
+                            result = true;
+                        }
+                        else
+                        {
+                            result = false;
+                            throw new Exception("Something troubles.");
+                        }
                     }
                 }
                 key.Close();
             }
 
-            return ret;
+            return result;
         }
         /// <summary>
         /// This functions check system version (64/32bit) and then get corresponding branch of registry.
         /// </summary>
-        public static RegistryKey GetBaseKey()
+        private static RegistryKey GetBaseKey()
         {
             return RegistryKey.OpenBaseKey(
                 RegistryHive.LocalMachine,
                 InternalCheckIsWow64() ? RegistryView.Registry64 : RegistryView.Registry32);
         }
-        public static bool InternalCheckIsWow64()
+        private static bool InternalCheckIsWow64()
         {
             bool b = Environment.Is64BitOperatingSystem;
             return b;
+        }
+        #endregion
+
+        #region ResetAdapter
+        private static void DisableAdapter(string nicid)
+        {
+            ManagementObjectSearcher objMOS = new ManagementObjectSearcher(
+                        new SelectQuery("SELECT * FROM Win32_NetworkAdapter WHERE Index = " + nicid));
+
+            foreach (ManagementObject objMO in objMOS.Get().OfType<ManagementObject>())
+            {
+                objMO.InvokeMethod("Disable", null);
+            }
+        }
+        private static void EnableAdapter(string nicid)
+        {
+            ManagementObjectSearcher objMOS = new ManagementObjectSearcher(
+                        new SelectQuery("SELECT * FROM Win32_NetworkAdapter WHERE Index = " + nicid));
+
+            foreach (ManagementObject objMO in objMOS.Get().OfType<ManagementObject>())
+            {
+                objMO.InvokeMethod("Enable", null);
+            }
+        }
+        /// <summary>
+        /// Get adapter status.
+        /// </summary>
+        /// <param name="nicid">Adapter ID.</param>
+        /// <returns>
+        /// Disconnected (0) Connecting(1) Connected(2) Disconnecting(3) Hardware Not Present(4) Hardware Disabled(5) Hardware Malfunction(6)
+        /// Media Disconnected(7) Authenticating(8) Authentication Succeeded(9) Authentication Failed(10) Invalid Address(11) Credentials Required(12)
+        /// </returns>
+        private static string GetAdapterStatus(string nicid)
+        {
+            string statusInfo = "";
+
+            ManagementObjectSearcher objMOS = new ManagementObjectSearcher(
+                        new SelectQuery("SELECT * FROM Win32_NetworkAdapter WHERE Index = " + nicid));
+
+            foreach (ManagementObject objMO in objMOS.Get().OfType<ManagementObject>())
+            {
+                statusInfo = objMO["NetConnectionStatus"].ToString();
+            }
+
+            return statusInfo;
+        }
+        /// <summary>
+        /// Restarts adapter, and return: True, if adapter connected to network.
+        /// </summary>
+        public static bool RestartAdapter(string nicid)
+        {
+            bool result = false;
+
+            DisableAdapter(nicid);
+            
+            EnableAdapter(nicid);
+
+            if (GetAdapterStatus(nicid) == "2")
+                result = true;
+
+            return result;
         }
         #endregion
     }
