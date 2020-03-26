@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
+using System.Data.SQLite;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,10 +25,19 @@ namespace NetworkInterfaceConfigurator.ViewModels
         // Constructor.
         public MainViewModel()
         {
+            if (!Directory.Exists(appFolder))
+                Directory.CreateDirectory(appFolder);
+            DBinit();
+            presetsDB.DeletePreset(3, presetsDB.Load().Count);
+            presetsDB.AddPreset(adapterSettings);
+            presetsDB.Disconnect();
             GetAdapters();
         }
 
         // Variables, Constants & Properties.
+        string appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NetworkInterfaceConfigurator\\");
+        PresetsDB presetsDB = new PresetsDB();
+        string[] adapterSettings = new string[7] { "ip", "subnet", "gw", "dns1", "dns2", "mac", "rand" };
         string tempIP;
         string tempDNS2;
 
@@ -273,13 +285,14 @@ namespace NetworkInterfaceConfigurator.ViewModels
         #endregion
 
         #region Buttons
-        private RelayCommand changeProperties;
-        public RelayCommand ChangeProperties
+        // Apply all properties from MainWindow TextBoxes to adapter.
+        private RelayCommand changeSettings;
+        public RelayCommand ChangeSettings
         {
             get
             {
-                return changeProperties ??
-                  (changeProperties = new RelayCommand(obj =>
+                return changeSettings ??
+                  (changeSettings = new RelayCommand(obj =>
                   {
                       try
                       {
@@ -341,6 +354,25 @@ namespace NetworkInterfaceConfigurator.ViewModels
                   }));
             }
         }
+
+        private RelayCommand clearSettings;
+        public RelayCommand ClearSettings
+        {
+            get
+            {
+                return clearSettings ??
+                  (clearSettings = new RelayCommand(obj =>
+                  {
+                      List<object> parameters = obj as List<object>;
+
+                      foreach (TextBox item in parameters)
+                      {
+                          item.Text = "";
+                      }
+                  }));
+            }
+        }
+
         private RelayCommand updateSettings;
         public RelayCommand UpdateSettings
         {
@@ -363,6 +395,64 @@ namespace NetworkInterfaceConfigurator.ViewModels
         #endregion
 
         #region Presets
+        /// <summary>
+        /// DB init.
+        /// </summary>
+        private string DBinit()
+        {
+            if (!File.Exists(appFolder + "Presets.db"))
+            {
+                return presetsDB.CreateAndConnect(appFolder + "Presets.db") ? "Create DB and connect to it: OK" : "Create DB and connect to it: Error";
+            }
+            else
+            {
+                return presetsDB.Connect(appFolder + "Presets.db") ? "Conncet to DB: OK" : "Conncet to DB: Error";
+            }
+        }
+
+        // Preset buttons.
+        private RelayCommand applyPreset;
+        public RelayCommand ApplyPreset
+        {
+            get
+            {
+                return applyPreset ??
+                  (applyPreset = new RelayCommand(obj =>
+                  {
+                      Button presetBtn = obj as Button;
+                      try
+                      {
+                          Preset pr = new Preset();
+                          
+                          Debug = SelectedAdapter.DNS2 + " " + presetBtn.Content + " " + pr.ID + " ";
+
+                          Debug += presetsDB.Load().Count + " ";
+
+                          foreach (object[] objArr in presetsDB.Load())
+                          {
+                              foreach (var item in objArr)
+                              {
+                                  Debug += item.ToString() + " ";
+                              }
+                          }
+                      }
+                      catch (NullReferenceException e)
+                      {
+                          MessageBox.Show("You did not select adapter!" + "\r\n" + e, "Error");
+                      }
+                  }));
+            }
+        }
+        public RelayCommand SaveCurrentSettingsToPreset
+        {
+            get
+            {
+                return new RelayCommand(obj =>
+                {
+                    Debug = "SaveCurrentSettingsToPreset";
+                });
+            }
+        }
         public RelayCommand EditPreset
         {
             get

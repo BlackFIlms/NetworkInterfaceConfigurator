@@ -61,8 +61,13 @@
                         <TextBlock Text="Presets" Style="{StaticResource GridPresetsTitle}"/>
                     </Grid>
                     <Grid Height="34">
-                        <Button Content="Preset 1" Tag="Active" Style="{StaticResource GridPresetsButtons}">
+                        <Button x:Name="BtnPreset1" Content="Preset 1" Tag="Active" Style="{StaticResource GridPresetsButtons}">
                             <Button.InputBindings>
+                                <MouseBinding Command="{Binding ApplyPreset}"
+                                              CommandParameter="{Binding ElementName=BtnPreset1}"
+                                              Gesture="LeftClick"/>
+                                <MouseBinding Command="{Binding SaveCurrentSettingsToPreset}"
+                                              Gesture="RightClick"/>
                                 <MouseBinding Command="{Binding EditPreset}"
                                               Gesture="Control+LeftClick"/>
                             </Button.InputBindings>
@@ -281,7 +286,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Change"
                                 Style="{StaticResource GridAdapterButtons}"
-                                Command="{Binding ChangeProperties}">
+                                Command="{Binding ChangeSettings}">
                             <Button.CommandParameter>
                                 <MultiBinding Converter="{StaticResource myAdapterSettingsConverter}">
                                     <Binding ElementName="adapterSetIP"/>
@@ -293,8 +298,23 @@
                                 </MultiBinding>
                             </Button.CommandParameter>
                         </Button>
-                        <Button Content="Clear" Style="{StaticResource GridAdapterButtons}"/>
-                        <Button Content="Update" Style="{StaticResource GridAdapterButtons}" Command="{Binding UpdateSettings}"/>
+                        <Button Content="Clear"
+                                Style="{StaticResource GridAdapterButtons}"
+                                Command="{Binding ClearSettings}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource myAdapterSettingsConverter}">
+                                    <Binding ElementName="adapterSetIP"/>
+                                    <Binding ElementName="adapterSetSubnet"/>
+                                    <Binding ElementName="adapterSetGateway"/>
+                                    <Binding ElementName="adapterSetDNS1"/>
+                                    <Binding ElementName="adapterSetDNS2"/>
+                                    <Binding ElementName="adapterSetMAC"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button Content="Update"
+                                Style="{StaticResource GridAdapterButtons}"
+                                Command="{Binding UpdateSettings}"/>
                     </StackPanel>
                 </Grid>
             </Grid>
