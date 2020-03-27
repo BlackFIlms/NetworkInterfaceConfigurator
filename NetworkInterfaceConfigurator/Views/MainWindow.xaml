@@ -21,12 +21,13 @@
         MinWidth="700"
         WindowStartupLocation="CenterScreen">
 
-    <Window.DataContext>
-        <viewmodel:MainViewModel x:Name="MainVM"/>
-    </Window.DataContext>
     <Window.Resources>
         <converter:AdapterSettingsConverter x:Key="myAdapterSettingsConverter"/>
+        <viewmodel:MainViewModel x:Key="MainVM"/>
     </Window.Resources>
+    <Window.DataContext>
+        <Binding Source="{StaticResource MainVM}" />
+    </Window.DataContext>
 
     <!-- For get user input, better use gesture then Interaction.Triggers -->
     <Window.InputBindings>
@@ -60,46 +61,36 @@
                     <Grid Height="34">
                         <TextBlock Text="Presets" Style="{StaticResource GridPresetsTitle}"/>
                     </Grid>
+
+                    <Menu Style="{StaticResource PresetMenu}"
+                          ItemContainerStyle="{StaticResource PresetMenuItem}"
+                          ItemsSource="{Binding Presets}">
+                        <Menu.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Width="100"
+                                      Height="34">
+                                        <Button x:Name="BtnPreset1"
+                                                Content="{Binding Path=Name}"
+                                                Tag="{Binding Path=ID}"
+                                                Style="{StaticResource GridPresetsButtons}">
+                                            <Button.InputBindings>
+                                                <MouseBinding Command="{Binding ApplyPreset, Source={StaticResource MainVM}}"
+                                                              CommandParameter="{Binding ElementName=BtnPreset1}"
+                                                              Gesture="LeftClick"/>
+                                                <MouseBinding Command="{Binding SaveCurrentSettingsToPreset}"
+                                                              Gesture="RightClick"/>
+                                                <MouseBinding Command="{Binding EditPreset}"
+                                                              Gesture="Control+LeftClick"/>
+                                            </Button.InputBindings>
+                                        </Button>
+                                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
+                                    </Grid>
+                            </DataTemplate>
+                        </Menu.ItemTemplate>
+                    </Menu>
+
                     <Grid Height="34">
-                        <Button x:Name="BtnPreset1" Content="Preset 1" Tag="Active" Style="{StaticResource GridPresetsButtons}">
-                            <Button.InputBindings>
-                                <MouseBinding Command="{Binding ApplyPreset}"
-                                              CommandParameter="{Binding ElementName=BtnPreset1}"
-                                              Gesture="LeftClick"/>
-                                <MouseBinding Command="{Binding SaveCurrentSettingsToPreset}"
-                                              Gesture="RightClick"/>
-                                <MouseBinding Command="{Binding EditPreset}"
-                                              Gesture="Control+LeftClick"/>
-                            </Button.InputBindings>
-                        </Button>
-                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
-                    </Grid>
-                    <Grid Height="34">
-                        <Button Content="Preset 2" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
-                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
-                    </Grid>
-                    <Grid Height="34">
-                        <Button Content="Preset 3" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
-                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
-                    </Grid>
-                    <Grid Height="34">
-                        <Button Content="Preset 4" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
-                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
-                    </Grid>
-                    <Grid Height="34">
-                        <Button Content="Preset 5" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
-                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
-                    </Grid>
-                    <Grid Height="34">
-                        <Button Content="Preset 6" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
-                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
-                    </Grid>
-                    <Grid Height="34">
-                        <Button Content="Preset 7" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
-                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
-                    </Grid>
-                    <Grid Height="34">
-                        <Button Content="Preset 8" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
+                        <Button Content="Add Preset" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
                     </Grid>
                 </StackPanel>
             </Grid>
@@ -113,6 +104,7 @@
                     <StackPanel Margin="0, 14, 0, 0" Orientation="Vertical">
                         <TextBlock Text="Adapter" Style="{StaticResource GridContentTitles}"/>
                         <ComboBox Style="{StaticResource AdapterSelector}"
+                                  ItemContainerStyle="{StaticResource AdapterSelectorItem}"
                                   ItemsSource="{Binding Adapters}"
                                   SelectedItem="{Binding SelectedAdapter}">
                             <ComboBox.ItemTemplate>

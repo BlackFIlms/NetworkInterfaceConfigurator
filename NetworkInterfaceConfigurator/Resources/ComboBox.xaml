@@ -97,7 +97,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type ComboBoxItem}">
+    <Style x:Key="AdapterSelectorItem" TargetType="{x:Type ComboBoxItem}">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Foreground" Value="{StaticResource BrushWhite}"/>

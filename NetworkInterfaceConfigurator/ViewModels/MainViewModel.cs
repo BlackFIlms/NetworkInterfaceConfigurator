@@ -25,21 +25,22 @@ namespace NetworkInterfaceConfigurator.ViewModels
         // Constructor.
         public MainViewModel()
         {
+            // Create directory for app settings if it does not exist.
             if (!Directory.Exists(appFolder))
                 Directory.CreateDirectory(appFolder);
-            DBinit();
-            presetsDB.DeletePreset(3, presetsDB.Load().Count);
-            presetsDB.AddPreset(adapterSettings);
-            presetsDB.Disconnect();
+
+            // Presets init.
+            GetPresets();
+
+            // Adapters init.
             GetAdapters();
         }
 
         // Variables, Constants & Properties.
-        string appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NetworkInterfaceConfigurator\\");
+        string appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NetworkInterfaceConfigurator\\"); // Path for app settings.
         PresetsDB presetsDB = new PresetsDB();
-        string[] adapterSettings = new string[7] { "ip", "subnet", "gw", "dns1", "dns2", "mac", "rand" };
-        string tempIP;
-        string tempDNS2;
+        string tempIP; // Field for compare adapter settings.
+        string tempDNS2; // Field for compare adapter settings.
 
 
         private string debug;
@@ -67,6 +68,8 @@ namespace NetworkInterfaceConfigurator.ViewModels
                 OnPropertyChanged("SelectedAdapter");
             }
         }
+
+        public ObservableCollection<Preset> Presets { get; set; }
 
         #region Control logics for window.
 
@@ -227,13 +230,6 @@ namespace NetworkInterfaceConfigurator.ViewModels
         }
         #endregion
 
-        #region GetAdapters
-        public void GetAdapters()
-        {
-            Adapters = new ObservableCollection<NetworkInterfaceLib>(Init());
-        }
-        #endregion
-
         #region AdaptersInit
         /*
             Manual initialization.
@@ -244,7 +240,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             Step two: validate adapters.
             Step three: Create new object for each adapter and set base properties.
         */
-        public IEnumerable<NetworkInterfaceLib> Init()
+        public IEnumerable<NetworkInterfaceLib> InitAdapters()
         {
             foreach (string adapterIndex in NetworkInterfaceLib.GetNicIndexes())
             {
@@ -281,6 +277,13 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
 
             obj.MAC = NetworkInterfaceLib.GetMAC(obj.NicIndex);
+        }
+        #endregion
+
+        #region GetAdapters
+        public void GetAdapters()
+        {
+            Adapters = new ObservableCollection<NetworkInterfaceLib>(InitAdapters());
         }
         #endregion
 
@@ -410,6 +413,36 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Presets init. Load all existing presets from DB.
+        /// </summary>
+        public IEnumerable<Preset> InitPresets()
+        {
+            DBinit();
+            foreach (object[] objArr in presetsDB.Load())
+            {
+                Preset pr = new Preset();
+
+                pr.ID = objArr[0].ToString();
+                pr.Name = objArr[1].ToString();
+                pr.IP = objArr[2].ToString();
+                pr.Subnet = objArr[3].ToString();
+                pr.Gateway = objArr[4].ToString();
+                pr.DNS1 = objArr[5].ToString();
+                pr.DNS2 = objArr[6].ToString();
+                pr.MAC = objArr[7].ToString();
+                pr.MACR = objArr[8].ToString();
+
+                yield return pr;
+            }
+            presetsDB.Disconnect();
+        }
+        
+        public void GetPresets()
+        {
+            Presets = new ObservableCollection<Preset>(InitPresets());
+        }
+
         // Preset buttons.
         private RelayCommand applyPreset;
         public RelayCommand ApplyPreset
@@ -422,19 +455,12 @@ namespace NetworkInterfaceConfigurator.ViewModels
                       Button presetBtn = obj as Button;
                       try
                       {
-                          Preset pr = new Preset();
+                          Debug = SelectedAdapter.DNS2 + " " + presetBtn.Content + " ";
                           
-                          Debug = SelectedAdapter.DNS2 + " " + presetBtn.Content + " " + pr.ID + " ";
-
+                          DBinit();
                           Debug += presetsDB.Load().Count + " ";
-
-                          foreach (object[] objArr in presetsDB.Load())
-                          {
-                              foreach (var item in objArr)
-                              {
-                                  Debug += item.ToString() + " ";
-                              }
-                          }
+                          
+                          presetsDB.Disconnect();
                       }
                       catch (NullReferenceException e)
                       {

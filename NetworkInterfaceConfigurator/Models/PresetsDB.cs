@@ -35,7 +35,7 @@ namespace NetworkInterfaceConfigurator.Models
                 dbConn.Open();
                 sqlCmd.Connection = dbConn; // Sets connection for commands.
 
-                sqlCmd.CommandText = "CREATE TABLE IF NOT EXISTS Presets (ID INTEGER NOT NULL PRIMARY KEY, IP TEXT, Subnet TEXT, Gateway TEXT, DNS1 TEXT, DNS2 TEXT, MAC TEXT, MACR TEXT)"; // Sets command property for create table in DB.
+                sqlCmd.CommandText = "CREATE TABLE IF NOT EXISTS Presets (ID INTEGER NOT NULL PRIMARY KEY, NAME TEXT, IP TEXT, Subnet TEXT, Gateway TEXT, DNS1 TEXT, DNS2 TEXT, MAC TEXT, MACR TEXT)"; // Sets command property for create table in DB.
                 sqlCmd.ExecuteNonQuery(); // Create table in DB.
 
                 result = true;
@@ -82,9 +82,7 @@ namespace NetworkInterfaceConfigurator.Models
 
             try
             {
-                sqlCmd.Dispose();
                 dbConn.Close();
-                dbConn.Dispose();
 
                 result = true;
             }
@@ -130,30 +128,39 @@ namespace NetworkInterfaceConfigurator.Models
             return listObj;
         }
         /// <summary>
-        /// Add preset to db with current adapter settings.
+        /// Add preset to db.
         /// Return true if preset added to db.
         /// </summary>
-        /// <param name="adapter">Array of adapter settings.</param>
+        /// <param name="preset">Preset object.</param>
         /// <returns>True if preset added to db.</returns>
-        public bool AddPreset(string[] adapter)
+        public bool AddPreset(Preset preset, out int id)
         {
             bool result = false;
+            id = 0;
 
             if (dbConn.State == ConnectionState.Open) // Check connection to DB.
             {
                 try
                 {
                     // Sets adapter settings from array to command property.
-                    sqlCmd.CommandText = "INSERT INTO Presets ('IP', 'Subnet', 'Gateway', 'DNS1', 'DNS2', 'MAC', 'MACR') values ('" +
-                        adapter[0] + "' , '" +
-                        adapter[1] + "' , '" +
-                        adapter[2] + "' , '" +
-                        adapter[3] + "' , '" +
-                        adapter[4] + "' , '" +
-                        adapter[5] + "' , '" +
-                        adapter[6] + "')";
+                    sqlCmd.CommandText = "INSERT INTO Presets ('NAME', 'IP', 'Subnet', 'Gateway', 'DNS1', 'DNS2', 'MAC', 'MACR') values ('" +
+                        preset.Name + "' , '" +
+                        preset.IP + "' , '" +
+                        preset.Subnet + "' , '" +
+                        preset.Gateway + "' , '" +
+                        preset.DNS1 + "' , '" +
+                        preset.DNS1 + "' , '" +
+                        preset.MAC + "' , '" +
+                        preset.MACR + "')";
 
                     sqlCmd.ExecuteNonQuery(); // Add preset to DB.
+
+                    // Return id, of created preset.
+                    sqlCmd.CommandText = "SELECT MAX(ID) FROM Presets";
+                    SQLiteDataReader sqlReader = sqlCmd.ExecuteReader(); // SQL query.
+                    sqlReader.Read(); // Get row from sql answer.
+                    id = sqlReader.GetInt32(0); // Write id to out int.
+                    sqlReader.Close(); // Close sqlReader session.
 
                     result = true;
                 }
@@ -169,10 +176,9 @@ namespace NetworkInterfaceConfigurator.Models
         /// Edit preset in db with settings from edit preset window.
         /// Return true if preset edited in db.
         /// </summary>
-        /// <param name="id">Index of updating adapter.</param>
-        /// <param name="adapter">Array of adapter settings.</param>
+        /// <param name="preset">Preset object.</param>
         /// <returns>True if preset edited in db.</returns>
-        public bool EditPreset(int id, string[] adapter)
+        public bool EditPreset(Preset preset)
         {
             bool result = false;
 
@@ -181,14 +187,15 @@ namespace NetworkInterfaceConfigurator.Models
                 try
                 {
                     // Sets adapter settings from array to command property.
-                    sqlCmd.CommandText = "UPDATE Presets SET ('IP', 'Subnet', 'Gateway', 'DNS1', 'DNS2', 'MAC', 'MACR') = ('" +
-                        adapter[0] + "' , '" +
-                        adapter[1] + "' , '" +
-                        adapter[2] + "' , '" +
-                        adapter[3] + "' , '" +
-                        adapter[4] + "' , '" +
-                        adapter[5] + "' , '" +
-                        adapter[6] + "') WHERE ID = " + id;
+                    sqlCmd.CommandText = "UPDATE Presets SET ('NAME', 'IP', 'Subnet', 'Gateway', 'DNS1', 'DNS2', 'MAC', 'MACR') = ('" +
+                        preset.Name + "' , '" +
+                        preset.IP + "' , '" +
+                        preset.Subnet + "' , '" +
+                        preset.Gateway + "' , '" +
+                        preset.DNS1 + "' , '" +
+                        preset.DNS2 + "' , '" +
+                        preset.MAC + "' , '" +
+                        preset.MACR + "') WHERE ID = " + preset.ID;
 
                     sqlCmd.ExecuteNonQuery(); // Edit preset in DB.
 
@@ -222,6 +229,7 @@ namespace NetworkInterfaceConfigurator.Models
 
                     sqlCmd.ExecuteNonQuery(); // Delete preset from DB.
 
+                    // Decrease IDs for presets with a larger ID than deleted.
                     for (int i = ++id; i <= (presetCount); i++)
                     {
                         sqlCmd.CommandText = "UPDATE Presets SET ID = " + (i - 1) + " WHERE ID = " + i;
