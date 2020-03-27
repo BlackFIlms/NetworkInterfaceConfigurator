@@ -39,8 +39,6 @@ namespace NetworkInterfaceConfigurator.ViewModels
         // Variables, Constants & Properties.
         string appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NetworkInterfaceConfigurator\\"); // Path for app settings.
         PresetsDB presetsDB = new PresetsDB();
-        string tempIP; // Field for compare adapter settings.
-        string tempDNS2; // Field for compare adapter settings.
 
 
         private string debug;
@@ -54,7 +52,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                 OnPropertyChanged("Debug");
             }
         }
-        
+
         public ObservableCollection<NetworkInterfaceLib> Adapters { get; set; }
 
         private NetworkInterfaceLib selectedAdapter;
@@ -263,14 +261,14 @@ namespace NetworkInterfaceConfigurator.ViewModels
             obj.IP = NetworkInterfaceLib.GetIP(obj.NicIndex);
             obj.Subnet = NetworkInterfaceLib.GetSubnet(obj.NicIndex);
             obj.Gateway = NetworkInterfaceLib.GetGateway(obj.NicIndex);
-            
+
             for (int i = 0; i < NetworkInterfaceLib.GetDNS(obj.NicIndex).Length; i++)
             {
                 if (i == 0)
                 {
                     obj.DNS1 = NetworkInterfaceLib.GetDNS(obj.NicIndex)[0];
                 }
-                else if (i == 1 )
+                else if (i == 1)
                 {
                     obj.DNS2 = NetworkInterfaceLib.GetDNS(obj.NicIndex)[1];
                 }
@@ -308,36 +306,26 @@ namespace NetworkInterfaceConfigurator.ViewModels
                               switch (item.Name)
                               {
                                   case "adapterSetIP":
-                                      tempIP = SelectedAdapter.IP; // Writes ip to field, for get it in next case.
                                       SelectedAdapter.IP = item.Text; // Writes ip from TextBox to adapter property.
                                       break;
                                   case "adapterSetSubnet":
-                                      string tempSubnet = SelectedAdapter.Subnet;
                                       SelectedAdapter.Subnet = item.Text; // Writes subnet from TextBox to adapter property.
-                                      if ((SelectedAdapter.IP != tempIP) || (SelectedAdapter.Subnet != tempSubnet))
-                                          NetworkInterfaceLib.SetStatic(SelectedAdapter.NicIndex, SelectedAdapter.IP, SelectedAdapter.Subnet); // Apply new ip and subnet to adapter.
+                                      NetworkInterfaceLib.SetStatic(SelectedAdapter.NicIndex, SelectedAdapter.IP, SelectedAdapter.Subnet); // Apply new ip and subnet to adapter.
                                       break;
                                   case "adapterSetGateway":
-                                      string tempGateway = SelectedAdapter.Gateway;
                                       SelectedAdapter.Gateway = item.Text; // Writes gateway from TextBox to adapter property.
-                                      if (SelectedAdapter.Gateway != tempGateway)
-                                          NetworkInterfaceLib.SetGateway(SelectedAdapter.NicIndex, SelectedAdapter.Gateway); // Apply new gateway to adapter.
+                                      NetworkInterfaceLib.SetGateway(SelectedAdapter.NicIndex, SelectedAdapter.Gateway); // Apply new gateway to adapter.
                                       break;
                                   case "adapterSetDNS2": // Change property setting queue of DNS1 and DNS2.
-                                      tempDNS2 = SelectedAdapter.DNS2; // Writes dns1 to field, for get it in next case.
                                       SelectedAdapter.DNS2 = item.Text; // Writes dns1 from TextBox to adapter property.
                                       break;
                                   case "adapterSetDNS1":
-                                      string tempDNS1 = SelectedAdapter.DNS1;
                                       SelectedAdapter.DNS1 = item.Text; // Writes dns2 from TextBox to adapter property.
-                                      if ((SelectedAdapter.DNS1 != tempDNS1) || (SelectedAdapter.DNS2 != tempDNS2))
-                                          NetworkInterfaceLib.SetDNS(SelectedAdapter.NicIndex, SelectedAdapter.DNS1, SelectedAdapter.DNS2); // Apply new dns1 and dns2 to adapter.
+                                      NetworkInterfaceLib.SetDNS(SelectedAdapter.NicIndex, SelectedAdapter.DNS1, SelectedAdapter.DNS2); // Apply new dns1 and dns2 to adapter.
                                       break;
                                   case "adapterSetMAC":
-                                      string tempMAC = SelectedAdapter.MAC;
                                       SelectedAdapter.MAC = item.Text; // Writes mac address form TextBox to adapter propery.
-                                      if (SelectedAdapter.MAC != tempMAC)
-                                          NetworkInterfaceLib.SetMAC(SelectedAdapter.NicID, SelectedAdapter.MAC); // Apply new mac address to adapter.
+                                      NetworkInterfaceLib.SetMAC(SelectedAdapter.NicID, SelectedAdapter.MAC); // Apply new mac address to adapter.
                                       break;
                               }
                           }
@@ -437,13 +425,47 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
             presetsDB.Disconnect();
         }
-        
+
         public void GetPresets()
         {
             Presets = new ObservableCollection<Preset>(InitPresets());
         }
 
         // Preset buttons.
+        private RelayCommand addPreset;
+        public RelayCommand AddPreset
+        {
+            get
+            {
+                return addPreset ??
+                    (addPreset = new RelayCommand(obj =>
+                    {
+                        if (Presets.Count < 8)
+                        {
+                            Preset pr = new Preset();
+
+                            // Add preset to DB.
+                            DBinit();
+                            presetsDB.AddPreset(pr, out int id);
+
+                            // Set preset id and name.
+                            pr.ID = id.ToString();
+                            pr.Name = "Preset " + id;
+
+                            // Add to presets collection.
+                            Presets.Add(pr);
+
+                            // Update preset name in DB.
+                            presetsDB.EditPreset(pr);
+                            presetsDB.Disconnect();
+                        }
+                        else
+                        {
+                            // Write error to debug.
+                        }
+                    }));
+            }
+        }
         private RelayCommand applyPreset;
         public RelayCommand ApplyPreset
         {
@@ -455,11 +477,66 @@ namespace NetworkInterfaceConfigurator.ViewModels
                       Button presetBtn = obj as Button;
                       try
                       {
-                          Debug = SelectedAdapter.DNS2 + " " + presetBtn.Content + " ";
-                          
+                          // Get preset settings, from presets collection.
+                          int x = 0;
+                          while (presetBtn.Tag.ToString() != Presets[x].ID)
+                          {
+                              x++;
+                          }
+                          Preset pr = Presets[x];
+
+                          // Write preset settings to SelectedAdapter properties. It does not install in the adapter settings, only in the interface.
+                          SelectedAdapter.IP = pr.IP;
+                          SelectedAdapter.Subnet = pr.Subnet;
+                          SelectedAdapter.Gateway = pr.Gateway;
+                          SelectedAdapter.DNS1 = pr.DNS1;
+                          SelectedAdapter.DNS2 = pr.DNS2;
+                          if (pr.MACR == "true")
+                          {
+                              // NetworkInterfaceLib.RandMAC();
+                          }
+                          else
+                          {
+                              SelectedAdapter.MAC = pr.MAC;
+                          }
+                      }
+                      catch (NullReferenceException e)
+                      {
+                          MessageBox.Show("You did not select adapter!" + "\r\n" + e, "Error");
+                      }
+                  }));
+            }
+        }
+        private RelayCommand saveCurrentSettingsToPreset;
+        public RelayCommand SaveCurrentSettingsToPreset
+        {
+            get
+            {
+                return saveCurrentSettingsToPreset ??
+                  (saveCurrentSettingsToPreset = new RelayCommand(obj =>
+                  {
+                      Button presetBtn = obj as Button;
+                      try
+                      {
+                          // Get preset settings, from presets collection.
+                          int x = 0;
+                          while (presetBtn.Tag.ToString() != Presets[x].ID)
+                          {
+                              x++;
+                          }
+                          Preset pr = Presets[x];
+
+                          // Write SelectedAdapter properties to preset settings.
+                          pr.IP = SelectedAdapter.IP;
+                          pr.Subnet = SelectedAdapter.Subnet;
+                          pr.Gateway = SelectedAdapter.Gateway;
+                          pr.DNS1 = SelectedAdapter.DNS1;
+                          pr.DNS2 = SelectedAdapter.DNS2;
+                          pr.MAC = SelectedAdapter.MAC;
+
+                          // Update preset in DB.
                           DBinit();
-                          Debug += presetsDB.Load().Count + " ";
-                          
+                          presetsDB.EditPreset(pr);
                           presetsDB.Disconnect();
                       }
                       catch (NullReferenceException e)
@@ -469,27 +546,19 @@ namespace NetworkInterfaceConfigurator.ViewModels
                   }));
             }
         }
-        public RelayCommand SaveCurrentSettingsToPreset
-        {
-            get
-            {
-                return new RelayCommand(obj =>
-                {
-                    Debug = "SaveCurrentSettingsToPreset";
-                });
-            }
-        }
+        private RelayCommand editPreset;
         public RelayCommand EditPreset
         {
             get
             {
-                return new RelayCommand(obj =>
-                {
-                    var w = new EditPresetWindow();
-                    var vm = new EditPresetViewModel();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
+                return editPreset ??
+                    (editPreset = new RelayCommand(obj =>
+                    {
+                        var w = new EditPresetWindow();
+                        var vm = new EditPresetViewModel();
+                        w.DataContext = vm;
+                        w.ShowDialog();
+                    }));
             }
         }
         #endregion

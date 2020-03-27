@@ -69,17 +69,19 @@
                             <DataTemplate>
                                 <Grid Width="100"
                                       Height="34">
-                                        <Button x:Name="BtnPreset1"
+                                        <Button x:Name="BtnPreset"
                                                 Content="{Binding Path=Name}"
                                                 Tag="{Binding Path=ID}"
                                                 Style="{StaticResource GridPresetsButtons}">
                                             <Button.InputBindings>
                                                 <MouseBinding Command="{Binding ApplyPreset, Source={StaticResource MainVM}}"
-                                                              CommandParameter="{Binding ElementName=BtnPreset1}"
+                                                              CommandParameter="{Binding ElementName=BtnPreset}"
                                                               Gesture="LeftClick"/>
-                                                <MouseBinding Command="{Binding SaveCurrentSettingsToPreset}"
+                                                <MouseBinding Command="{Binding SaveCurrentSettingsToPreset, Source={StaticResource MainVM}}"
+                                                              CommandParameter="{Binding ElementName=BtnPreset}"
                                                               Gesture="RightClick"/>
-                                                <MouseBinding Command="{Binding EditPreset}"
+                                                <MouseBinding Command="{Binding EditPreset, Source={StaticResource MainVM}}"
+                                                              CommandParameter="{Binding ElementName=BtnPreset}"
                                                               Gesture="Control+LeftClick"/>
                                             </Button.InputBindings>
                                         </Button>
@@ -90,7 +92,12 @@
                     </Menu>
 
                     <Grid Height="34">
-                        <Button Content="Add Preset" Tag="Active" Style="{StaticResource GridPresetsButtons}"/>
+                        <Button Content="Add Preset" Style="{StaticResource GridPresetsButtons}">
+                            <Button.InputBindings>
+                                <MouseBinding Command="{Binding AddPreset}"
+                                              Gesture="LeftClick"/>
+                            </Button.InputBindings>
+                        </Button>
                     </Grid>
                 </StackPanel>
             </Grid>

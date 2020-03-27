@@ -54,6 +54,41 @@ namespace NetworkInterfaceConfigurator.Models
             return valid;
         }
         /// <summary>
+        /// Check dns values on matching to some conditions.
+        /// And after checks, return true if value is valid.
+        /// </summary>
+        /// <param name="data">Requieries the ip based value.</param>
+        /// <param name="key">Requieries name of the property.</param>
+        /// <returns>Bool value. True if value is valid.</returns>
+        protected bool IsValidDNS(string data, string key)
+        {
+            ClearErrors(key);
+            //Variables.
+            bool valid = false;
+            const int ipGroups = 4;
+            const int ipMaxValue = 255;
+
+            //Validation.
+            if (string.IsNullOrWhiteSpace(data)) // DNS values can be empty.
+            {
+                valid = true;
+                return valid;
+            }
+            if (!ValidateStringFormat(data, @"\A(\d+)\.(\d+)\.(\d+)\.(\d+)\z"))
+            {
+                AddError(key, "Wrong " + key + " format.");
+                return valid;
+            }
+            if (!ValidateIntMaxValues(data, @"(\d+)", ipGroups, ipMaxValue))
+            {
+                AddError(key, "Values in " + key + " cannot be greater, than: " + ipMaxValue + ".");
+                return valid;
+            }
+
+            valid = true;
+            return valid;
+        }
+        /// <summary>
         /// Check mac based values on matching to some conditions.
         /// And after checks, return true if value is valid.
         /// </summary>
@@ -235,7 +270,7 @@ namespace NetworkInterfaceConfigurator.Models
 
             set
             {
-                if (IsValidIP(value, "DNS1"))
+                if (IsValidDNS(value, "DNS1"))
                 {
                     dns1 = value;
                     OnPropertyChanged("DNS1");
@@ -251,7 +286,7 @@ namespace NetworkInterfaceConfigurator.Models
 
             set
             {
-                if (IsValidIP(value, "DNS2"))
+                if (IsValidDNS(value, "DNS2"))
                 {
                     dns2 = value;
                     OnPropertyChanged("DNS2");
@@ -575,9 +610,17 @@ namespace NetworkInterfaceConfigurator.Models
                     {
                         ManagementBaseObject newMO = objMO.GetMethodParameters("SetDNSServerSearchOrder");
 
-                        // Set new value.
-                        newMO["DNSServerSearchOrder"] = new string[] { new_dns1, new_dns2 };
-                        objMO.InvokeMethod("SetDNSServerSearchOrder", newMO, null);
+                        // Is dns null, set empty string.
+                        if (string.IsNullOrWhiteSpace(new_dns1) || string.IsNullOrWhiteSpace(new_dns2))
+                        {
+                            objMO.InvokeMethod("SetDNSServerSearchOrder", newMO, null);
+                        }
+                        else
+                        {
+                            // Set new value.
+                            newMO["DNSServerSearchOrder"] = new string[] { new_dns1, new_dns2 };
+                            objMO.InvokeMethod("SetDNSServerSearchOrder", newMO, null);
+                        }
 
                         result = true;
                     }
@@ -598,8 +641,6 @@ namespace NetworkInterfaceConfigurator.Models
                 if (key != null)
                 {
                     string regKey = key.GetValue("NetCfgInstanceId").ToString(); // Get regKey(adapter index in registry).
-                    string old_mac = GetMAC(regKey); // Get the old MAC address to check changes.
-                    old_mac = old_mac.Replace(":", "");
 
                     new_mac = new_mac.Replace(":", "");
                     key.SetValue("NetworkAddress", new_mac, RegistryValueKind.String);
@@ -621,7 +662,7 @@ namespace NetworkInterfaceConfigurator.Models
                             result = true;
                             throw new WarningException("MAC address was restored to default value.");
                         }
-                        else if (restartState && (new_mac != old_mac))
+                        else if (restartState)
                         {
                             result = true;
                         }

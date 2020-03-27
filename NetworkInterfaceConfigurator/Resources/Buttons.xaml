@@ -38,7 +38,7 @@
         <Setter Property="Background" Value="{StaticResource BrushVeryDarkGray}"/>
         <Setter Property="Foreground" Value="{StaticResource BrushWhite}"/>
         <Setter Property="FontSize" Value="{StaticResource Big}"/>
-        <Setter Property="FontFamily" Value="{StaticResource BoldFont}"/>
+        <Setter Property="FontFamily" Value="{StaticResource BoldFont-Light}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
