@@ -135,7 +135,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid x:Name="gridAdapterSettings" Margin="20, 0, 0, 0" Grid.Column="0">
-                        <StackPanel DataContext="{Binding SelectedAdapter}" Orientation="Vertical">
+                        <StackPanel Orientation="Vertical">
                             <Grid x:Name="gridAdapterSettingsIP" Margin="0, 18, 0, 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -148,12 +148,12 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="23"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding IP, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
+                                    <TextBlock Text="{Binding SelectedAdapter.IP, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
                                                Style="{StaticResource GridContentValues}"
                                                Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetIP"
                                              Tag="Set ip here"
-                                             Text="{Binding Path=IP, UpdateSourceTrigger=Explicit, ValidatesOnNotifyDataErrors=True}"
+                                             Text="{Binding TempAdapter.IP, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                 </Grid>
@@ -170,12 +170,12 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="23"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Subnet, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
+                                    <TextBlock Text="{Binding SelectedAdapter.Subnet, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetSubnet"
                                              Tag="Set subnet here"
-                                             Text="{Binding Subnet, UpdateSourceTrigger=Explicit}"
+                                             Text="{Binding TempAdapter.Subnet, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                 </Grid>
@@ -192,12 +192,12 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="23"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Gateway, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
+                                    <TextBlock Text="{Binding SelectedAdapter.Gateway, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetGateway"
                                              Tag="Set gateway here"
-                                             Text="{Binding Gateway, UpdateSourceTrigger=Explicit}"
+                                             Text="{Binding TempAdapter.Gateway, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                 </Grid>
@@ -214,12 +214,12 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="23"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding DNS1, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
+                                    <TextBlock Text="{Binding SelectedAdapter.DNS1, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetDNS1"
                                              Tag="Set 1st dns here"
-                                             Text="{Binding DNS1, UpdateSourceTrigger=Explicit}"
+                                             Text="{Binding TempAdapter.DNS1, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                 </Grid>
@@ -236,12 +236,12 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="23"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding DNS2, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
+                                    <TextBlock Text="{Binding SelectedAdapter.DNS2, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetDNS2"
                                              Tag="Set 2nd dns here"
-                                             Text="{Binding DNS2, UpdateSourceTrigger=Explicit}"
+                                             Text="{Binding TempAdapter.DNS2, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                 </Grid>
@@ -258,12 +258,12 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="23"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding MAC, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
+                                    <TextBlock Text="{Binding SelectedAdapter.MAC, TargetNullValue=0.0.0.0, FallbackValue=0.0.0.0}"
                                            Style="{StaticResource GridContentValues}"
                                            Grid.Column="0"/>
                                     <TextBox x:Name="adapterSetMAC"
                                              Tag="Set mac here"
-                                             Text="{Binding MAC, UpdateSourceTrigger=Explicit}"
+                                             Text="{Binding TempAdapter.MAC, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True}"
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                     <Button Content="R"

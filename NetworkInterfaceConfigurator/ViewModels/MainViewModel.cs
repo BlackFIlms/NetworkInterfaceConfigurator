@@ -62,7 +62,27 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 selectedAdapter = value;
                 InitAdapterProperties(value); // After selection adapter, loading adapter properties.
+
+                // Copy current adapter values, to TextBoxes in gridAdapterSettings.
+                tempAdapter.IP = selectedAdapter.IP;
+                tempAdapter.Subnet = selectedAdapter.Subnet;
+                tempAdapter.Gateway = selectedAdapter.Gateway;
+                tempAdapter.DNS1 = selectedAdapter.DNS1;
+                tempAdapter.DNS2 = selectedAdapter.DNS2;
+                tempAdapter.MAC = selectedAdapter.MAC;
+
                 OnPropertyChanged("SelectedAdapter");
+            }
+        }
+        // Temp adapter for decrease count of false positives validation.
+        private NetworkInterfaceLib tempAdapter = new NetworkInterfaceLib();
+        public NetworkInterfaceLib TempAdapter
+        {
+            get { return tempAdapter; }
+            set
+            {
+                tempAdapter = value;
+                OnPropertyChanged("TempAdapter");
             }
         }
 

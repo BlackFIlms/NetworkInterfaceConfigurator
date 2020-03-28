@@ -242,9 +242,9 @@ namespace NetworkInterfaceConfigurator.Models
             const int macMaxValue = 255;
 
             //Validation.
-            if (string.IsNullOrWhiteSpace(data))
+            if (string.IsNullOrWhiteSpace(data)) // MAC values in preset can be empty.
             {
-                AddError(key, key + " cannot be empty.");
+                valid = true;
                 return valid;
             }
             if (!ValidateStringFormat(data, @"\A(((\d+[A-F]*)|([A-F]+\d*)){2}:){5}((\d+[A-F]*)|([A-F]+\d*)){2}\z")) // {2} for single char cases. {5} for 5 times matches this group.
