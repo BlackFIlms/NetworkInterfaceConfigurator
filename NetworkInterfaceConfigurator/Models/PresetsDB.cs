@@ -13,6 +13,11 @@ namespace NetworkInterfaceConfigurator.Models
     class PresetsDB
     {
         // Variables, Constants & Properties.
+        private readonly string appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NetworkInterfaceConfigurator\\"); // Path for app settings.
+        public string AppFolder
+        {
+            get { return appFolder; }
+        }
         private SQLiteConnection dbConn;
         private SQLiteCommand sqlCmd = new SQLiteCommand();
 
@@ -70,6 +75,20 @@ namespace NetworkInterfaceConfigurator.Models
                 MessageBox.Show("Error: " + ex.Message);
             }
             return result;
+        }
+        /// <summary>
+        /// DB init.
+        /// </summary>
+        public string DBinit()
+        {
+            if (!File.Exists(appFolder + "Presets.db"))
+            {
+                return CreateAndConnect(appFolder + "Presets.db") ? "Create DB and connect to it: OK" : "Create DB and connect to it: Error";
+            }
+            else
+            {
+                return Connect(appFolder + "Presets.db") ? "Conncet to DB: OK" : "Conncet to DB: Error";
+            }
         }
         /// <summary>
         /// Disconnects from DB.

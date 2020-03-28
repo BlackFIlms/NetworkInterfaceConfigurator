@@ -25,6 +25,14 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
+    <Style x:Key="GridEditPresetID" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{StaticResource BrushMediumGray}"/>
+        <Setter Property="FontSize" Value="{StaticResource Big}"/>
+        <Setter Property="FontFamily" Value="{StaticResource ValuesText-Light}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0, 6, 0, 0"/>
+    </Style>
+
     <!-- TextBoxes -->
     <!-- Base template for TextBoxes -->
     <!--
@@ -163,6 +171,11 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+    
+    <!-- CheckBoxes -->
+    <Style x:Key="CheckBoxPresetMACR" TargetType="{x:Type CheckBox}">
+        <Setter Property="Foreground" Value="{StaticResource BrushWhite}"/>
     </Style>
 
 </ResourceDictionary>

@@ -157,7 +157,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Preset.xaml">
+    <Page Include="Resources\Menu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -190,7 +190,7 @@
     <Compile Include="Models\NetworkInterfaceLib.cs" />
     <Compile Include="Models\NotifyDataErrorInfoAndPropertyChanged.cs" />
     <Compile Include="Models\Preset.cs" />
-    <Compile Include="Models\ProperyChanged.cs" />
+    <Compile Include="Models\PropChanged.cs" />
     <Compile Include="ViewModels\EditPresetViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

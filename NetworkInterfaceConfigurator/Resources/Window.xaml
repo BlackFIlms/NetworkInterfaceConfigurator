@@ -173,4 +173,103 @@
         </Setter>
     </Style>
 
+    <Style x:Key="SettingsWindowStyle" TargetType="{x:Type Window}">
+        <Setter Property="AllowsTransparency" Value="true" />
+        <Setter Property="WindowStyle" Value="None" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <!--
+                    7 is a magic number. By default Windows fits a maximized window with Margin
+                    7 7 7 7 to fill entire screen (WPF .Net 4.5). Larger numbers produce a gap
+                    between maximized window and screen edges; smaller numbers show parts of
+                    the window outside of the current monitor on multi-display computers.
+                    -->
+                    <Grid
+                        Margin="7"
+                        TextOptions.TextRenderingMode="ClearType"
+                        TextOptions.TextFormattingMode="Display">
+                        <Border
+                            x:Name="PART_Border"
+                            Width="Auto"
+                            Height="Auto"
+                            Background="{StaticResource BrushDarkBlue}"
+                            BorderBrush="RoyalBlue"
+                            BorderThickness="0"
+                            Padding="0">
+                            <Border.Effect>
+                                <DropShadowEffect
+                                    Color="black"
+                                    Opacity="0.5"
+                                    BlurRadius="7"
+                                    ShadowDepth="2"
+                                    Direction="315"/>
+                            </Border.Effect>
+                            <DockPanel   
+                                HorizontalAlignment="Stretch"
+                                Background="Transparent"
+                                VerticalAlignment="Stretch"
+                                >
+                                <Border
+                                    x:Name="TitleBar"
+                                    DockPanel.Dock="Top"
+                                    Background="{StaticResource BrushDarkGray}"
+                                    BorderThickness="0"
+                                    >
+                                    <Grid Height="18">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="34"/>
+                                        </Grid.ColumnDefinitions>
+                                        <!-- SizeObserver calculate actual sizes of the element -->
+                                        <!-- Observe - Set ObservedWidth & ObservedHeight properties in SizeObserver class -->
+                                        <!-- ObservedWidth & ObservedHeight - Binding property value to VM field or property -->
+                                        <TextBlock
+                                            x:Name="Title"
+                                            viewmodel:SizeObserver.Observe="True"
+                                            viewmodel:SizeObserver.ObservedWidth="{Binding GetTitleHeaderWidth, Mode=OneWayToSource}"
+                                            Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Foreground="{StaticResource BrushWhite}"
+                                            FontFamily="{StaticResource WideFont}"
+                                            FontSize="{StaticResource Regular}"
+                                            Margin="{Binding CenterTitle}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Grid.Column="0"
+                                            />
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Grid.Column="1" >
+                                            <Button
+                                                x:Name="CloseButton"
+                                                Width="34"
+                                                Height="18"
+                                                Style="{StaticResource WindowStyleHeaderButton}"
+                                                Command="{Binding Path=CloseWin}"
+                                                CommandParameter="{Binding ElementName=nameEditPresetWindow}"
+                                                >
+                                                <Label x:Name="LabelCloseButton" Style="{StaticResource CloseIcon}"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                                <ContentPresenter />
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- Unused trigger for border -->
+                        <Trigger Property="IsActive" Value="False">
+                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="Gray"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

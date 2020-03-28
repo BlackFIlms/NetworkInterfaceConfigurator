@@ -20,14 +20,14 @@ using NetworkInterfaceConfigurator.Views;
 
 namespace NetworkInterfaceConfigurator.ViewModels
 {
-    class MainViewModel : ProperyChanged
+    class MainViewModel : PropChanged
     {
         // Constructor.
         public MainViewModel()
         {
             // Create directory for app settings if it does not exist.
-            if (!Directory.Exists(appFolder))
-                Directory.CreateDirectory(appFolder);
+            if (!Directory.Exists(presetsDB.AppFolder))
+                Directory.CreateDirectory(presetsDB.AppFolder);
 
             // Presets init.
             GetPresets();
@@ -37,7 +37,6 @@ namespace NetworkInterfaceConfigurator.ViewModels
         }
 
         // Variables, Constants & Properties.
-        string appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NetworkInterfaceConfigurator\\"); // Path for app settings.
         PresetsDB presetsDB = new PresetsDB();
 
 
@@ -67,7 +66,16 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
 
-        public ObservableCollection<Preset> Presets { get; set; }
+        public ObservableCollection<Preset> presets;
+        public ObservableCollection<Preset> Presets
+        {
+            get {return presets; }
+            set
+            {
+                presets = value;
+                OnPropertyChanged("Presets");
+            }
+        }
 
         #region Control logics for window.
 
@@ -188,17 +196,6 @@ namespace NetworkInterfaceConfigurator.ViewModels
             {
                 menuHeaderWidth = value;
                 OnPropertyChanged("GetMenuHeaderWidth");
-                CalcMarginTitle();
-            }
-        }
-        private string gridWidth;
-        public string GridWidth
-        {
-            get { return gridWidth; }
-            set
-            {
-                gridWidth = value;
-                OnPropertyChanged("GridWidth");
                 CalcMarginTitle();
             }
         }
@@ -387,26 +384,11 @@ namespace NetworkInterfaceConfigurator.ViewModels
 
         #region Presets
         /// <summary>
-        /// DB init.
-        /// </summary>
-        private string DBinit()
-        {
-            if (!File.Exists(appFolder + "Presets.db"))
-            {
-                return presetsDB.CreateAndConnect(appFolder + "Presets.db") ? "Create DB and connect to it: OK" : "Create DB and connect to it: Error";
-            }
-            else
-            {
-                return presetsDB.Connect(appFolder + "Presets.db") ? "Conncet to DB: OK" : "Conncet to DB: Error";
-            }
-        }
-
-        /// <summary>
         /// Presets init. Load all existing presets from DB.
         /// </summary>
         public IEnumerable<Preset> InitPresets()
         {
-            DBinit();
+            presetsDB.DBinit();
             foreach (object[] objArr in presetsDB.Load())
             {
                 Preset pr = new Preset();
@@ -445,7 +427,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                             Preset pr = new Preset();
 
                             // Add preset to DB.
-                            DBinit();
+                            presetsDB.DBinit();
                             presetsDB.AddPreset(pr, out int id);
 
                             // Set preset id and name.
@@ -535,7 +517,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                           pr.MAC = SelectedAdapter.MAC;
 
                           // Update preset in DB.
-                          DBinit();
+                          presetsDB.DBinit();
                           presetsDB.EditPreset(pr);
                           presetsDB.Disconnect();
                       }
@@ -554,10 +536,27 @@ namespace NetworkInterfaceConfigurator.ViewModels
                 return editPreset ??
                     (editPreset = new RelayCommand(obj =>
                     {
+                        Button presetBtn = obj as Button;
+                        // Get preset settings, from presets collection.
+                        int x = 0;
+                        while (presetBtn.Tag.ToString() != Presets[x].ID)
+                        {
+                            x++;
+                        }
+                        Preset pr = Presets[x];
+
+                        // Create and open window for edit preset.
                         var w = new EditPresetWindow();
-                        var vm = new EditPresetViewModel();
+                        var vm = new EditPresetViewModel(pr, presetsDB, Presets.Count);
                         w.DataContext = vm;
-                        w.ShowDialog();
+                        bool? result = w.ShowDialog();
+
+                        // Edit Presets collection.
+                        if (result.ToString() == "True")
+                        {
+                            Presets.Clear();
+                            GetPresets();
+                        }
                     }));
             }
         }

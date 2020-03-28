@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace NetworkInterfaceConfigurator.Models
 {
-    class NotifyDataErrorInfoAndPropertyChanged : ProperyChanged, INotifyDataErrorInfo
+    class NotifyDataErrorInfoAndPropertyChanged : PropChanged, INotifyDataErrorInfo
     {
         #region Implementation basic validation.
         private readonly Dictionary<string, List<string>> _errorsByPropertyName = new Dictionary<string, List<string>>();

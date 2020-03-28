@@ -6,13 +6,192 @@
         xmlns:local="clr-namespace:NetworkInterfaceConfigurator.Views"
         xmlns:viewmodel="clr-namespace:NetworkInterfaceConfigurator.ViewModels"
         mc:Ignorable="d"
-        Title="EditPresetWindow" Height="450" Width="800">
+        x:Name="nameEditPresetWindow"
+        Style="{StaticResource SettingsWindowStyle}"
+        viewmodel:SizeObserver.Observe="True"
+        viewmodel:SizeObserver.ObservedWidth="{Binding GetWindowWidth, Mode=OneWayToSource}"
+        Title="Edit preset"
+        Height="323"
+        Width="300"
+        MinHeight="323"
+        MinWidth="300"
+        WindowStartupLocation="CenterScreen">
 
-    <Window.DataContext>
-        <viewmodel:EditPresetViewModel />
-    </Window.DataContext>
+    <Window.Resources>
+        <!-- <viewmodel:EditPresetViewModel x:Key="EditPresetVM"/> -->
+    </Window.Resources>
+    <!-- DataContext sets in MainVM  -->
+    <!-- <Window.DataContext>
+        <Binding Source="{StaticResource EditPresetVM}" />
+    </Window.DataContext> -->
+
+    <!-- For get user input, better use gesture then Interaction.Triggers -->
+    <Window.InputBindings>
+        <MouseBinding Command="{Binding DragWindow}"
+                      CommandParameter="{Binding ElementName=nameEditPresetWindow}"
+                      Gesture="LeftClick"/>
+    </Window.InputBindings>
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <Grid DataContext="{Binding CurrentPreset}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid x:Name="gridPresetName" VerticalAlignment="Bottom" Margin="20, 0, 0, 0" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Preset name" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                    <TextBox x:Name="presetSetName"
+                             Tag="Set name here"
+                             Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource GridContentSettings}"
+                             Grid.Row="1"/>
+                </Grid>
+                <Grid x:Name="gridPresetId" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="ID" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                    <TextBlock x:Name="presetId"
+                               Tag="Set name here"
+                               Text="{Binding Path=ID}"
+                               Style="{StaticResource GridEditPresetID}"
+                               Grid.Row="1"/>
+                </Grid>
+            </Grid>
+        </DockPanel>
+        <Grid x:Name="gridPresetSettings" Margin="20, 0, 0, 0" Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel DataContext="{Binding CurrentPreset}" Orientation="Vertical" Grid.Column="0">
+                    <Grid x:Name="gridPresetSettingsIP" Margin="0, 14, 0, 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="IP" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                        <TextBox x:Name="presetSetIP"
+                                 Tag="Set ip here"
+                                 Text="{Binding IP, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True}"
+                                 Style="{StaticResource GridContentSettings}"
+                                 Grid.Row="1"/>
+                    </Grid>
+                    <Grid x:Name="gridPresetSettingsSubnet" Margin="0, 14, 0, 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Subnet" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                        <TextBox x:Name="presetSetSubnet"
+                                 Tag="Set subnet here"
+                                 Text="{Binding Subnet, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True}"
+                                 Style="{StaticResource GridContentSettings}"
+                                 Grid.Row="1"/>
+                    </Grid>
+                    <Grid x:Name="gridPresetSettingsGateway" Margin="0, 14, 0, 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Gateway" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                        <TextBox x:Name="presetSetGateway"
+                                 Tag="Set gateway here"
+                                 Text="{Binding Gateway, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True}"
+                                 Style="{StaticResource GridContentSettings}"
+                                 Grid.Row="1"/>
+                    </Grid>
+                </StackPanel>
+                <StackPanel DataContext="{Binding CurrentPreset}" Orientation="Vertical" Grid.Column="1">
+                    <Grid x:Name="gridPresetSettingsDNS1" Margin="0, 14, 0, 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="DNS 1" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                        <TextBox x:Name="presetSetDNS1"
+                                 Tag="Set 1st dns here"
+                                 Text="{Binding DNS1, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True}"
+                                 Style="{StaticResource GridContentSettings}"
+                                 Grid.Row="1"/>
+                    </Grid>
+                    <Grid x:Name="gridPresetSettingsDNS2" Margin="0, 14, 0, 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="DNS 2" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                        <TextBox x:Name="presetSetDNS2"
+                                 Tag="Set 2nd dns here"
+                                 Text="{Binding DNS2, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True}"
+                                 Style="{StaticResource GridContentSettings}"
+                                 Grid.Row="1"/>
+                    </Grid>
+                    <Grid x:Name="gridPresetSettingsMAC" Margin="0, 14, 0, 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="MAC" Style="{StaticResource GridContentTitles}" Grid.Row="0"/>
+                        <Grid Grid.Row="1">
+                            <TextBox x:Name="presetSetMAC"
+                                     Tag="Set mac here"
+                                     Text="{Binding MAC, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True}"
+                                     Style="{StaticResource GridContentSettings}"/>
+                        </Grid>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid x:Name="gridPresetMACR" DataContext="{Binding CurrentPreset}" Grid.Row="2">
+            <CheckBox x:Name="presetSetMACR"
+                      IsChecked="{Binding MACR, UpdateSourceTrigger=PropertyChanged}"
+                      Content="Random generate MAC"
+                      ToolTip="This option not recommended for use! Because some network adapters can't set some MAC addresses!"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Style="{StaticResource CheckBoxPresetMACR}"/>
+        </Grid>
+        <!-- For change settings before user click on button, using MultiBinding -->
+        <Grid x:Name="gridPresetButtons" Grid.Row="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Content="OK"
+                        Style="{StaticResource GridEditPresetButtons}"
+                        Command="{Binding OkBtn}"
+                        CommandParameter="{Binding ElementName=nameEditPresetWindow}"
+                        Grid.Column="1">
+                </Button>
+                <Button Content="Cancel"
+                        Style="{StaticResource GridEditPresetButtons}"
+                        Command="{Binding CloseWin}"
+                        CommandParameter="{Binding ElementName=nameEditPresetWindow}"
+                        Grid.Column="2"/>
+                <Button Content="Delete"
+                        Style="{StaticResource GridEditPresetButtons}"
+                        Command="{Binding DeleteBtn}"
+                        CommandParameter="{Binding ElementName=nameEditPresetWindow}"
+                        Grid.Column="3"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

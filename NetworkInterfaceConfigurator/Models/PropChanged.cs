@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetworkInterfaceConfigurator.Models
 {
-    class ProperyChanged : INotifyPropertyChanged
+    class PropChanged : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")

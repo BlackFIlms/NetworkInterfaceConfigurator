@@ -14,7 +14,7 @@
                 <ResourceDictionary Source="Resources/Buttons.xaml"/>
                 <ResourceDictionary Source="Resources/ScrollBar.xaml"/>
                 
-                <ResourceDictionary Source="Resources/Preset.xaml"/>
+                <ResourceDictionary Source="Resources/Menu.xaml"/>
                 <ResourceDictionary Source="Resources/ComboBox.xaml"/>
                 <ResourceDictionary Source="Resources/Window.xaml"/>
             </ResourceDictionary.MergedDictionaries>

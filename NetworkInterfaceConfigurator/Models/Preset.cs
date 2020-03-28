@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NetworkInterfaceConfigurator.Models
 {
-    class Preset : ProperyChanged
+    class Preset : NotifyDataErrorInfoAndPropertyChanged
     {
         // Constructor.
         public Preset()
@@ -59,8 +59,11 @@ namespace NetworkInterfaceConfigurator.Models
             get { return ip; }
             set
             {
-                ip = value;
-                OnPropertyChanged("IP");
+                if (IsValidIP(value, "IP"))
+                {
+                    ip = value;
+                    OnPropertyChanged("IP");
+                }
             }
         }
         /// <summary>
@@ -71,8 +74,11 @@ namespace NetworkInterfaceConfigurator.Models
             get { return subnet; }
             set
             {
-                subnet = value;
-                OnPropertyChanged("Subnet");
+                if (IsValidIP(value, "Subnet"))
+                {
+                    subnet = value;
+                    OnPropertyChanged("Subnet");
+                }
             }
         }
         /// <summary>
@@ -83,8 +89,11 @@ namespace NetworkInterfaceConfigurator.Models
             get { return gateway; }
             set
             {
-                gateway = value;
-                OnPropertyChanged("Gateway");
+                if (IsValidIP(value, "Gateway"))
+                {
+                    gateway = value;
+                    OnPropertyChanged("Gateway");
+                }
             }
         }
         /// <summary>
@@ -95,8 +104,11 @@ namespace NetworkInterfaceConfigurator.Models
             get { return dns1; }
             set
             {
-                dns1 = value;
-                OnPropertyChanged("DNS1");
+                if (IsValidDNS(value, "DNS1"))
+                {
+                    dns1 = value;
+                    OnPropertyChanged("DNS1");
+                }
             }
         }
         /// <summary>
@@ -107,8 +119,11 @@ namespace NetworkInterfaceConfigurator.Models
             get { return dns2; }
             set
             {
-                dns2 = value;
-                OnPropertyChanged("DNS2");
+                if (IsValidDNS(value, "DNS2"))
+                {
+                    dns2 = value;
+                    OnPropertyChanged("DNS2");
+                }
             }
         }
         /// <summary>
@@ -119,8 +134,11 @@ namespace NetworkInterfaceConfigurator.Models
             get { return mac; }
             set
             {
-                mac = value;
-                OnPropertyChanged("MAC");
+                if (IsValidMAC(value, "MAC"))
+                {
+                    mac = value;
+                    OnPropertyChanged("MAC");
+                }
             }
         }
         /// <summary>
@@ -134,6 +152,119 @@ namespace NetworkInterfaceConfigurator.Models
                 macr = value;
                 OnPropertyChanged("MACR");
             }
+        }
+        #endregion
+
+        #region Validation
+        /// <summary>
+        /// Check ip based values on matching to some conditions.
+        /// And after checks, return true if value is valid.
+        /// </summary>
+        /// <param name="data">Requieries the ip based value.</param>
+        /// <param name="key">Requieries name of the property.</param>
+        /// <returns>Bool value. True if value is valid.</returns>
+        protected bool IsValidIP(string data, string key)
+        {
+            ClearErrors(key);
+            //Variables.
+            bool valid = false;
+            const int ipGroups = 4;
+            const int ipMaxValue = 255;
+
+            //Validation.
+            if (string.IsNullOrWhiteSpace(data))
+            {
+                AddError(key, key + " cannot be empty.");
+                return valid;
+            }
+            if (!ValidateStringFormat(data, @"\A(\d+)\.(\d+)\.(\d+)\.(\d+)\z"))
+            {
+                AddError(key, "Wrong " + key + " format.");
+                return valid;
+            }
+            if (!ValidateIntMaxValues(data, @"(\d+)", ipGroups, ipMaxValue))
+            {
+                AddError(key, "Values in " + key + " cannot be greater, than: " + ipMaxValue + ".");
+                return valid;
+            }
+
+            valid = true;
+            return valid;
+        }
+        /// <summary>
+        /// Check dns values on matching to some conditions.
+        /// And after checks, return true if value is valid.
+        /// </summary>
+        /// <param name="data">Requieries the ip based value.</param>
+        /// <param name="key">Requieries name of the property.</param>
+        /// <returns>Bool value. True if value is valid.</returns>
+        protected bool IsValidDNS(string data, string key)
+        {
+            ClearErrors(key);
+            //Variables.
+            bool valid = false;
+            const int ipGroups = 4;
+            const int ipMaxValue = 255;
+
+            //Validation.
+            if (string.IsNullOrWhiteSpace(data)) // DNS values can be empty.
+            {
+                valid = true;
+                return valid;
+            }
+            if (!ValidateStringFormat(data, @"\A(\d+)\.(\d+)\.(\d+)\.(\d+)\z"))
+            {
+                AddError(key, "Wrong " + key + " format.");
+                return valid;
+            }
+            if (!ValidateIntMaxValues(data, @"(\d+)", ipGroups, ipMaxValue))
+            {
+                AddError(key, "Values in " + key + " cannot be greater, than: " + ipMaxValue + ".");
+                return valid;
+            }
+
+            valid = true;
+            return valid;
+        }
+        /// <summary>
+        /// Check mac based values on matching to some conditions.
+        /// And after checks, return true if value is valid.
+        /// </summary>
+        /// <param name="data">Requieries the mac based value.</param>
+        /// <param name="key">Requieries name of the property.</param>
+        /// <returns>Bool value. True if value is valid.</returns>
+        protected bool IsValidMAC(string data, string key)
+        {
+            ClearErrors(key);
+            //Variables.
+            bool valid = false;
+            const int macGroups = 6;
+            const int macMaxValue = 255;
+
+            //Validation.
+            if (string.IsNullOrWhiteSpace(data))
+            {
+                AddError(key, key + " cannot be empty.");
+                return valid;
+            }
+            if (!ValidateStringFormat(data, @"\A(((\d+[A-F]*)|([A-F]+\d*)){2}:){5}((\d+[A-F]*)|([A-F]+\d*)){2}\z")) // {2} for single char cases. {5} for 5 times matches this group.
+            {
+                AddError(key, "Wrong " + key + " format.");
+                return valid;
+            }
+            if (!ValidateHEXMaxValues(data, @"((\d+[A-F]*)|([A-F]+\d*)){2}", macGroups, macMaxValue)) //{2} for A0A or 0A0 cases.
+            {
+                AddError(key, "Values in " + key + " cannot be greater, than: " + macMaxValue + ".");
+                return valid;
+            }
+            if (ValidateStringFormat(data, @"00(\d+[A-F]*)|00(\d*[A-F]+)")) // For 00x, where x any value.
+            {
+                AddError(key, "Wrong " + key + " format.");
+                return valid;
+            }
+
+            valid = true;
+            return valid;
         }
         #endregion
 
