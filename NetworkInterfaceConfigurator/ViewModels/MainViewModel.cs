@@ -513,7 +513,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                           TempAdapter.Gateway = pr.Gateway;
                           TempAdapter.DNS1 = pr.DNS1;
                           TempAdapter.DNS2 = pr.DNS2;
-                          if (pr.MACR == "true")
+                          if (Convert.ToBoolean(pr.MACR))
                           {
                               TempAdapter.MAC = RandMAC.GetRandMAC();
                           }
