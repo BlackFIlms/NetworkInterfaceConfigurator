@@ -271,6 +271,7 @@
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Style="{StaticResource MacRandButton}"
+                                            Command="{Binding RandomizeMAC}"
                                             Grid.Column="2"/>
                                 </Grid>
                             </Grid>

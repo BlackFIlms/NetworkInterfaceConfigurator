@@ -303,6 +303,26 @@ namespace NetworkInterfaceConfigurator.ViewModels
         #endregion
 
         #region Buttons
+        private RelayCommand randomizeMAC;
+        public RelayCommand RandomizeMAC
+        {
+            get
+            {
+                return randomizeMAC ??
+                  (randomizeMAC = new RelayCommand(obj =>
+                  {
+                      try
+                      {
+                          TempAdapter.MAC = RandMAC.GetRandMAC();
+                      }
+                      catch (NullReferenceException e)
+                      {
+                          MessageBox.Show("You did not select adapter!", "Error");
+                      }
+                  }));
+            }
+        }
+
         // Apply all properties from MainWindow TextBoxes to adapter.
         private RelayCommand changeSettings;
         public RelayCommand ChangeSettings
@@ -488,18 +508,18 @@ namespace NetworkInterfaceConfigurator.ViewModels
                           Preset pr = Presets[x];
 
                           // Write preset settings to SelectedAdapter properties. It does not install in the adapter settings, only in the interface.
-                          SelectedAdapter.IP = pr.IP;
-                          SelectedAdapter.Subnet = pr.Subnet;
-                          SelectedAdapter.Gateway = pr.Gateway;
-                          SelectedAdapter.DNS1 = pr.DNS1;
-                          SelectedAdapter.DNS2 = pr.DNS2;
+                          TempAdapter.IP = pr.IP;
+                          TempAdapter.Subnet = pr.Subnet;
+                          TempAdapter.Gateway = pr.Gateway;
+                          TempAdapter.DNS1 = pr.DNS1;
+                          TempAdapter.DNS2 = pr.DNS2;
                           if (pr.MACR == "true")
                           {
-                              // NetworkInterfaceLib.RandMAC();
+                              TempAdapter.MAC = RandMAC.GetRandMAC();
                           }
                           else
                           {
-                              SelectedAdapter.MAC = pr.MAC;
+                              TempAdapter.MAC = pr.MAC;
                           }
                       }
                       catch (NullReferenceException e)
