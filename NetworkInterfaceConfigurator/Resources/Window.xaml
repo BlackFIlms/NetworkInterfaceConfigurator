@@ -86,7 +86,8 @@
                                             <Menu Background="{StaticResource BrushDarkGray}"
                                                   Foreground="{StaticResource BrushLightGray}"
                                                   Margin="5, 0, 0, 0"
-                                                  VerticalAlignment="Center">
+                                                  VerticalAlignment="Center"
+                                                  ItemContainerStyle="{StaticResource MainMenuItems}">
                                                 <MenuItem Header="File"
                                                           Background="{StaticResource BrushDarkGray}">
                                                     <TextBlock>Open</TextBlock>
