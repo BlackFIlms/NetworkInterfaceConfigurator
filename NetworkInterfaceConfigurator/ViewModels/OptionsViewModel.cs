@@ -2,53 +2,24 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using NetworkInterfaceConfigurator.Models;
 using NetworkInterfaceConfigurator.Views;
 
 namespace NetworkInterfaceConfigurator.ViewModels
 {
-    class EditPresetViewModel : PropChanged
+    class OptionsViewModel : PropChanged
     {
         // Constructor.
-        public EditPresetViewModel(Preset pr, PresetsDB _presetsDB, int _presetsCount, string _appFolder)
+        public OptionsViewModel(string _appFolder)
         {
-            // Get preset without link to object.
-            CurrentPreset.ID = pr.ID;
-            CurrentPreset.Name = pr.Name;
-            CurrentPreset.IP = pr.IP;
-            CurrentPreset.Subnet = pr.Subnet;
-            CurrentPreset.Gateway = pr.Gateway;
-            CurrentPreset.DNS1 = pr.DNS1;
-            CurrentPreset.DNS2 = pr.DNS2;
-            CurrentPreset.MAC = pr.MAC;
-            CurrentPreset.MACR = pr.MACR;
-
-            presetsDB = _presetsDB;
-
-            presetsCount = _presetsCount;
-
             appFolder = _appFolder;
         }
-
+        
         // Variables, Constants & Properties.
-        private Preset currentPreset = new Preset();
-        public Preset CurrentPreset
-        {
-            get { return currentPreset; }
-            set
-            {
-                currentPreset = value;
-                OnPropertyChanged("CurrentPreset");
-            }
-        }
-        PresetsDB presetsDB;
-        int presetsCount;
         readonly string appFolder;
         string AppFolder
         {
@@ -92,7 +63,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
         #endregion
-        
+
         #region Center header title.
         private string centerTitle;
         public string CenterTitle
@@ -155,41 +126,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                       {
                           Window w = obj as Window;
 
-                          // Write changes to DB.
-                          presetsDB.DBinit(AppFolder);
-                          presetsDB.EditPreset(CurrentPreset);
-                          presetsDB.Disconnect();
-
-                          // Close window.
-                          w.DialogResult = true;
-                      }
-                      catch (WarningException e)
-                      {
-                          MessageBox.Show(e.Message, "Warning");
-                      }
-                      catch (Exception e)
-                      {
-                          MessageBox.Show(e.Message, "Error");
-                      }
-                  }));
-            }
-        }
-        private RelayCommand deleteBtn;
-        public RelayCommand DeleteBtn
-        {
-            get
-            {
-                return deleteBtn ??
-                  (deleteBtn = new RelayCommand(obj =>
-                  {
-                      try
-                      {
-                          Window w = obj as Window;
-
-                          // Write changes to DB.
-                          presetsDB.DBinit(AppFolder);
-                          presetsDB.DeletePreset(Convert.ToInt32(CurrentPreset.ID), presetsCount);
-                          presetsDB.Disconnect();
+                          
 
                           // Close window.
                           w.DialogResult = true;

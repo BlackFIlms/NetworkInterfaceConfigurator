@@ -1,0 +1,58 @@
+﻿<Window x:Class="NetworkInterfaceConfigurator.Views.OptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NetworkInterfaceConfigurator.Views"
+        xmlns:viewmodel="clr-namespace:NetworkInterfaceConfigurator.ViewModels"
+        mc:Ignorable="d"
+        x:Name="nameOptionsWindow"
+        Style="{StaticResource DialogsWindowStyle}"
+        viewmodel:SizeObserver.Observe="True"
+        viewmodel:SizeObserver.ObservedWidth="{Binding GetWindowWidth, Mode=OneWayToSource}"
+        Title="Options"
+        Height="323"
+        Width="450"
+        MinHeight="323"
+        MinWidth="450"
+        WindowStartupLocation="CenterScreen">
+
+    <!-- For get user input, better use gesture then Interaction.Triggers -->
+    <Window.InputBindings>
+        <MouseBinding Command="{Binding DragWindow}"
+                      CommandParameter="{Binding ElementName=nameOptionsWindow}"
+                      Gesture="LeftClick"/>
+    </Window.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        
+
+        <!-- For change settings before user click on button, using MultiBinding -->
+        <Grid x:Name="gridPresetButtons" Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Content="OK"
+                        Style="{StaticResource GridOptionsButtons}"
+                        Command="{Binding OkBtn}"
+                        CommandParameter="{Binding ElementName=nameOptionsWindow}"
+                        Grid.Column="1">
+                </Button>
+                <Button Content="Cancel"
+                        Style="{StaticResource GridOptionsButtons}"
+                        Command="{Binding CloseWin}"
+                        CommandParameter="{Binding ElementName=nameOptionsWindow}"
+                        Grid.Column="2"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

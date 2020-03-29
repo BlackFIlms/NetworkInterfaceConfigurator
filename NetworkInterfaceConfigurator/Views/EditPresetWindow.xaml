@@ -7,7 +7,7 @@
         xmlns:viewmodel="clr-namespace:NetworkInterfaceConfigurator.ViewModels"
         mc:Ignorable="d"
         x:Name="nameEditPresetWindow"
-        Style="{StaticResource SettingsWindowStyle}"
+        Style="{StaticResource DialogsWindowStyle}"
         viewmodel:SizeObserver.Observe="True"
         viewmodel:SizeObserver.ObservedWidth="{Binding GetWindowWidth, Mode=OneWayToSource}"
         Title="Edit preset"

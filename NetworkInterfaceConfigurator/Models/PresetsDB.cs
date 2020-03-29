@@ -13,11 +13,6 @@ namespace NetworkInterfaceConfigurator.Models
     class PresetsDB
     {
         // Variables, Constants & Properties.
-        private readonly string appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NetworkInterfaceConfigurator\\"); // Path for app settings.
-        public string AppFolder
-        {
-            get { return appFolder; }
-        }
         private SQLiteConnection dbConn;
         private SQLiteCommand sqlCmd = new SQLiteCommand();
 
@@ -79,7 +74,7 @@ namespace NetworkInterfaceConfigurator.Models
         /// <summary>
         /// DB init.
         /// </summary>
-        public string DBinit()
+        public string DBinit(string appFolder)
         {
             if (!File.Exists(appFolder + "Presets.db"))
             {

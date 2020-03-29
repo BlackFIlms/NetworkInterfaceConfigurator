@@ -26,8 +26,11 @@ namespace NetworkInterfaceConfigurator.ViewModels
         public MainViewModel()
         {
             // Create directory for app settings if it does not exist.
-            if (!Directory.Exists(presetsDB.AppFolder))
-                Directory.CreateDirectory(presetsDB.AppFolder);
+            if (!Directory.Exists(AppFolder))
+                Directory.CreateDirectory(AppFolder);
+
+            // Settings init.
+            settings = new Settings(AppFolder);
 
             // Presets init.
             GetPresets();
@@ -37,6 +40,12 @@ namespace NetworkInterfaceConfigurator.ViewModels
         }
 
         // Variables, Constants & Properties.
+        private readonly string appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NetworkInterfaceConfigurator\\"); // Path for app settings.
+        public string AppFolder
+        {
+            get { return appFolder; }
+        }
+        Settings settings;
         PresetsDB presetsDB = new PresetsDB();
 
 
@@ -245,6 +254,25 @@ namespace NetworkInterfaceConfigurator.ViewModels
         }
         #endregion
 
+        #region Menu
+        private RelayCommand openOptionsWindow;
+        public RelayCommand OpenOptionsWindow
+        {
+            get
+            {
+                return openOptionsWindow ??
+                    (openOptionsWindow = new RelayCommand(obj =>
+                    {
+                        // Create and open window for edit options.
+                        var w = new OptionsWindow();
+                        var vm = new OptionsViewModel(AppFolder);
+                        w.DataContext = vm;
+                        bool? result = w.ShowDialog();
+                    }));
+            }
+        }
+        #endregion
+
         #region AdaptersInit
         /*
             Manual initialization.
@@ -428,7 +456,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
         /// </summary>
         public IEnumerable<Preset> InitPresets()
         {
-            presetsDB.DBinit();
+            presetsDB.DBinit(AppFolder);
             foreach (object[] objArr in presetsDB.Load())
             {
                 Preset pr = new Preset();
@@ -467,7 +495,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                             Preset pr = new Preset();
 
                             // Add preset to DB.
-                            presetsDB.DBinit();
+                            presetsDB.DBinit(AppFolder);
                             presetsDB.AddPreset(pr, out int id);
 
                             // Set preset id and name.
@@ -557,7 +585,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                           pr.MAC = SelectedAdapter.MAC;
 
                           // Update preset in DB.
-                          presetsDB.DBinit();
+                          presetsDB.DBinit(AppFolder);
                           presetsDB.EditPreset(pr);
                           presetsDB.Disconnect();
                       }
@@ -587,7 +615,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
 
                         // Create and open window for edit preset.
                         var w = new EditPresetWindow();
-                        var vm = new EditPresetViewModel(pr, presetsDB, Presets.Count);
+                        var vm = new EditPresetViewModel(pr, presetsDB, Presets.Count, AppFolder);
                         w.DataContext = vm;
                         bool? result = w.ShowDialog();
 

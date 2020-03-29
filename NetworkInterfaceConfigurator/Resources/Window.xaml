@@ -92,8 +92,15 @@
                                                           Background="{StaticResource BrushDarkGray}">
                                                     <TextBlock>Open</TextBlock>
                                                     <TextBlock>Save</TextBlock>
-                                                    <TextBlock>Options</TextBlock>
-                                                    <TextBlock>Exit</TextBlock>
+                                                    <Button x:Name="MenuOptionsButton"
+                                                            Content="Options"
+                                                            Style="{StaticResource WindowStyleMenuButton}"
+                                                            Command="{Binding Path=OpenOptionsWindow}"/>
+                                                    <Button x:Name="MenuExitButton"
+                                                            Content="Exit"
+                                                            Style="{StaticResource WindowStyleMenuButton}"
+                                                            Command="{Binding Path=CloseWin}"
+                                                            CommandParameter="{Binding ElementName=nameMainWindow}"/>
                                                 </MenuItem>
                                                 <MenuItem Header="Help">
                                                     <TextBlock>Updates</TextBlock>
@@ -174,7 +181,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="SettingsWindowStyle" TargetType="{x:Type Window}">
+    <Style x:Key="DialogsWindowStyle" TargetType="{x:Type Window}">
         <Setter Property="AllowsTransparency" Value="true" />
         <Setter Property="WindowStyle" Value="None" />
         <Setter Property="Background" Value="Transparent" />
@@ -245,13 +252,14 @@
                                             HorizontalAlignment="Right"
                                             VerticalAlignment="Top"
                                             Grid.Column="1" >
+                                            <!-- Binding without name. Using TemplatedParent. -->
                                             <Button
                                                 x:Name="CloseButton"
                                                 Width="34"
                                                 Height="18"
                                                 Style="{StaticResource WindowStyleHeaderButton}"
                                                 Command="{Binding Path=CloseWin}"
-                                                CommandParameter="{Binding ElementName=nameEditPresetWindow}"
+                                                CommandParameter="{Binding Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
                                                 >
                                                 <Label x:Name="LabelCloseButton" Style="{StaticResource CloseIcon}"/>
                                             </Button>
