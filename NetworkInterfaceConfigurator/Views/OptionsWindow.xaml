@@ -11,10 +11,10 @@
         viewmodel:SizeObserver.Observe="True"
         viewmodel:SizeObserver.ObservedWidth="{Binding GetWindowWidth, Mode=OneWayToSource}"
         Title="Options"
-        Height="323"
-        Width="450"
-        MinHeight="323"
-        MinWidth="450"
+        Height="250"
+        Width="350"
+        MinHeight="250"
+        MinWidth="350"
         WindowStartupLocation="CenterScreen">
 
     <!-- For get user input, better use gesture then Interaction.Triggers -->
@@ -29,11 +29,50 @@
             <RowDefinition Height="5*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
-        
+
+        <Grid x:Name="gridOptionsSettings" Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="gridSettingsLang"
+                  Visibility="Collapsed"
+                  Grid.Row="0">
+                <StackPanel Height="34" Margin="20, 0, 20, 0" Orientation="Vertical">
+                    <TextBlock Text="Language" Style="{StaticResource GridContentTitles}"/>
+                    <ComboBox x:Name="settingsLang"
+                              Style="{StaticResource OptionsSelector}"
+                              ItemContainerStyle="{StaticResource OptionsSelectorItem}"
+                              ItemsSource="{Binding Languages}"
+                              SelectedItem="{Binding TempSettings.Lang}"/>
+                </StackPanel>
+            </Grid>
+            <Grid x:Name="gridSettingsMACR"
+                  Grid.Row="1">
+                <Grid Height="34" Margin="20, 0, 20, 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <CheckBox x:Name="settingsMACR"
+                              IsChecked="{Binding TempSettings.AllowRandomizeMAC, UpdateSourceTrigger=PropertyChanged}"
+                              Content="Allow random generate MAC"
+                              ToolTip="It's not recommended to activate this option! Because some network adapters can't set some MAC addresses!"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center"
+                              Style="{StaticResource CheckBoxPresetMACR}"
+                              Grid.Row="0"/>
+                    <TextBlock Text="It's not recommended to activate this option! See ToolTip for more info."
+                               Style="{StaticResource SmallWarningText}"
+                               Grid.Row="1"/>
+                </Grid>
+            </Grid>
+        </Grid>
 
         <!-- For change settings before user click on button, using MultiBinding -->
-        <Grid x:Name="gridPresetButtons" Grid.Row="2">
+        <Grid x:Name="gridOptionsButtons" Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>

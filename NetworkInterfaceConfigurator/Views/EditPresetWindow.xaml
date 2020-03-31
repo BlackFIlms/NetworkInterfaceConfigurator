@@ -156,9 +156,10 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        <Grid x:Name="gridPresetMACR" DataContext="{Binding CurrentPreset}" Grid.Row="2">
+        <Grid x:Name="gridPresetMACR" Grid.Row="2">
             <CheckBox x:Name="presetSetMACR"
-                      IsChecked="{Binding MACR, UpdateSourceTrigger=PropertyChanged}"
+                      IsEnabled="{Binding Settings.AllowRandomizeMAC}"
+                      IsChecked="{Binding CurrentPreset.MACR, UpdateSourceTrigger=PropertyChanged}"
                       Content="Random generate MAC"
                       ToolTip="This option not recommended for use! Because some network adapters can't set some MAC addresses!"
                       HorizontalAlignment="Center"

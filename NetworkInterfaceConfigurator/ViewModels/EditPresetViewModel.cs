@@ -16,7 +16,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
     class EditPresetViewModel : PropChanged
     {
         // Constructor.
-        public EditPresetViewModel(Preset pr, PresetsDB _presetsDB, int _presetsCount, string _appFolder)
+        public EditPresetViewModel(Preset pr, PresetsDB _presetsDB, int _presetsCount, Settings _settings)
         {
             // Get preset without link to object.
             CurrentPreset.ID = pr.ID;
@@ -33,7 +33,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
 
             presetsCount = _presetsCount;
 
-            appFolder = _appFolder;
+            settings = _settings;
         }
 
         // Variables, Constants & Properties.
@@ -49,10 +49,16 @@ namespace NetworkInterfaceConfigurator.ViewModels
         }
         PresetsDB presetsDB;
         int presetsCount;
-        readonly string appFolder;
-        string AppFolder
+
+        private Settings settings;
+        public Settings Settings
         {
-            get { return appFolder; }
+            get { return settings; }
+            set
+            {
+                settings = value;
+                OnPropertyChanged("Settings");
+            }
         }
 
 
@@ -156,7 +162,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                           Window w = obj as Window;
 
                           // Write changes to DB.
-                          presetsDB.DBinit(AppFolder);
+                          presetsDB.DBinit(Settings.AppFolder);
                           presetsDB.EditPreset(CurrentPreset);
                           presetsDB.Disconnect();
 
@@ -187,7 +193,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                           Window w = obj as Window;
 
                           // Write changes to DB.
-                          presetsDB.DBinit(AppFolder);
+                          presetsDB.DBinit(Settings.AppFolder);
                           presetsDB.DeletePreset(Convert.ToInt32(CurrentPreset.ID), presetsCount);
                           presetsDB.Disconnect();
 

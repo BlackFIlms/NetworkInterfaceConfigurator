@@ -215,6 +215,13 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{StaticResource BrushMediumGray2}"/>
+                <Setter Property="Foreground" Value="{StaticResource BrushLightGray}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="GridEditPresetButtons" TargetType="{x:Type Button}">

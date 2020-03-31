@@ -45,7 +45,17 @@ namespace NetworkInterfaceConfigurator.ViewModels
         {
             get { return appFolder; }
         }
-        Settings settings;
+        private Settings settings;
+        public Settings Settings
+        {
+            get { return settings; }
+            set
+            {
+                settings = value;
+                OnPropertyChanged("Settings");
+            }
+        }
+
         PresetsDB presetsDB = new PresetsDB();
 
 
@@ -265,7 +275,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
                     {
                         // Create and open window for edit options.
                         var w = new OptionsWindow();
-                        var vm = new OptionsViewModel(AppFolder);
+                        var vm = new OptionsViewModel(AppFolder, Settings);
                         w.DataContext = vm;
                         bool? result = w.ShowDialog();
                     }));
@@ -615,7 +625,7 @@ namespace NetworkInterfaceConfigurator.ViewModels
 
                         // Create and open window for edit preset.
                         var w = new EditPresetWindow();
-                        var vm = new EditPresetViewModel(pr, presetsDB, Presets.Count, AppFolder);
+                        var vm = new EditPresetViewModel(pr, presetsDB, Presets.Count, Settings);
                         w.DataContext = vm;
                         bool? result = w.ShowDialog();
 

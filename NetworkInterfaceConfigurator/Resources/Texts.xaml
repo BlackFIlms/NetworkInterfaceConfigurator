@@ -33,6 +33,13 @@
         <Setter Property="Margin" Value="0, 6, 0, 0"/>
     </Style>
 
+    <Style x:Key="SmallWarningText" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{StaticResource BrushRed}"/>
+        <Setter Property="FontSize" Value="{StaticResource Small}"/>
+        <Setter Property="FontFamily" Value="{StaticResource StandartText}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    
     <!-- TextBoxes -->
     <!-- Base template for TextBoxes -->
     <!--
@@ -176,6 +183,12 @@
     <!-- CheckBoxes -->
     <Style x:Key="CheckBoxPresetMACR" TargetType="{x:Type CheckBox}">
         <Setter Property="Foreground" Value="{StaticResource BrushWhite}"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False ">
+                <Setter Property="Foreground" Value="{StaticResource BrushLightGray}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>

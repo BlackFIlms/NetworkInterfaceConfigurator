@@ -267,6 +267,7 @@
                                              Style="{StaticResource GridContentSettings}"
                                              Grid.Column="1"/>
                                     <Button Content="R"
+                                            IsEnabled="{Binding Settings.AllowRandomizeMAC}"
                                             ToolTip="Set random mac address"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"

@@ -92,15 +92,11 @@
                                                           Background="{StaticResource BrushDarkGray}">
                                                     <TextBlock>Open</TextBlock>
                                                     <TextBlock>Save</TextBlock>
-                                                    <Button x:Name="MenuOptionsButton"
-                                                            Content="Options"
-                                                            Style="{StaticResource WindowStyleMenuButton}"
-                                                            Command="{Binding Path=OpenOptionsWindow}"/>
-                                                    <Button x:Name="MenuExitButton"
-                                                            Content="Exit"
-                                                            Style="{StaticResource WindowStyleMenuButton}"
-                                                            Command="{Binding Path=CloseWin}"
-                                                            CommandParameter="{Binding ElementName=nameMainWindow}"/>
+                                                    <MenuItem Header="Options"
+                                                              Command="{Binding Path=OpenOptionsWindow}"/>
+                                                    <MenuItem Header="Exit"
+                                                              Command="{Binding Path=CloseWin}"
+                                                              CommandParameter="{Binding ElementName=nameMainWindow}"/>
                                                 </MenuItem>
                                                 <MenuItem Header="Help">
                                                     <TextBlock>Updates</TextBlock>

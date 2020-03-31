@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -14,18 +15,41 @@ namespace NetworkInterfaceConfigurator.ViewModels
     class OptionsViewModel : PropChanged
     {
         // Constructor.
-        public OptionsViewModel(string _appFolder)
+        public OptionsViewModel(string _appFolder, Settings _settings)
         {
+            settings = _settings;
+
             appFolder = _appFolder;
+
+            // Get settings without link to object.
+            tempSettings = new Settings(AppFolder);
+            TempSettings.Lang = _settings.Lang;
+            TempSettings.AllowRandomizeMAC = _settings.AllowRandomizeMAC;
+
+            // Define languages.
+            Languages = new ObservableCollection<string>();
+            Languages.Add("RU");
+            Languages.Add("EN");
         }
-        
+
         // Variables, Constants & Properties.
-        readonly string appFolder;
+        private Settings settings; // Field for save link, to origin settings object.
+        private readonly string appFolder;
         string AppFolder
         {
             get { return appFolder; }
         }
-
+        private Settings tempSettings;
+        public Settings TempSettings
+        {
+            get { return tempSettings; }
+            set
+            {
+                tempSettings = value;
+                OnPropertyChanged("TempSettings");
+            }
+        }
+        public ObservableCollection<string> Languages { get; set; } // List of available langs.
 
         #region Control logics for window.
 
@@ -126,7 +150,11 @@ namespace NetworkInterfaceConfigurator.ViewModels
                       {
                           Window w = obj as Window;
 
-                          
+                          // Update settings.
+                          settings.Lang = TempSettings.Lang;
+                          settings.AllowRandomizeMAC = TempSettings.AllowRandomizeMAC;
+                          // Save to file.
+                          settings.SaveSettings();
 
                           // Close window.
                           w.DialogResult = true;

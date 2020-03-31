@@ -51,7 +51,7 @@ namespace NetworkInterfaceConfigurator.Models
             {
                 // Define default settings.
                 List<string> defaultSettings = new List<string>();
-                defaultSettings.Add("Lang=RU");
+                defaultSettings.Add("Lang=EN");
                 defaultSettings.Add("AllowRandomizeMAC=False");
 
                 // Write settings to file.
@@ -74,10 +74,10 @@ namespace NetworkInterfaceConfigurator.Models
 
                 // Apply settings.
                 string lang = settings.Find(x => x.Contains("Lang"));
-                lang.Replace("Lang=", "");
+                lang = lang.Replace("Lang=", "");
 
                 string allowRandomizeMAC = settings.Find(x => x.Contains("AllowRandomizeMAC"));
-                allowRandomizeMAC.Replace("AllowRandomizeMAC=", "");
+                allowRandomizeMAC = allowRandomizeMAC.Replace("AllowRandomizeMAC=", "");
 
                 ApplySettings(lang, allowRandomizeMAC);
             }
