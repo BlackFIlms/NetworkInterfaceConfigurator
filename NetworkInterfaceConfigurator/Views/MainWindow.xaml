@@ -70,6 +70,7 @@
                                 <Grid Width="100"
                                       Height="34">
                                         <Button x:Name="BtnPreset"
+                                                ToolTip="Left click - Apply preset settings, to current adapter. Ctrl+Left click - Edit preset settings. Right click - copy current adapter settings, to preset."
                                                 Content="{Binding Path=Name}"
                                                 Tag="{Binding Path=ID}"
                                                 Style="{StaticResource GridPresetsButtons}">
