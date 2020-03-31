@@ -90,8 +90,12 @@
                                                   ItemContainerStyle="{StaticResource MainMenuItems}">
                                                 <MenuItem Header="File"
                                                           Background="{StaticResource BrushDarkGray}">
-                                                    <TextBlock>Open</TextBlock>
-                                                    <TextBlock>Save</TextBlock>
+                                                    <MenuItem Header="Open"
+                                                              ToolTip="Open adapter settings file and sets it's settings to current adapter."
+                                                              Command="{Binding Path=OpenFile}"/>
+                                                    <MenuItem Header="Save"
+                                                              ToolTip="Save current adapter settings to file."
+                                                              Command="{Binding Path=SaveFile}"/>
                                                     <MenuItem Header="Options"
                                                               Command="{Binding Path=OpenOptionsWindow}"/>
                                                     <MenuItem Header="Exit"
@@ -99,8 +103,10 @@
                                                               CommandParameter="{Binding ElementName=nameMainWindow}"/>
                                                 </MenuItem>
                                                 <MenuItem Header="Help">
-                                                    <TextBlock>Updates</TextBlock>
-                                                    <TextBlock>About</TextBlock>
+                                                    <MenuItem Header="Update"
+                                                              Command="{Binding Path=OpenUpdateLink}"/>
+                                                    <MenuItem Header="About"
+                                                              Command="{Binding Path=OpenAboutWindow}"/>
                                                 </MenuItem>
                                             </Menu>
                                         </StackPanel>

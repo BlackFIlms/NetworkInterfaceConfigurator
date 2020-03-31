@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -265,6 +266,75 @@ namespace NetworkInterfaceConfigurator.ViewModels
         #endregion
 
         #region Menu
+        private RelayCommand openFile;
+        public RelayCommand OpenFile
+        {
+            get
+            {
+                return openFile ??
+                    (openFile = new RelayCommand(obj =>
+                    {
+                        List<string> adapterSettings = new List<string>();
+
+                        // Open file.
+                        OpenFileDialog path = new OpenFileDialog();
+                        path.Filter = "Text files(*.txt) | *.txt";
+                        path.ShowDialog();
+                        
+                        try
+                        {
+                            adapterSettings = File.ReadLines(path.FileName).ToList();
+                            
+                            // Find settings in list, remove names from settings and apply settings to temp adapter.
+                            TempAdapter.IP = adapterSettings.Find(x => x.Contains("IP")).Replace("IP=", "");
+                            TempAdapter.Subnet = adapterSettings.Find(x => x.Contains("Subnet")).Replace("Subnet=", "");
+                            TempAdapter.Gateway = adapterSettings.Find(x => x.Contains("Gateway")).Replace("Gateway=", "");
+                            TempAdapter.DNS1 = adapterSettings.Find(x => x.Contains("DNS1")).Replace("DNS1=", "");
+                            TempAdapter.DNS2 = adapterSettings.Find(x => x.Contains("DNS2")).Replace("DNS2=", "");
+                            TempAdapter.MAC = adapterSettings.Find(x => x.Contains("MAC")).Replace("MAC=", "");
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message, "Error");
+                        }
+                    }));
+            }
+        }
+        private RelayCommand saveFile;
+        public RelayCommand SaveFile
+        {
+            get
+            {
+                return saveFile ??
+                    (saveFile = new RelayCommand(obj =>
+                    {
+                        List<string> adapterSettings = new List<string>();
+
+                        // Save file.
+                        SaveFileDialog path = new SaveFileDialog();
+                        path.Filter = "Text files(*.txt) | *.txt";
+                        path.ShowDialog();
+
+                        try
+                        {
+                            // Write current settings to list.
+                            adapterSettings.Add("IP=" + SelectedAdapter.IP);
+                            adapterSettings.Add("Subnet=" + SelectedAdapter.Subnet);
+                            adapterSettings.Add("Gateway=" + SelectedAdapter.Gateway);
+                            adapterSettings.Add("DNS1=" + SelectedAdapter.DNS1);
+                            adapterSettings.Add("DNS2=" + SelectedAdapter.DNS2);
+                            adapterSettings.Add("MAC=" + SelectedAdapter.MAC);
+
+                            // Write current settings to file.
+                            File.AppendAllLines(path.FileName, adapterSettings.AsEnumerable<string>());
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message, "Error");
+                        }
+                    }));
+            }
+        }
         private RelayCommand openOptionsWindow;
         public RelayCommand OpenOptionsWindow
         {
@@ -278,6 +348,18 @@ namespace NetworkInterfaceConfigurator.ViewModels
                         var vm = new OptionsViewModel(AppFolder, Settings);
                         w.DataContext = vm;
                         bool? result = w.ShowDialog();
+                    }));
+            }
+        }
+        private RelayCommand openUpdateLink;
+        public RelayCommand OpenUpdateLink
+        {
+            get
+            {
+                return openUpdateLink ??
+                    (openUpdateLink = new RelayCommand(obj =>
+                    {
+                        Process.Start("https://github.com/BlackFIlms/NetworkInterfaceConfigurator/releases");
                     }));
             }
         }
