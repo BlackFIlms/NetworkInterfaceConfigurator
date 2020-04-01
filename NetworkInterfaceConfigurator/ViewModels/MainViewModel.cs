@@ -33,7 +33,12 @@ namespace NetworkInterfaceConfigurator.ViewModels
             // Settings init.
             settings = new Settings(AppFolder);
 
+            // Log init.
+            File.Delete(AppFolder + "Log.txt");
+            LogList = new ObservableCollection<LogEntry>();
+
             // Presets init.
+            presetsDB = new PresetsDB(this);
             GetPresets();
 
             // Adapters init.
@@ -57,17 +62,22 @@ namespace NetworkInterfaceConfigurator.ViewModels
             }
         }
 
-        PresetsDB presetsDB = new PresetsDB();
-
-
-        private string debug;
-        public string Debug
+        public ObservableCollection<LogEntry> LogList { get; set; }
+        private LogEntry debug;
+        public LogEntry Debug
         {
             get { return debug; }
 
             set
             {
                 debug = value;
+                debug.Time = debug.DateTime.ToLongTimeString();
+
+                // Add entry to log list.
+                LogList.Add(debug);
+                // Writes log to file.
+                File.AppendAllText(AppFolder + "Log.txt","Time: " + debug.Time + " " + "Index: " + "#" + debug.Index + " " + "Message: " + debug.Message + " " + "Type: " + debug.GetType().ToString().Replace("NetworkInterfaceConfigurator.ViewModels.LogEntry", "") + "\r\n");
+
                 OnPropertyChanged("Debug");
             }
         }
@@ -91,6 +101,14 @@ namespace NetworkInterfaceConfigurator.ViewModels
                 tempAdapter.DNS2 = selectedAdapter.DNS2;
                 tempAdapter.MAC = selectedAdapter.MAC;
 
+                // Add log entry.
+                Debug = new LogEntryMessage()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Adapter settings initialized."
+                };
+
                 OnPropertyChanged("SelectedAdapter");
             }
         }
@@ -105,6 +123,8 @@ namespace NetworkInterfaceConfigurator.ViewModels
                 OnPropertyChanged("TempAdapter");
             }
         }
+
+        PresetsDB presetsDB;
 
         public ObservableCollection<Preset> presets;
         public ObservableCollection<Preset> Presets
@@ -170,6 +190,15 @@ namespace NetworkInterfaceConfigurator.ViewModels
 
                     if (closeWindowCommand != null)
                     {
+                        // Copy log file, for save it before next start.
+                        if (File.Exists(AppFolder + "Log.txt"))
+                        {
+                            string copyFileName = DateTime.Now.ToShortDateString() + "_" + DateTime.Now.ToLongTimeString().Replace(":", "-") + "_" + "Log.txt";
+                            if (!Directory.Exists(AppFolder + "OldLogs\\"))
+                                Directory.CreateDirectory(AppFolder + "OldLogs\\");
+                            File.Copy(AppFolder + "Log.txt", AppFolder + "OldLogs\\" + copyFileName);
+                        }
+
                         closeWindowCommand.Close();
                     }
                 });
@@ -292,10 +321,26 @@ namespace NetworkInterfaceConfigurator.ViewModels
                             TempAdapter.DNS1 = adapterSettings.Find(x => x.Contains("DNS1")).Replace("DNS1=", "");
                             TempAdapter.DNS2 = adapterSettings.Find(x => x.Contains("DNS2")).Replace("DNS2=", "");
                             TempAdapter.MAC = adapterSettings.Find(x => x.Contains("MAC")).Replace("MAC=", "");
+
+                            // Add log entry.
+                            Debug = new LogEntryMessage()
+                            {
+                                DateTime = DateTime.Now,
+                                Index = LogEntry.IndexCount,
+                                Message = "File openned and settings copied to text fields."
+                            };
                         }
                         catch (Exception e)
                         {
                             MessageBox.Show(e.Message, "Error");
+
+                            // Add log entry.
+                            Debug = new LogEntryError()
+                            {
+                                DateTime = DateTime.Now,
+                                Index = LogEntry.IndexCount,
+                                Message = "Error: " + e.Message + " " + "Source: " + e.Source + " " + "TargetSite: " + e.TargetSite + " " + "StackTrace: " + e.StackTrace // Presentation of the error, variant 1.
+                            };
                         }
                     }));
             }
@@ -331,6 +376,14 @@ namespace NetworkInterfaceConfigurator.ViewModels
                         catch (Exception e)
                         {
                             MessageBox.Show(e.Message, "Error");
+
+                            // Add log entry.
+                            Debug = new LogEntryError()
+                            {
+                                DateTime = DateTime.Now,
+                                Index = LogEntry.IndexCount,
+                                Message = "Error: " + e
+                            };
                         }
                     }));
             }
@@ -348,6 +401,27 @@ namespace NetworkInterfaceConfigurator.ViewModels
                         var vm = new OptionsViewModel(AppFolder, Settings);
                         w.DataContext = vm;
                         bool? result = w.ShowDialog();
+
+                        if (result.Value)
+                        {
+                            // Add log entry.
+                            Debug = new LogEntryMessage()
+                            {
+                                DateTime = DateTime.Now,
+                                Index = LogEntry.IndexCount,
+                                Message = "Options changed."
+                            };
+                        }
+                        else
+                        {
+                            // Add log entry.
+                            Debug = new LogEntryMessage()
+                            {
+                                DateTime = DateTime.Now,
+                                Index = LogEntry.IndexCount,
+                                Message = "Options not changed."
+                            };
+                        }
                     }));
             }
         }
@@ -419,6 +493,14 @@ namespace NetworkInterfaceConfigurator.ViewModels
         public void GetAdapters()
         {
             Adapters = new ObservableCollection<NetworkInterfaceLib>(InitAdapters());
+
+            // Add log entry.
+            Debug = new LogEntryMessage()
+            {
+                DateTime = DateTime.Now,
+                Index = LogEntry.IndexCount,
+                Message = "Adapters initialized."
+            };
         }
         #endregion
 
@@ -434,10 +516,26 @@ namespace NetworkInterfaceConfigurator.ViewModels
                       try
                       {
                           TempAdapter.MAC = RandMAC.GetRandMAC();
+
+                          // Add log entry.
+                          Debug = new LogEntryMessage()
+                          {
+                              DateTime = DateTime.Now,
+                              Index = LogEntry.IndexCount,
+                              Message = "MAC randomized."
+                          };
                       }
                       catch (NullReferenceException e)
                       {
                           MessageBox.Show("You did not select adapter!", "Error");
+
+                          // Add log entry.
+                          Debug = new LogEntryError()
+                          {
+                              DateTime = DateTime.Now,
+                              Index = LogEntry.IndexCount,
+                              Message = "Error(NullReferenceException): " + e
+                          };
                       }
                   }));
             }
@@ -455,11 +553,18 @@ namespace NetworkInterfaceConfigurator.ViewModels
                       try
                       {
                           List<object> parameters = obj as List<object>;
-                          Debug = parameters.Count.ToString() + " ";
 
                           foreach (TextBox item in parameters)
                           {
-                              Debug += item.Name + "=" + item.Text + " ";
+                              // Add log entry.
+                              Debug = new LogEntryMessage()
+                              {
+                                  DateTime = DateTime.Now,
+                                  Index = LogEntry.IndexCount,
+                                  Message = "Changing settings: " + item.Name + " " + "Value: " + item.Text
+                              };
+
+                              bool changingState;
                               switch (item.Name)
                               {
                                   case "adapterSetIP":
@@ -467,37 +572,149 @@ namespace NetworkInterfaceConfigurator.ViewModels
                                       break;
                                   case "adapterSetSubnet":
                                       SelectedAdapter.Subnet = item.Text; // Writes subnet from TextBox to adapter property.
-                                      NetworkInterfaceLib.SetStatic(SelectedAdapter.NicIndex, SelectedAdapter.IP, SelectedAdapter.Subnet); // Apply new ip and subnet to adapter.
+                                      changingState = NetworkInterfaceLib.SetStatic(SelectedAdapter.NicIndex, SelectedAdapter.IP, SelectedAdapter.Subnet); // Apply new ip and subnet to adapter.
+                                      if (changingState)
+                                      {
+                                          // Add log entry.
+                                          Debug = new LogEntryMessage()
+                                          {
+                                              DateTime = DateTime.Now,
+                                              Index = LogEntry.IndexCount,
+                                              Message = "Adapter: " + SelectedAdapter.NicName + " " + "Network: " + SelectedAdapter.NetName + " " + "IP and Subnet settings changed."
+                                          };
+                                      }
+                                      else
+                                      {
+                                          // Add log entry.
+                                          Debug = new LogEntryMessage()
+                                          {
+                                              DateTime = DateTime.Now,
+                                              Index = LogEntry.IndexCount,
+                                              Message = "Adapter: " + SelectedAdapter.NicName + " " + "Network: " + SelectedAdapter.NetName + " " + "IP and Subnet settings not changed."
+                                          };
+                                      }
                                       break;
                                   case "adapterSetGateway":
                                       SelectedAdapter.Gateway = item.Text; // Writes gateway from TextBox to adapter property.
-                                      NetworkInterfaceLib.SetGateway(SelectedAdapter.NicIndex, SelectedAdapter.Gateway); // Apply new gateway to adapter.
+                                      changingState = NetworkInterfaceLib.SetGateway(SelectedAdapter.NicIndex, SelectedAdapter.Gateway); // Apply new gateway to adapter.
+                                      if (changingState)
+                                      {
+                                          // Add log entry.
+                                          Debug = new LogEntryMessage()
+                                          {
+                                              DateTime = DateTime.Now,
+                                              Index = LogEntry.IndexCount,
+                                              Message = "Adapter: " + SelectedAdapter.NicName + " " + "Network: " + SelectedAdapter.NetName + " " + "Gateway settings changed."
+                                          };
+                                      }
+                                      else
+                                      {
+                                          // Add log entry.
+                                          Debug = new LogEntryMessage()
+                                          {
+                                              DateTime = DateTime.Now,
+                                              Index = LogEntry.IndexCount,
+                                              Message = "Adapter: " + SelectedAdapter.NicName + " " + "Network: " + SelectedAdapter.NetName + " " + "Gateway settings not changed."
+                                          };
+                                      }
                                       break;
                                   case "adapterSetDNS2": // Change property setting queue of DNS1 and DNS2.
                                       SelectedAdapter.DNS2 = item.Text; // Writes dns1 from TextBox to adapter property.
                                       break;
                                   case "adapterSetDNS1":
                                       SelectedAdapter.DNS1 = item.Text; // Writes dns2 from TextBox to adapter property.
-                                      NetworkInterfaceLib.SetDNS(SelectedAdapter.NicIndex, SelectedAdapter.DNS1, SelectedAdapter.DNS2); // Apply new dns1 and dns2 to adapter.
+                                      changingState = NetworkInterfaceLib.SetDNS(SelectedAdapter.NicIndex, SelectedAdapter.DNS1, SelectedAdapter.DNS2); // Apply new dns1 and dns2 to adapter.
+                                      if (changingState)
+                                      {
+                                          // Add log entry.
+                                          Debug = new LogEntryMessage()
+                                          {
+                                              DateTime = DateTime.Now,
+                                              Index = LogEntry.IndexCount,
+                                              Message = "Adapter: " + SelectedAdapter.NicName + " " + "Network: " + SelectedAdapter.NetName + " " + "DNS settings changed."
+                                          };
+                                      }
+                                      else
+                                      {
+                                          // Add log entry.
+                                          Debug = new LogEntryMessage()
+                                          {
+                                              DateTime = DateTime.Now,
+                                              Index = LogEntry.IndexCount,
+                                              Message = "Adapter: " + SelectedAdapter.NicName + " " + "Network: " + SelectedAdapter.NetName + " " + "DNS settings not changed."
+                                          };
+                                      }
                                       break;
                                   case "adapterSetMAC":
                                       SelectedAdapter.MAC = item.Text; // Writes mac address form TextBox to adapter propery.
-                                      NetworkInterfaceLib.SetMAC(SelectedAdapter.NicID, SelectedAdapter.MAC); // Apply new mac address to adapter.
+                                      changingState = NetworkInterfaceLib.SetMAC(SelectedAdapter.NicID, SelectedAdapter.MAC); // Apply new mac address to adapter.
+                                      if (changingState)
+                                      {
+                                          // Add log entry.
+                                          Debug = new LogEntryMessage()
+                                          {
+                                              DateTime = DateTime.Now,
+                                              Index = LogEntry.IndexCount,
+                                              Message = "Adapter: " + SelectedAdapter.NicName + " " + "Network: " + SelectedAdapter.NetName + " " + "MAC settings changed."
+                                          };
+                                      }
+                                      else
+                                      {
+                                          // Add log entry.
+                                          Debug = new LogEntryMessage()
+                                          {
+                                              DateTime = DateTime.Now,
+                                              Index = LogEntry.IndexCount,
+                                              Message = "Adapter: " + SelectedAdapter.NicName + " " + "Network: " + SelectedAdapter.NetName + " " + "MAC settings not changed."
+                                          };
+                                      }
                                       break;
                               }
                           }
+
+                          // Add log entry.
+                          Debug = new LogEntryMessage()
+                          {
+                              DateTime = DateTime.Now,
+                              Index = LogEntry.IndexCount,
+                              Message = "Adapter settings changed."
+                          };
                       }
                       catch (NullReferenceException e)
                       {
-                          MessageBox.Show("You did not select adapter!" + "\r\n" + e, "Error");
+                          MessageBox.Show("You did not select adapter!", "Error");
+
+                          // Add log entry.
+                          Debug = new LogEntryError()
+                          {
+                              DateTime = DateTime.Now,
+                              Index = LogEntry.IndexCount,
+                              Message = "Error(NullReferenceException): " + e
+                          };
                       }
                       catch (WarningException e)
                       {
                           MessageBox.Show(e.Message, "Warning");
+
+                          // Add log entry.
+                          Debug = new LogEntryWarning()
+                          {
+                              DateTime = DateTime.Now,
+                              Index = LogEntry.IndexCount,
+                              Message = "Warning: " + e
+                          };
                       }
                       catch (Exception e)
                       {
                           MessageBox.Show(e.Message, "Error");
+
+                          // Add log entry.
+                          Debug = new LogEntryError()
+                          {
+                              DateTime = DateTime.Now,
+                              Index = LogEntry.IndexCount,
+                              Message = "Error: " + e
+                          };
                       }
                   }));
             }
@@ -517,6 +734,14 @@ namespace NetworkInterfaceConfigurator.ViewModels
                       {
                           item.Text = "";
                       }
+
+                      // Add log entry.
+                      Debug = new LogEntryMessage()
+                      {
+                          DateTime = DateTime.Now,
+                          Index = LogEntry.IndexCount,
+                          Message = "Text fields with settings cleared."
+                      };
                   }));
             }
         }
@@ -532,10 +757,26 @@ namespace NetworkInterfaceConfigurator.ViewModels
                       try
                       {
                           InitAdapterProperties(SelectedAdapter);
+
+                          // Add log entry.
+                          Debug = new LogEntryMessage()
+                          {
+                              DateTime = DateTime.Now,
+                              Index = LogEntry.IndexCount,
+                              Message = "Adapter settings updated."
+                          };
                       }
                       catch (NullReferenceException e)
                       {
                           MessageBox.Show("You did not select adapter!", "Error");
+
+                          // Add log entry.
+                          Debug = new LogEntryError()
+                          {
+                              DateTime = DateTime.Now,
+                              Index = LogEntry.IndexCount,
+                              Message = "Error(NullReferenceException): " + e
+                          };
                       }
                   }));
             }
@@ -571,6 +812,14 @@ namespace NetworkInterfaceConfigurator.ViewModels
         public void GetPresets()
         {
             Presets = new ObservableCollection<Preset>(InitPresets());
+
+            // Add log entry.
+            Debug = new LogEntryMessage()
+            {
+                DateTime = DateTime.Now,
+                Index = LogEntry.IndexCount,
+                Message = "Presets initialized."
+            };
         }
 
         // Preset buttons.
@@ -600,10 +849,24 @@ namespace NetworkInterfaceConfigurator.ViewModels
                             // Update preset name in DB.
                             presetsDB.EditPreset(pr);
                             presetsDB.Disconnect();
+                            
+                            // Add log entry.
+                            Debug = new LogEntryMessage()
+                            {
+                                DateTime = DateTime.Now,
+                                Index = LogEntry.IndexCount,
+                                Message = "Preset added."
+                            };
                         }
                         else
                         {
-                            // Write error to debug.
+                            // Add log entry.
+                            Debug = new LogEntryWarning()
+                            {
+                                DateTime = DateTime.Now,
+                                Index = LogEntry.IndexCount,
+                                Message = "Warning: " + "The number of presets reached a maximum."
+                            };
                         }
                     }));
             }
@@ -641,10 +904,26 @@ namespace NetworkInterfaceConfigurator.ViewModels
                           {
                               TempAdapter.MAC = pr.MAC;
                           }
+                          
+                          // Add log entry.
+                          Debug = new LogEntryMessage()
+                          {
+                              DateTime = DateTime.Now,
+                              Index = LogEntry.IndexCount,
+                              Message = "Preset settings copied to text fields."
+                          };
                       }
                       catch (NullReferenceException e)
                       {
-                          MessageBox.Show("You did not select adapter!" + "\r\n" + e, "Error");
+                          MessageBox.Show("You did not select adapter!", "Error");
+
+                          // Add log entry.
+                          Debug = new LogEntryError()
+                          {
+                              DateTime = DateTime.Now,
+                              Index = LogEntry.IndexCount,
+                              Message = "Error(NullReferenceException): " + e
+                          };
                       }
                   }));
             }
@@ -680,10 +959,26 @@ namespace NetworkInterfaceConfigurator.ViewModels
                           presetsDB.DBinit(AppFolder);
                           presetsDB.EditPreset(pr);
                           presetsDB.Disconnect();
+
+                          // Add log entry.
+                          Debug = new LogEntryMessage()
+                          {
+                              DateTime = DateTime.Now,
+                              Index = LogEntry.IndexCount,
+                              Message = "Current adapter settings copied to preset settings."
+                          };
                       }
                       catch (NullReferenceException e)
                       {
                           MessageBox.Show("You did not select adapter!" + "\r\n" + e, "Error");
+
+                          // Add log entry.
+                          Debug = new LogEntryError()
+                          {
+                              DateTime = DateTime.Now,
+                              Index = LogEntry.IndexCount,
+                              Message = "Error(NullReferenceException): " + e
+                          };
                       }
                   }));
             }
@@ -712,10 +1007,28 @@ namespace NetworkInterfaceConfigurator.ViewModels
                         bool? result = w.ShowDialog();
 
                         // Edit Presets collection.
-                        if (result.ToString() == "True")
+                        if (result.Value)
                         {
                             Presets.Clear();
                             GetPresets();
+
+                            // Add log entry.
+                            Debug = new LogEntryMessage()
+                            {
+                                DateTime = DateTime.Now,
+                                Index = LogEntry.IndexCount,
+                                Message = "Preset settings edited."
+                            };
+                        }
+                        else
+                        {
+                            // Add log entry.
+                            Debug = new LogEntryMessage()
+                            {
+                                DateTime = DateTime.Now,
+                                Index = LogEntry.IndexCount,
+                                Message = "Preset settings not changed."
+                            };
                         }
                     }));
             }

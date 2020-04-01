@@ -16,6 +16,7 @@
                 
                 <ResourceDictionary Source="Resources/Menu.xaml"/>
                 <ResourceDictionary Source="Resources/ComboBox.xaml"/>
+                <ResourceDictionary Source="Resources/DebugPanel.xaml"/>
                 <ResourceDictionary Source="Resources/Window.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

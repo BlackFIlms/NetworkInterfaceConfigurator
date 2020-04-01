@@ -3,6 +3,7 @@
                     xmlns:local="clr-namespace:NetworkInterfaceConfigurator.Resources"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
+    <FontFamily x:Key="WideFont-Light">pack://application:,,,/Design/Fonts/#Montserrat Light</FontFamily>
     <FontFamily x:Key="WideFont">pack://application:,,,/Design/Fonts/#Montserrat Regular</FontFamily>
     <FontFamily x:Key="WideFont-Medium">pack://application:,,,/Design/Fonts/#Montserrat Medium</FontFamily>
     <FontFamily x:Key="StandartText-Light">pack://application:,,,/Design/Fonts/#Raleway Light</FontFamily>

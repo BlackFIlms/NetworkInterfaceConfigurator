@@ -1,0 +1,165 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:NetworkInterfaceConfigurator.Resources"
+                    xmlns:viewmodel="clr-namespace:NetworkInterfaceConfigurator.ViewModels">
+
+    <DataTemplate DataType="{x:Type viewmodel:LogEntryMessage}">
+        <Grid IsSharedSizeScope="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Time" Width="Auto"/>
+                <ColumnDefinition SharedSizeGroup="Index" Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="{Binding Time}" Margin="5,0,5,0" Grid.Column="0"/>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <TextBlock Text="#" Margin="0,0,2,0" />
+                <TextBlock Text="{Binding Index}" Margin="0,0,10,0" />
+            </StackPanel>
+
+            <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Grid.Column="2"/>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodel:LogEntryWarning}">
+        <Grid IsSharedSizeScope="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Time" Width="Auto"/>
+                <ColumnDefinition SharedSizeGroup="Index" Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Foreground="{StaticResource BrushYellow}" Text="{Binding Time}" Margin="5,0,5,0" Grid.Column="0"/>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <TextBlock Foreground="{StaticResource BrushYellow}" Text="#" Margin="0,0,2,0" />
+                <TextBlock Foreground="{StaticResource BrushYellow}" Text="{Binding Index}" Margin="0,0,10,0" />
+            </StackPanel>
+
+            <TextBlock Foreground="{StaticResource BrushYellow}" Text="{Binding Message}" TextWrapping="Wrap" Grid.Column="2"/>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodel:LogEntryError}">
+        <Grid IsSharedSizeScope="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Time" Width="Auto"/>
+                <ColumnDefinition SharedSizeGroup="Index" Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Foreground="{StaticResource BrushRed}" Text="{Binding Time}" Margin="5,0,5,0" Grid.Column="0"/>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <TextBlock Foreground="{StaticResource BrushRed}" Text="#" Margin="0,0,2,0" />
+                <TextBlock Foreground="{StaticResource BrushRed}" Text="{Binding Index}" Margin="0,0,10,0" />
+            </StackPanel>
+
+            <TextBlock Foreground="{StaticResource BrushRed}" Text="{Binding Message}" TextWrapping="Wrap" Grid.Column="2"/>
+        </Grid>
+    </DataTemplate>
+
+    <ControlTemplate x:Key="DebugPanelToggleButton" TargetType="{x:Type ToggleButton}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="27" />
+            </Grid.ColumnDefinitions>
+            <Border x:Name="Border"
+                    CornerRadius="2"
+                    BorderThickness="0"
+                    BorderBrush="{StaticResource BrushABlack}"
+                    Background="{StaticResource BrushVeryDarkGray}"
+                    Grid.ColumnSpan="2">
+                <ContentPresenter/>
+            </Border>
+            <Control x:Name="Arrow"
+                     Foreground="{StaticResource BrushAWhite}"
+                     Template="{StaticResource Arrow}"
+                     Margin="0, 0, 8, 0"
+                     RenderTransformOrigin="0.5, 0.5"
+                     Grid.Column="1">
+                <Control.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="0.5" ScaleY="0.5"/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="180"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Control.RenderTransform>
+            </Control>
+        </Grid>
+    </ControlTemplate>
+
+    <Style x:Key="DebugPanel" TargetType="{x:Type ItemsControl}">
+        <Setter Property="Background" Value="{StaticResource BrushVeryDarkGray}"/>
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
+        <Setter Property="MinWidth" Value="400" />
+        <Setter Property="MaxHeight" Value="100" />
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="MinHeight" Value="18" />
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushGreen}"/>
+        <Setter Property="FontSize" Value="{StaticResource Regular}"/>
+        <Setter Property="FontFamily" Value="{StaticResource WideFont-Light}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ItemsControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="5*"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <ScrollViewer x:Name="TogglingPanel"
+                                      Visibility="Collapsed"
+                                      Style="{StaticResource ScrollViewer}"
+                                      MaxHeight="100"
+                                      Height="Auto"
+                                      MinHeight="10"
+                                      VerticalAlignment="Stretch"
+                                      VerticalContentAlignment="Stretch"
+                                      Margin="6,0,0,0"
+                                      Focusable="false"
+                                      SnapsToDevicePixels="True"
+                                      Grid.Row="0">
+                            <StackPanel IsItemsHost="True"
+                                        KeyboardNavigation.DirectionalNavigation="Contained"/>
+                        </ScrollViewer>
+                        <ToggleButton x:Name="ToggleButton"
+                                      Template="{StaticResource DebugPanelToggleButton}"
+                                      TextBlock.Foreground="{TemplateBinding Foreground}"
+                                      TextBlock.FontSize="{TemplateBinding FontSize}"
+                                      TextBlock.FontFamily="{TemplateBinding FontFamily}"
+                                      Focusable="false"
+                                      ClickMode="Press"
+                                      Grid.Row="1">
+                            <ContentPresenter x:Name="ContentSite"
+                                              Visibility="Visible"
+                                              Margin="6,0,33,0"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Left"
+                                              Content="{Binding Debug}">
+                            </ContentPresenter>
+                        </ToggleButton>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="ToggleButton"  Property="IsChecked" Value="True">
+                            <Setter TargetName="TogglingPanel" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="ContentSite" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsGrouping" Value="true">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -7,12 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using NetworkInterfaceConfigurator.ViewModels;
 
 namespace NetworkInterfaceConfigurator.Models
 {
     class PresetsDB
     {
+        // Constructor.
+        public PresetsDB(MainViewModel mainVM)
+        {
+            MainVM = mainVM;
+        }
+
         // Variables, Constants & Properties.
+        private MainViewModel MainVM;
         private SQLiteConnection dbConn;
         private SQLiteCommand sqlCmd = new SQLiteCommand();
 
@@ -40,9 +48,17 @@ namespace NetworkInterfaceConfigurator.Models
 
                 result = true;
             }
-            catch (SQLiteException ex)
+            catch (SQLiteException e)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Error: " + e.Message);
+
+                // Add log entry.
+                MainVM.Debug = new LogEntryError()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Error(SQLiteException): " + e
+                };
             }
 
             return result;
@@ -65,24 +81,70 @@ namespace NetworkInterfaceConfigurator.Models
 
                 result = true;
             }
-            catch (SQLiteException ex)
+            catch (SQLiteException e)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Error: " + e.Message);
+
+                // Add log entry.
+                MainVM.Debug = new LogEntryError()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Error(SQLiteException): " + e
+                };
             }
             return result;
         }
         /// <summary>
         /// DB init.
         /// </summary>
-        public string DBinit(string appFolder)
+        public void DBinit(string appFolder)
         {
             if (!File.Exists(appFolder + "Presets.db"))
             {
-                return CreateAndConnect(appFolder + "Presets.db") ? "Create DB and connect to it: OK" : "Create DB and connect to it: Error";
+                if (CreateAndConnect(appFolder + "Presets.db"))
+                {
+                    // Add log entry.
+                    MainVM.Debug = new LogEntryMessage()
+                    {
+                        DateTime = DateTime.Now,
+                        Index = LogEntry.IndexCount,
+                        Message = "Message(SQLiteException): Create DB and connect to it: OK"
+                    };
+                }
+                else
+                {
+                    // Add log entry.
+                    MainVM.Debug = new LogEntryMessage()
+                    {
+                        DateTime = DateTime.Now,
+                        Index = LogEntry.IndexCount,
+                        Message = "Message(SQLiteException): Create DB and connect to it: Error"
+                    };
+                }
             }
             else
             {
-                return Connect(appFolder + "Presets.db") ? "Conncet to DB: OK" : "Conncet to DB: Error";
+                if (Connect(appFolder + "Presets.db"))
+                {
+                    // Add log entry.
+                    MainVM.Debug = new LogEntryMessage()
+                    {
+                        DateTime = DateTime.Now,
+                        Index = LogEntry.IndexCount,
+                        Message = "Message(SQLiteException): Conncet to DB: OK"
+                    };
+                }
+                else
+                {
+                    // Add log entry.
+                    MainVM.Debug = new LogEntryMessage()
+                    {
+                        DateTime = DateTime.Now,
+                        Index = LogEntry.IndexCount,
+                        Message = "Message(SQLiteException): Conncet to DB: Error"
+                };
+                }
             }
         }
         /// <summary>
@@ -90,7 +152,7 @@ namespace NetworkInterfaceConfigurator.Models
         /// Return true if disconnected from DB.
         /// </summary>
         /// <returns>True if disconnected from DB.</returns>
-        public bool Disconnect()
+        public void Disconnect()
         {
             bool result = false;
 
@@ -100,11 +162,29 @@ namespace NetworkInterfaceConfigurator.Models
 
                 result = true;
             }
-            catch (SQLiteException ex)
+            catch (SQLiteException e)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Error: " + e.Message);
+
+                // Add log entry.
+                MainVM.Debug = new LogEntryError()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Error(SQLiteException): " + e
+                };
             }
-            return result;
+
+            if (result)
+            {
+                // Add log entry.
+                MainVM.Debug = new LogEntryMessage()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Message(SQLiteException): DB disconnected."
+                };
+            }
         }
         /// <summary>
         /// Loading all data from DB.
@@ -133,9 +213,17 @@ namespace NetworkInterfaceConfigurator.Models
                     sqlReader.Close(); // Close sqlReader session.
                     return listObj;
                 }
-                catch (SQLiteException ex)
+                catch (SQLiteException e)
                 {
-                    MessageBox.Show("Error: " + ex.Message);
+                    MessageBox.Show("Error: " + e.Message);
+
+                    // Add log entry.
+                    MainVM.Debug = new LogEntryError()
+                    {
+                        DateTime = DateTime.Now,
+                        Index = LogEntry.IndexCount,
+                        Message = "Error(SQLiteException): " + e
+                    };
                 }
             }
 
@@ -147,7 +235,7 @@ namespace NetworkInterfaceConfigurator.Models
         /// </summary>
         /// <param name="preset">Preset object.</param>
         /// <returns>True if preset added to db.</returns>
-        public bool AddPreset(Preset preset, out int id)
+        public void AddPreset(Preset preset, out int id)
         {
             bool result = false;
             id = 0;
@@ -178,13 +266,30 @@ namespace NetworkInterfaceConfigurator.Models
 
                     result = true;
                 }
-                catch (SQLiteException ex)
+                catch (SQLiteException e)
                 {
-                    MessageBox.Show("Error: " + ex.Message);
+                    MessageBox.Show("Error: " + e.Message);
+
+                    // Add log entry.
+                    MainVM.Debug = new LogEntryError()
+                    {
+                        DateTime = DateTime.Now,
+                        Index = LogEntry.IndexCount,
+                        Message = "Error(SQLiteException): " + e
+                    };
                 }
             }
 
-            return result;
+            if (result)
+            {
+                // Add log entry.
+                MainVM.Debug = new LogEntryMessage()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Message(SQLiteException): Preset added to DB."
+                };
+            }
         }
         /// <summary>
         /// Edit preset in db with settings from edit preset window.
@@ -192,7 +297,7 @@ namespace NetworkInterfaceConfigurator.Models
         /// </summary>
         /// <param name="preset">Preset object.</param>
         /// <returns>True if preset edited in db.</returns>
-        public bool EditPreset(Preset preset)
+        public void EditPreset(Preset preset)
         {
             bool result = false;
 
@@ -215,13 +320,30 @@ namespace NetworkInterfaceConfigurator.Models
 
                     result = true;
                 }
-                catch (SQLiteException ex)
+                catch (SQLiteException e)
                 {
-                    MessageBox.Show("Error: " + ex.Message);
+                    MessageBox.Show("Error: " + e.Message);
+
+                    // Add log entry.
+                    MainVM.Debug = new LogEntryError()
+                    {
+                        DateTime = DateTime.Now,
+                        Index = LogEntry.IndexCount,
+                        Message = "Error(SQLiteException): " + e
+                    };
                 }
             }
 
-            return result;
+            if (result)
+            {
+                // Add log entry.
+                MainVM.Debug = new LogEntryMessage()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Message(SQLiteException): Preset edited in DB."
+                };
+            }
         }
         /// <summary>
         /// Delete preset from db.
@@ -230,7 +352,7 @@ namespace NetworkInterfaceConfigurator.Models
         /// <param name="id">Index of deleting adapter.</param>
         /// <param name="presetCount">Amount of presets.</param>
         /// <returns>True if preset deleted from db.</returns>
-        public bool DeletePreset(int id, int presetCount)
+        public void DeletePreset(int id, int presetCount)
         {
             bool result = false;
 
@@ -253,13 +375,30 @@ namespace NetworkInterfaceConfigurator.Models
 
                     result = true;
                 }
-                catch (SQLiteException ex)
+                catch (SQLiteException e)
                 {
-                    MessageBox.Show("Error: " + ex.Message);
+                    MessageBox.Show("Error: " + e.Message);
+
+                    // Add log entry.
+                    MainVM.Debug = new LogEntryError()
+                    {
+                        DateTime = DateTime.Now,
+                        Index = LogEntry.IndexCount,
+                        Message = "Error(SQLiteException): " + e
+                    };
                 }
             }
 
-            return result;
+            if (result)
+            {
+                // Add log entry.
+                MainVM.Debug = new LogEntryMessage()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Message(SQLiteException): Preset deleted from DB."
+                };
+            }
         }
         #endregion
     }

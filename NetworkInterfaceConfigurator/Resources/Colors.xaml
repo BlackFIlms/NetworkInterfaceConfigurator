@@ -46,10 +46,14 @@
     <SolidColorBrush x:Key="BrushPressedLightBlue" Color="#8db9e5"/>
     <Color x:Key="ColorPressedLightBlue">#8db9e5</Color>
 
-    <SolidColorBrush x:Key="BrushRoyalBlue" Color="#0072cf"/> 
+    <SolidColorBrush x:Key="BrushRoyalBlue" Color="#0072cf"/>
     <Color x:Key="ColorRoyalBlue">#0072cf</Color>
+    
+    <SolidColorBrush x:Key="BrushYellow" Color="#dcd900"/>
+    <Color x:Key="ColorYellow">#dcd900</Color>
 
     <SolidColorBrush x:Key="BrushRed" Color="#dd1120"/>
     <Color x:Key="ColorRed">#dd1120</Color>
 
 </ResourceDictionary>
+    

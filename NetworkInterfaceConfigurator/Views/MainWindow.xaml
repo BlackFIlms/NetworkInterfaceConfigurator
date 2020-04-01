@@ -15,7 +15,7 @@
         viewmodel:SizeObserver.ObservedWidth="{Binding GetWindowWidth, Mode=OneWayToSource}"
         Icon="/NetworkInterfaceConfigurator;component/Design/Icon-3-64.ico"
         Title="Network Interface Configurator"
-        Height="446"
+        Height="459"
         Width="700"
         MinHeight="459"
         MinWidth="700"
@@ -49,7 +49,7 @@
     <Grid x:Name="gridBase">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="18"/>
+            <RowDefinition MinHeight="20" Height="Auto" MaxHeight="100"/>
         </Grid.RowDefinitions>
         <Grid x:Name="gridMain" Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -69,25 +69,25 @@
                             <DataTemplate>
                                 <Grid Width="100"
                                       Height="34">
-                                        <Button x:Name="BtnPreset"
+                                    <Button x:Name="BtnPreset"
                                                 ToolTip="Left click - Apply preset settings, to current adapter. Ctrl+Left click - Edit preset settings. Right click - copy current adapter settings, to preset."
                                                 Content="{Binding Path=Name}"
                                                 Tag="{Binding Path=ID}"
                                                 Style="{StaticResource GridPresetsButtons}">
-                                            <Button.InputBindings>
-                                                <MouseBinding Command="{Binding ApplyPreset, Source={StaticResource MainVM}}"
+                                        <Button.InputBindings>
+                                            <MouseBinding Command="{Binding ApplyPreset, Source={StaticResource MainVM}}"
                                                               CommandParameter="{Binding ElementName=BtnPreset}"
                                                               Gesture="LeftClick"/>
-                                                <MouseBinding Command="{Binding SaveCurrentSettingsToPreset, Source={StaticResource MainVM}}"
+                                            <MouseBinding Command="{Binding SaveCurrentSettingsToPreset, Source={StaticResource MainVM}}"
                                                               CommandParameter="{Binding ElementName=BtnPreset}"
                                                               Gesture="RightClick"/>
-                                                <MouseBinding Command="{Binding EditPreset, Source={StaticResource MainVM}}"
+                                            <MouseBinding Command="{Binding EditPreset, Source={StaticResource MainVM}}"
                                                               CommandParameter="{Binding ElementName=BtnPreset}"
                                                               Gesture="Control+LeftClick"/>
-                                            </Button.InputBindings>
-                                        </Button>
-                                        <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
-                                    </Grid>
+                                        </Button.InputBindings>
+                                    </Button>
+                                    <Rectangle Style="{StaticResource GridPresetsRectangles}"/>
+                                </Grid>
                             </DataTemplate>
                         </Menu.ItemTemplate>
                     </Menu>
@@ -105,7 +105,7 @@
             <Grid x:Name="gridContent" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="48"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="305"/>
                     <RowDefinition Height="61"/>
                 </Grid.RowDefinitions>
                 <Grid x:Name="gridAdapterField" Margin="20,0" Grid.Row="0">
@@ -280,7 +280,7 @@
                         </StackPanel>
                     </Grid>
                     <Grid x:Name="gridAdapterStats" Grid.Column="1">
-                        
+
                     </Grid>
                 </Grid>
                 <!-- For change settings before user click on button, using MultiBinding -->
@@ -324,7 +324,10 @@
         <Grid x:Name="gridFooter" Grid.Row="1">
             <StatusBar Background="{StaticResource BrushVeryDarkGray}"
                        Width="Auto"
-                       Height="20"
+                       MaxHeight="100"
+                       Height="Auto"
+                       MinHeight="20"
+                       VerticalContentAlignment="Stretch"
                        HorizontalContentAlignment="Stretch">
                 <StatusBar.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -336,17 +339,31 @@
                         </Grid>
                     </ItemsPanelTemplate>
                 </StatusBar.ItemsPanel>
-                <StatusBarItem Grid.Column="0">
-                    <TextBlock Text="{Binding Debug}"
+                <StatusBarItem MinHeight="20"
+                               VerticalAlignment="Stretch"
+                               VerticalContentAlignment="Stretch"
+                               HorizontalAlignment="Stretch"
+                               HorizontalContentAlignment="Stretch"
+                               Grid.Column="0">
+                    <!--<TextBlock Text="{Binding Debug}"
                                TextTrimming="CharacterEllipsis"
                                Margin="3,0,0,0"
                                HorizontalAlignment="Stretch"
                                VerticalAlignment="Center"
-                               Foreground="{StaticResource BrushGreen}"/>
+                               Foreground="{StaticResource BrushGreen}"/> -->
+                    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <ItemsControl VerticalAlignment="Stretch"
+                                      VerticalContentAlignment="Stretch"
+                                      ItemsSource="{Binding LogList}"
+                                      Style="{StaticResource DebugPanel}"/>
+                    </StackPanel>
                 </StatusBarItem>
-                <StatusBarItem Grid.Column="1">
+                <StatusBarItem MinHeight="20"
+                               VerticalAlignment="Bottom"
+                               VerticalContentAlignment="Bottom"
+                               Grid.Column="1">
                     <ResizeGrip HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
+                                VerticalAlignment="Bottom"
                                 Opacity="0.75"/>
                 </StatusBarItem>
             </StatusBar>
