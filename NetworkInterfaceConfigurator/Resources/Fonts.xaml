@@ -19,5 +19,9 @@
     <system:Double x:Key="Regular">10</system:Double>
     <system:Double x:Key="Big">12</system:Double>
     <system:Double x:Key="VeryBig">14</system:Double>
+    <system:Double x:Key="H4">16</system:Double>
+    <system:Double x:Key="H3">19</system:Double>
+    <system:Double x:Key="H2">24</system:Double>
+    <system:Double x:Key="H1">32</system:Double>
 
 </ResourceDictionary>

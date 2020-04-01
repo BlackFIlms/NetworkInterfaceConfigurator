@@ -1,0 +1,81 @@
+﻿<Window x:Class="NetworkInterfaceConfigurator.Views.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NetworkInterfaceConfigurator.Views"
+        xmlns:viewmodel="clr-namespace:NetworkInterfaceConfigurator.ViewModels"
+        mc:Ignorable="d"
+        x:Name="nameAboutWindow"
+        Style="{StaticResource DialogsWindowStyle}"
+        viewmodel:SizeObserver.Observe="True"
+        viewmodel:SizeObserver.ObservedWidth="{Binding GetWindowWidth, Mode=OneWayToSource}"
+        Title="About"
+        Height="250"
+        Width="350"
+        MinHeight="250"
+        MinWidth="350"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="30, 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <DockPanel VerticalAlignment="Bottom" >
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Netvork Interface Configurator"
+                               Foreground="{StaticResource BrushAWhite}"
+                               FontFamily="{StaticResource BoldFont}"
+                               FontSize="{StaticResource H3}"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding AssemblyInfo}"
+                               Foreground="{StaticResource BrushWhite}"
+                               FontFamily="{StaticResource BoldFont}"
+                               FontSize="{StaticResource Regular}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,20"/>
+                    <TextBlock Text="Developed by:"
+                               Foreground="{StaticResource BrushWhite}"
+                               FontFamily="{StaticResource BoldFont}"
+                               FontSize="{StaticResource Big}"
+                               FontWeight="Bold"/>
+                </StackPanel>
+            </DockPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="3"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="{Binding WebImage}"
+                   VerticalAlignment="Top"
+                   Margin="0,5,0,0"
+                   Grid.Column="0"/>
+            <GridSplitter Background="{StaticResource BrushGridSplitter}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1"/>
+            <StackPanel Orientation="Vertical" Grid.Column="2">
+                <TextBlock Text="{Binding AssemblyCopyright}"
+                           Foreground="{StaticResource BrushWhite}"
+                           FontFamily="{StaticResource BoldFont}"
+                           FontSize="{StaticResource H4}"
+                           FontWeight="Bold"
+                           VerticalAlignment="Top"
+                           Margin="15,5,0,0"/>
+                <TextBlock Text="Avdeev Matvey"
+                           Foreground="{StaticResource BrushWhite}"
+                           FontFamily="{StaticResource BoldFont-Light}"
+                           FontSize="{StaticResource Regular}"
+                           Margin="15,0,0,0"/>
+                <Button Content="Link to GitHub"
+                        Style="{StaticResource LinkButton}"
+                        FontFamily="{StaticResource BoldFont}"
+                        FontSize="{StaticResource Regular}"
+                        HorizontalAlignment="Left"
+                        Margin="15,10,0,0"
+                        Command="{Binding OpenGitHub}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

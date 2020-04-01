@@ -437,6 +437,22 @@ namespace NetworkInterfaceConfigurator.ViewModels
                     }));
             }
         }
+        private RelayCommand openAboutWindow;
+        public RelayCommand OpenAboutWindow
+        {
+            get
+            {
+                return openAboutWindow ??
+                    (openAboutWindow = new RelayCommand(obj =>
+                    {
+                        // Create and open about window.
+                        var w = new AboutWindow();
+                        var vm = new AboutViewModel();
+                        w.DataContext = vm;
+                        bool? result = w.ShowDialog();
+                    }));
+            }
+        }
         #endregion
 
         #region AdaptersInit

@@ -16,6 +16,9 @@
     <SolidColorBrush x:Key="BrushWhite" Color="#FEFEFE"/>
     <Color x:Key="ColorWhite">#FEFEFE</Color>
 
+    <SolidColorBrush x:Key="BrushGridSplitter" Color="#FF30353A"/>
+    <Color x:Key="ColorGridSplitter">#FF30353A</Color>
+
     <SolidColorBrush x:Key="BrushVeryDarkGray" Color="#202224"/>
     <Color x:Key="ColorVeryDarkGray">#202224</Color>
     

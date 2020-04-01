@@ -55,5 +55,5 @@ using System.Windows;
 //> a - version number.
 //> b - build number.
 //> c - release number(0 - Release version, 1 - Beta version, 2 - Dev version).
-[assembly: AssemblyVersion("0.9.10.2")]
-[assembly: AssemblyFileVersion("0.9.10.2")]
+[assembly: AssemblyVersion("1.0.1.1")]
+[assembly: AssemblyFileVersion("1.0.1.1")]
