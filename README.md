@@ -11,6 +11,18 @@ Version guide: a.a.b.c
 > c - release number(0 - Release version, 1 - Beta version, 2 - Dev version).    
 
 ## RU guide:
+#### Инструкция по использованию:
+1. Запустите программу от имени **администратора**.    
+1. Выберите нужный сетевой адаптер.
+1. В меню выберите: `File-Save` и выберите место куда сохранить настройки текущего адаптера.
+1. Убедитесь, что только что созданный файл не пустой и содержит ваши настройки.
+1. Можете редактировать настройки выбранного сетевого адаптера в главном окне программы,    
+в текстовых полях справа.
+1. Можете сохранять свои настройки в пресеты, редактировать их там    
+и в случае необходимости подгружать их к любому сетевому адаптеру.
+1. Можете сохранять свои настройки в файл,    
+и в случае необходимости подгружать их к любому сетевому адаптеру.    
+
 #### Сейчас в приложении доступно:
 
 - Базовая настройка сетевых адаптеров:
@@ -22,7 +34,7 @@ Version guide: a.a.b.c
 - Пресеты:
   - Добавление пресетов (*Левый клик на кнопку AddPreset*).
   - Сохранение настрооек текущего адаптера в пресет (*Правый клик на кнопку пресета*).
-  - Изменение настроек в пресете (*ctrl + левый клик на кнопку AddPreset*).
+  - Изменение настроек в пресете (*ctrl + левый клик на кнопку пресета*).
   - Удаление пресета (*доступно в окне реадктирования настроек пресета*).
   - И само собой применение настроек из пресета к текущему(выбранному) адаптеру    
   (*Левый клик на кнопку пресета*).
@@ -42,6 +54,18 @@ Version guide: a.a.b.c
   - Спасибо за ваше участие в тестировании, пожалуйста пишите комменты и отзывы. =)
 
 ## EN guide:
+#### Instructions for use:
+1. Run the program as **administrator**.
+1. Select the desired network adapter.
+1. In the menu, select: `File-Save` and select the place where to save the settings of the current adapter.
+1. Make sure that the file you just created is not empty and contains your settings.
+1. You can edit the settings of the selected network adapter in the main program window,    
+in the text boxes on the right.
+1. You can save your settings in presets, edit them there    
+and, if necessary, apply them to any network adapter.
+1. You can save your settings to a file,    
+and, if necessary, apply them to any network adapter.    
+
 #### Now available in the application:
 
 - Basic change network settings:
