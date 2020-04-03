@@ -485,23 +485,149 @@ namespace NetworkInterfaceConfigurator.ViewModels
         public void InitAdapterProperties(NetworkInterfaceLib obj)
         {
             obj.IPEnabled = NetworkInterfaceLib.IsIpEnabled(obj.NicIndex);
-            obj.IP = NetworkInterfaceLib.GetIP(obj.NicIndex);
-            obj.Subnet = NetworkInterfaceLib.GetSubnet(obj.NicIndex);
-            obj.Gateway = NetworkInterfaceLib.GetGateway(obj.NicIndex);
+            try
+            {
+                // Get IP.
+                obj.IP = NetworkInterfaceLib.GetIP(obj.NicIndex);
+                // Add log entry.
+                Debug = new LogEntryMessage()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Get adapter ip success. IP: " + obj.IP
+                };
+            }
+            catch (Exception e)
+            {
+                // Add log entry.
+                Debug = new LogEntryError()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Error: Get adapter ip failed." + e
+                };
+            }
+            try
+            {
+                // Get Subnet.
+                obj.Subnet = NetworkInterfaceLib.GetSubnet(obj.NicIndex);
+                // Add log entry.
+                Debug = new LogEntryMessage()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Get adapter subnet success. Subnet: " + obj.Subnet
+                };
+            }
+            catch (Exception e)
+            {
+                // Add log entry.
+                Debug = new LogEntryError()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Error: Get adapter subnet failed." + e
+                };
+            }
+            try
+            {
+                // Get Gateway.
+                obj.Gateway = NetworkInterfaceLib.GetGateway(obj.NicIndex);
+                // Add log entry.
+                Debug = new LogEntryMessage()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Get adapter gateway success. Gateway: " + obj.Gateway
+                };
+            }
+            catch (Exception e)
+            {
+                // Add log entry.
+                Debug = new LogEntryError()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Error: Get adapter gateway failed." + e
+                };
+            }
 
             for (int i = 0; i < NetworkInterfaceLib.GetDNS(obj.NicIndex).Length; i++)
             {
                 if (i == 0)
                 {
-                    obj.DNS1 = NetworkInterfaceLib.GetDNS(obj.NicIndex)[0];
+                    try
+                    {
+                        // Get DNS1.
+                        obj.DNS1 = NetworkInterfaceLib.GetDNS(obj.NicIndex)[0];
+                        // Add log entry.
+                        Debug = new LogEntryMessage()
+                        {
+                            DateTime = DateTime.Now,
+                            Index = LogEntry.IndexCount,
+                            Message = "Get adapter dns1 success. DNS1: " + obj.DNS1
+                        };
+                    }
+                    catch (Exception e)
+                    {
+                        // Add log entry.
+                        Debug = new LogEntryError()
+                        {
+                            DateTime = DateTime.Now,
+                            Index = LogEntry.IndexCount,
+                            Message = "Error: Get adapter dns1 failed." + e
+                        };
+                    }
                 }
                 else if (i == 1)
                 {
-                    obj.DNS2 = NetworkInterfaceLib.GetDNS(obj.NicIndex)[1];
+                    try
+                    {
+                        // Get DNS2.
+                        obj.DNS2 = NetworkInterfaceLib.GetDNS(obj.NicIndex)[1];
+                        // Add log entry.
+                        Debug = new LogEntryMessage()
+                        {
+                            DateTime = DateTime.Now,
+                            Index = LogEntry.IndexCount,
+                            Message = "Get adapter dns2 success. DNS2: " + obj.DNS2
+                        };
+                    }
+                    catch (Exception e)
+                    {
+                        // Add log entry.
+                        Debug = new LogEntryError()
+                        {
+                            DateTime = DateTime.Now,
+                            Index = LogEntry.IndexCount,
+                            Message = "Error: Get adapter dns2 failed." + e
+                        };
+                    }
                 }
             }
 
-            obj.MAC = NetworkInterfaceLib.GetMAC(obj.NicIndex);
+            try
+            {
+                // Get MAC.
+                obj.MAC = NetworkInterfaceLib.GetMAC(obj.NicIndex);
+                // Add log entry.
+                Debug = new LogEntryMessage()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Get adapter mac success. MAC: " + obj.MAC
+                };
+            }
+            catch (Exception e)
+            {
+                // Add log entry.
+                Debug = new LogEntryError()
+                {
+                    DateTime = DateTime.Now,
+                    Index = LogEntry.IndexCount,
+                    Message = "Error: Get adapter mac failed." + e
+                };
+            }
         }
         #endregion
 
